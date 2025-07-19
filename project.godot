@@ -1,0 +1,30 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="cardgame"
+run/main_scene="uid://cijoautimuua5"
+config/features=PackedStringArray("4.4", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+CardManager="*res://scripts/CardManager.gd"
+BossManager="*res://scripts/BossManager.gd"
+Globals="*res://scripts/globals.gd"
+JokerManager="*res://scripts/JokerManager.gd"
+
+[display]
+
+window/size/viewport_width=742
+window/size/viewport_height=532
+window/stretch/scale=7.0
+window/stretch/scale_mode="integer"

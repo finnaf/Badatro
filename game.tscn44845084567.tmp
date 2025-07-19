@@ -1,0 +1,307 @@
+[gd_scene load_steps=30 format=3 uid="uid://cijoautimuua5"]
+
+[ext_resource type="Texture2D" uid="uid://cv0tqpisxhrod" path="res://images/board/mat.png" id="1_80nbo"]
+[ext_resource type="Script" uid="uid://c7vv5i4f5v710" path="res://scripts/game.gd" id="1_lc2xo"]
+[ext_resource type="Texture2D" uid="uid://cneb3581youap" path="res://images/board/sortsuit.png" id="2_eow3j"]
+[ext_resource type="Script" uid="uid://bqw437ivhum4c" path="res://scripts/discard_button.gd" id="2_fc0e3"]
+[ext_resource type="Texture2D" uid="uid://jd5o5g53wqf6" path="res://images/board/discard.png" id="2_feb5d"]
+[ext_resource type="Script" uid="uid://bchk6mkxmy1j2" path="res://scripts/sort_suit_button.gd" id="2_vef74"]
+[ext_resource type="Texture2D" uid="uid://dhlmhi6enlpbo" path="res://images/board/play.png" id="3_fc0e3"]
+[ext_resource type="Texture2D" uid="uid://cg8jry153ouii" path="res://images/board/sortrank.png" id="3_j5wjh"]
+[ext_resource type="Script" uid="uid://dlcs4i5fuyd2f" path="res://scripts/sort_rank_button.gd" id="4_hve3p"]
+[ext_resource type="Script" uid="uid://bt1g21xjd08tc" path="res://scripts/deck.gd" id="5_7jktm"]
+[ext_resource type="Texture2D" uid="uid://k0jxldpehadk" path="res://images/board/sidebar.png" id="7_j5wjh"]
+[ext_resource type="Texture2D" uid="uid://cjg1njfkm0vfd" path="res://images/board/discard-grey.png" id="9_215e1"]
+[ext_resource type="Script" uid="uid://dyhyvgdxj7pof" path="res://scripts/play_button.gd" id="10_7sc4i"]
+[ext_resource type="Script" uid="uid://dp8isqxsoevh" path="res://scripts/sidebar.gd" id="10_iotsf"]
+[ext_resource type="Texture2D" uid="uid://lorlau6mb5va" path="res://images/board/numbers.png" id="11_lc2xo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ryrav"]
+size = Vector2(5, 6)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7jktm"]
+size = Vector2(28, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7sc4i"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_feb5d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_215e1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_215e1"]
+atlas = ExtResource("11_lc2xo")
+region = Rect2(0, 0, 3, 5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7sc4i"]
+atlas = ExtResource("11_lc2xo")
+region = Rect2(3, 0, 3, 5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_80cx4"]
+atlas = ExtResource("11_lc2xo")
+region = Rect2(6, 0, 3, 5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e8heu"]
+atlas = ExtResource("11_lc2xo")
+region = Rect2(9, 0, 3, 5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rvswv"]
+atlas = ExtResource("11_lc2xo")
+region = Rect2(12, 0, 3, 5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_boyg6"]
+atlas = ExtResource("11_lc2xo")
+region = Rect2(15, 0, 3, 5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e36ub"]
+atlas = ExtResource("11_lc2xo")
+region = Rect2(18, 0, 3, 5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hb5m1"]
+atlas = ExtResource("11_lc2xo")
+region = Rect2(21, 0, 3, 5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x5p1p"]
+atlas = ExtResource("11_lc2xo")
+region = Rect2(24, 0, 3, 5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qhcbd"]
+atlas = ExtResource("11_lc2xo")
+region = Rect2(27, 0, 3, 5)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_f1jbl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_215e1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7sc4i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_80cx4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e8heu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rvswv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_boyg6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e36ub")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hb5m1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x5p1p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qhcbd")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_lc2xo")
+
+[node name="Mat" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(53, 38)
+texture = ExtResource("1_80nbo")
+
+[node name="SortSuitButton" type="Area2D" parent="Mat"]
+texture_filter = 1
+position = Vector2(8, 32)
+script = ExtResource("2_vef74")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Mat/SortSuitButton"]
+position = Vector2(0.5, 0)
+shape = SubResource("RectangleShape2D_ryrav")
+
+[node name="SortSuit" type="Sprite2D" parent="Mat/SortSuitButton"]
+position = Vector2(0.5, 0)
+texture = ExtResource("2_eow3j")
+
+[node name="SortRankButton" type="Area2D" parent="Mat"]
+texture_filter = 1
+position = Vector2(2, 32)
+script = ExtResource("4_hve3p")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Mat/SortRankButton"]
+position = Vector2(0.5, 0)
+shape = SubResource("RectangleShape2D_ryrav")
+
+[node name="SortRank" type="Sprite2D" parent="Mat/SortRankButton"]
+position = Vector2(0.5, 0)
+texture = ExtResource("3_j5wjh")
+
+[node name="DiscardButton" type="Area2D" parent="Mat"]
+position = Vector2(23, 32)
+script = ExtResource("2_fc0e3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Mat/DiscardButton"]
+position = Vector2(4, 0)
+shape = SubResource("RectangleShape2D_7jktm")
+
+[node name="Discard" type="AnimatedSprite2D" parent="Mat/DiscardButton"]
+texture_filter = 1
+position = Vector2(4, 0)
+sprite_frames = SubResource("SpriteFrames_7sc4i")
+frame_progress = 0.298528
+
+[node name="PlayButton" type="Area2D" parent="Mat"]
+position = Vector2(-11, 32)
+script = ExtResource("10_7sc4i")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Mat/PlayButton"]
+position = Vector2(0, 0.125)
+shape = SubResource("RectangleShape2D_ryrav")
+
+[node name="Play" type="Sprite2D" parent="Mat/PlayButton"]
+texture = ExtResource("3_fc0e3")
+
+[node name="Sidebar" type="Sprite2D" parent="Mat"]
+position = Vector2(-41.5, 0)
+texture = ExtResource("7_j5wjh")
+script = ExtResource("10_iotsf")
+
+[node name="Discards" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(4, 11.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="MoneyOnes" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(4, 21.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="RoundTens" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(0, 31.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="RoundOnes" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(4.0113, 31.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="MoneyTens" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(-0.101526, 21.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="Hands" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(-4, 11.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="MultOnes" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(5.00258, 2.50171)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="MultTens" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(1.00258, 2.50171)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="ChipOnes" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(5, -5.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="ChipHundreds" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(-3, -5.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="ChipThousands" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(-7, -5.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="ChipTens" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(1, -5.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="MultHundreds" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(-2.99742, 2.50171)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="MultThousands" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(-6.99742, 2.50171)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="Ante" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(-5.98815, 31.495)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="ScoreOnes" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(6, -13.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="ScoreTens" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(2, -13.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="ScoreHundreds" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(-2, -13.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="ScoreThousands" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(-6, -13.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="ScoreTenThousands" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(6, -19.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="ScoreHundredThousands" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(2, -19.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="ScoreMillions" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(-2, -19.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="ScoreTenMillions" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(-6, -19.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalTenThousands" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(6, -33.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalHundredThousands" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(2, -33.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalMillions" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(-2, -33.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalTenMillions" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(-6, -33.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalOnes" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(6, -27.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalTens" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(2, -27.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalHundreds" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(-2, -27.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalThousands" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+position = Vector2(-6, -27.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="Deck" type="Node2D" parent="."]
+position = Vector2(57, 52)
+script = ExtResource("5_7jktm")

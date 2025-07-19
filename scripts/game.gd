@@ -1,0 +1,278 @@
+extends Node2D
+
+@onready var WinUI = $MoneyCountUI
+@onready var BottomButtons = $"Mat/BottomButtons"
+@onready var sidebar = $Mat/Sidebar
+@onready var shop = $"Shop"
+
+var seed = 1
+
+var GAMESPEED = 0.3
+var BASEHANDSIZE = 8
+
+var BASEDECKSIZE = 52
+var decksize = 52
+
+var ante = 1
+var round = 1
+var blind = 0 # 0, 1 or 2
+
+var BASE_REROLL_COST = 5
+var reroll_cost = 5
+
+var money = 4
+
+var BASEHANDS = 4
+var BASEDISCARDS = 3
+var hands = 4
+var discards = 3
+
+var score = 0
+var state = states.PLAYING
+
+enum states {
+	PLAYING,
+	WAITING, # animations
+	WINNING,
+	SHOPPING
+}
+
+var chips = 0
+var mult = 0
+
+var hand = "none"
+
+var levels = {
+	"none": 0,
+	"flush five": 0,
+	"flush house": 0,
+	"five of a kind": 0,
+	"straight flush": 0,
+	"four of a kind": 0,
+	"full house": 0,
+	"flush": 0,
+	"straight": 0,
+	"three of a kind": 0,
+	"two pair": 0,
+	"pair": 0,
+	"high card": 0
+}
+
+var hands_played = {
+	"none": 0,
+	"flush five": 0,
+	"flush house": 0,
+	"five of a kind": 0,
+	"straight flush": 0,
+	"four of a kind": 0,
+	"full house": 0,
+	"flush": 0,
+	"straight": 0,
+	"three of a kind": 0,
+	"two pair": 0,
+	"pair": 0,
+	"high card": 0
+}
+
+signal updateMoneyUI
+signal updateScoreUI
+signal updateGoalUI
+signal updateCashoutUI
+signal playCards
+
+func _ready():
+	updateGoalUI.emit()
+	setup(2)
+
+func setup(game_seed: int):
+	seed = game_seed
+	JokerManager.new_game(seed)
+
+func is_win():
+	if state == states.WINNING:
+		return 1
+	
+func calculate_goal():
+	return BossManager.get_chip_req(ante, blind)
+
+
+func get_seed():
+	return seed
+
+func get_deck_size():
+	return decksize
+
+func get_hand_size():
+	var hand_size = BASEHANDSIZE
+	return hand_size
+
+func get_money_gained():
+	if blind == 0:
+		return 3
+	elif blind == 1:
+		return 4
+	else:
+		if ante % 8 == 0:
+			return 8
+		return 5
+
+func get_reroll_cost():
+	return reroll_cost
+
+func get_round():
+	return round
+
+func get_ante():
+	return ante
+	
+func get_basic_deck() -> Array:
+	var ranks = range(2, 15)
+	var deck = []
+	var count = 0
+		
+	for suit in CardManager.Suit:
+		for rank in ranks:
+			var card = {
+				"id": count,
+				"type": CardManager.CardType.card,
+				"suit": suit,
+				"rank": rank,
+				"raised": false,
+				"enhancement": CardManager.Enhancement.none,
+				"edition": CardManager.Edition.none,
+				"seal": CardManager.Seal.none
+			}
+			
+			deck.append(card)
+			count += 1
+	return deck
+
+func set_hand(new_hand: String):
+	hand = new_hand
+	chips = CardManager.base_values[hand][0] + (levels[hand] * CardManager.planet_values[hand][0])
+	mult = CardManager.base_values[hand][1] + (levels[hand] * CardManager.planet_values[hand][1])
+
+func can_discard():
+	if discards <= 0 or state != states.PLAYING:
+		return false
+	return true
+
+func discard():
+	discards -= 1
+
+func play(cards: Array):
+	state = states.PLAYING
+	hands_played[hand] += 1
+	hands -= 1
+
+func process_reroll():
+	reroll_cost += 1
+
+# returns false if doesn't succeed
+func spend_money(cost: int) -> bool:
+	if (money >= cost):
+		money -= cost
+		updateMoneyUI.emit()
+		shop.update_buy_labels()
+		return true
+	else:
+		return false
+
+func add_money(value: int):
+	money += value
+
+func add_chips(value: int):
+	chips += value
+
+func add_mult(value: int):
+	mult += value
+
+func mult_mult(value: float):
+	mult *= value
+
+func end_turn():
+	score += chips * mult
+	updateScoreUI.emit()
+	chips = 0
+	mult = 0
+	state = states.WAITING
+	
+	# check win
+	var req = BossManager.get_chip_req(ante, blind)
+	if score >= req:
+		state = states.WINNING
+		
+		updateCashoutUI.emit(req)
+		
+		BottomButtons.visible = false
+		WinUI.visible = true
+	
+	else:
+		state = states.PLAYING
+
+func reset_score():
+	hands = BASEHANDS
+	discards = BASEDISCARDS
+	score = 0
+	updateScoreUI.emit()
+
+func cashout():
+	add_money(get_money_gained() + (hands * 2))
+	
+	WinUI.visible = false
+	reset_score()
+	reroll_cost = BASE_REROLL_COST
+	shop.open()
+
+func next_round():
+	shop.close()
+	
+	# TODO add choosing blinds
+	
+	round += 1
+	blind += 1
+	if blind > 2:
+		blind = 0
+		ante += 1
+	
+	sidebar.update_round()
+	sidebar.update_ante()
+	state = states.PLAYING
+	BottomButtons.visible = true
+	updateGoalUI.emit()
+
+func add_resource(card, dict: Dictionary):
+	# jokers have the value shown below, cards above
+	var offset = 0
+	if (card.data.type == CardManager.CardType.joker):
+		offset = 24
+	
+	var alert = null
+	for key in dict:
+		if key == "chips":
+			alert = Globals.do_score_alert(card, true, 
+				true, dict.chips, GAMESPEED, offset)
+			await add_chips(dict.chips)
+			sidebar.update_chips()
+			await get_tree().create_timer(GAMESPEED).timeout
+		elif key == "mult":
+			alert = Globals.do_score_alert(card, true, 
+				false, dict.mult, GAMESPEED, offset)
+			await add_mult(dict.mult)
+			sidebar.update_mult()
+			await get_tree().create_timer(GAMESPEED).timeout
+		elif key == "xmult":
+			alert = Globals.do_score_alert(card, false, 
+				false, dict.xmult, GAMESPEED, offset)
+			await add_chips(dict.xmult)
+			sidebar.update_mult()
+			await get_tree().create_timer(GAMESPEED).timeout
+		elif key == "money":
+			alert = Globals.do_score_alert(card, true, 
+				true, dict.money, GAMESPEED, offset)
+			await add_money(dict.money)
+			sidebar.update_money()
+			await get_tree().create_timer(GAMESPEED).timeout
+	
+	if (alert):
+		alert.queue_free()
