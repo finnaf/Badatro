@@ -1,6 +1,6 @@
 extends VBoxContainer
 
-@onready var game = $".."
+@onready var game = $"../.."
 
 @onready var moneygoalones = $MoneyGoal/MoneyGoalOnes
 @onready var moneygoaltens = $MoneyGoal/MoneyGoalTens

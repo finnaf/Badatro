@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://cijoautimuua5"]
+[gd_scene load_steps=53 format=3 uid="uid://cijoautimuua5"]
 
 [ext_resource type="Script" uid="uid://c7vv5i4f5v710" path="res://scripts/game.gd" id="1_ca42v"]
 [ext_resource type="Texture2D" uid="uid://cv0tqpisxhrod" path="res://images/board/mat/mat.png" id="2_qnb83"]
@@ -30,7 +30,6 @@
 [ext_resource type="Script" uid="uid://da4ky1onnbco4" path="res://scripts/deck_info.gd" id="16_sgl2t"]
 [ext_resource type="Texture2D" uid="uid://bkwyr3gjhtl2w" path="res://images/board/sidebar/shop-sidebar-5.png" id="17_sww3w"]
 [ext_resource type="Texture2D" uid="uid://euaxxcdeussy" path="res://images/board/sidebar/shop-sidebar-6.png" id="18_suyxu"]
-[ext_resource type="Texture2D" uid="uid://d2rs274hkxifa" path="res://images/board/deck-info/faded-bg.png" id="23_8ool0"]
 [ext_resource type="Texture2D" uid="uid://cgi8e3uotbq1c" path="res://images/board/deck-info/deck-info-background.png" id="23_gxtfn"]
 [ext_resource type="Script" uid="uid://dtgwjbansr3jo" path="res://scripts/cover_mat.gd" id="24_02fa5"]
 [ext_resource type="SpriteFrames" uid="uid://drbu1qd2ihqa8" path="res://resources/number-sprite-frames.tres" id="25_nepv3"]
@@ -403,12 +402,6 @@ offset_bottom = 40.0
 texture_normal = ExtResource("15_suyxu")
 script = ExtResource("16_sgl2t")
 
-[node name="FadedBackground" type="Sprite2D" parent="Mat/DeckInfo"]
-visible = false
-position = Vector2(-38, -27)
-scale = Vector2(1.01923, 1)
-texture = ExtResource("23_8ool0")
-
 [node name="CoverMat" type="Sprite2D" parent="Mat/DeckInfo"]
 visible = false
 position = Vector2(-38, -27)
@@ -423,7 +416,6 @@ offset_left = -15.0
 offset_top = 25.0
 offset_right = 22.0
 offset_bottom = 32.0
-texture_disabled = ExtResource("26_m4url")
 
 [node name="BackButton" type="TextureButton" parent="Mat/DeckInfo/CoverMat"]
 offset_left = 23.0

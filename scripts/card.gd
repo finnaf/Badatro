@@ -32,7 +32,7 @@ func setup(new_data: Dictionary):
 		return
 	match data.type:
 		CardManager.CardType.card:
-			set_card(str(data.rank), data.suit)
+			set_card(data.rank, data.suit)
 		CardManager.CardType.joker:
 			set_joker(data.id)
 		CardManager.CardType.booster:
@@ -40,8 +40,9 @@ func setup(new_data: Dictionary):
 		CardManager.CardType.voucher:
 			pass
 	
-func set_card(rank: String, suit: String):
-	var path = "res://images/cards/%s/%s%s.png" % [suit, rank, suit]
+func set_card(rank: int, suit: int):
+	var suit_str = CardManager.get_suit_name(suit)
+	var path = "res://images/cards/%s/%s%s.png" % [suit_str, str(rank), suit_str]
 	tex = CardManager.get_card_texture(path)
 	if tex:
 		image.texture = tex
@@ -52,7 +53,8 @@ func set_joker(joker: JokerManager.Jokers):
 	
 	var joker_data = JokerManager.get_joker(joker)
 	var path = ("res://images/cards/jokers/%s/%s.png" % 
-				[JokerManager.get_rarity_string(joker_data[1]), joker])
+				[JokerManager.get_rarity_string(joker_data[1]), 
+				JokerManager.get_joker_shortname(joker)])
 	
 	tex = CardManager.get_card_texture(path)
 	if tex:
@@ -111,14 +113,14 @@ func _on_buy_clicked_on_label(card):
 	emit_signal("buy_click_forwarded", self)
 
 func shop_select():
-	if not is_shop:
+	if cost_label == null:
 		return
 		
 	position.y -= SHOP_SELECT_DIST
 	cost_label.display_button()
 
 func shop_deselect():
-	if not is_shop:
+	if cost_label == null:
 		return
 	
 	cost_label.hide_button()
@@ -129,11 +131,19 @@ func _input_event(viewport, event, shape_idx):
 	if (event is InputEventMouseButton and event.pressed 
 		and event.button_index == MOUSE_BUTTON_LEFT):
 		
-		if (data.type == CardManager.CardType.card):
-			emit_signal("card_clicked", self)
+		if (data.type == CardManager.CardType.joker):
+			var jok_data = JokerManager.get_joker(data.id)
+			print(
+				JokerManager.get_rarity_string(jok_data[1]),
+				" ", 
+				jok_data[0],
+				" - ",
+				jok_data[3]
+			)
+				
+		emit_signal("card_clicked", self)
+			
 		
-		elif (is_shop):
-			emit_signal("card_clicked", self)
 
 func set_shop_card():
 	is_shop = true

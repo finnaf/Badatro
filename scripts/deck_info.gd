@@ -1,5 +1,8 @@
 extends TextureButton
 
+@onready var game = $"../.."
+@onready var info = $CoverMat
+
 var in_shop = false
 var raised = false
 var dist = 4
@@ -15,9 +18,14 @@ func exit_shop():
 func raise():
 	if not raised:
 		raised = true
+		info.lower()
 		self.position.y -= dist
 
 func lower():
 	if raised:
 		raised = false
+		info.raise()
 		self.position.y += dist
+
+func _on_pressed() -> void:
+	info.display(in_shop)

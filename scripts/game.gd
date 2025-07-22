@@ -1,9 +1,10 @@
 extends Node2D
 
-@onready var WinUI = $MoneyCountUI
+@onready var WinUI = $Mat/MoneyCountUI
 @onready var BottomButtons = $"Mat/BottomButtons"
 @onready var sidebar = $Mat/Sidebar
 @onready var shop = $"Shop"
+@onready var deck = $Deck
 
 var seed = 1
 
@@ -34,7 +35,8 @@ enum states {
 	PLAYING,
 	WAITING, # animations
 	WINNING,
-	SHOPPING
+	SHOPPING,
+	SETTINGS
 }
 
 var chips = 0
@@ -86,7 +88,11 @@ func _ready():
 
 func setup(game_seed: int):
 	seed = game_seed
-	JokerManager.new_game(seed)
+	seed(seed) # for shuffling cards
+	JokerManager.new_game(seed) # for drawing jokers
+	
+	deck.setup()
+	deck.begin_round()
 
 func is_win():
 	if state == states.WINNING:
@@ -130,12 +136,13 @@ func get_basic_deck() -> Array:
 	var deck = []
 	var count = 0
 		
-	for suit in CardManager.Suit:
+	for suit_name in CardManager.Suit:
+		var suit_val = CardManager.Suit[suit_name]
 		for rank in ranks:
 			var card = {
 				"id": count,
 				"type": CardManager.CardType.card,
-				"suit": suit,
+				"suit": suit_val,
 				"rank": rank,
 				"raised": false,
 				"enhancement": CardManager.Enhancement.none,
@@ -146,6 +153,14 @@ func get_basic_deck() -> Array:
 			deck.append(card)
 			count += 1
 	return deck
+
+# returns all values needed to evaluate jokers
+func get_game_state() -> Dictionary:
+	return {
+		"current_hand": hand,
+		"hands": hands,
+		"discards": discards,
+	}
 
 func set_hand(new_hand: String):
 	hand = new_hand
@@ -161,7 +176,7 @@ func discard():
 	discards -= 1
 
 func play(cards: Array):
-	state = states.PLAYING
+	state = states.WAITING
 	hands_played[hand] += 1
 	hands -= 1
 
@@ -195,7 +210,6 @@ func end_turn():
 	updateScoreUI.emit()
 	chips = 0
 	mult = 0
-	state = states.WAITING
 	
 	# check win
 	var req = BossManager.get_chip_req(ante, blind)
@@ -223,6 +237,7 @@ func cashout():
 	reset_score()
 	reroll_cost = BASE_REROLL_COST
 	shop.open()
+	state = states.SHOPPING
 
 func next_round():
 	shop.close()
@@ -241,7 +256,7 @@ func next_round():
 	BottomButtons.visible = true
 	updateGoalUI.emit()
 
-func add_resource(card, dict: Dictionary):
+func add_resources(card, dict: Dictionary):
 	# jokers have the value shown below, cards above
 	var offset = 0
 	if (card.data.type == CardManager.CardType.joker):

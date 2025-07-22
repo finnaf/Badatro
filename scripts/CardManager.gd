@@ -181,13 +181,18 @@ func is_flush(hand: Array):
 			return false
 	return true
 
-func is_straight(hand: Array):
+func is_straight(hand: Array):	
 	if hand.size() != 5:
 		return false
 	
 	hand.sort_custom(func(a, b):
-		return a["data"]["rank"] < b["data"]["rank"]
+		return a.get_rank() < b.get_rank()
 	)
+	
+	# low aces
+	if hand[4].get_rank() == 14 and hand[0].get_rank() == 2:
+		if hand[1].get_rank() == 3 and hand[2].get_rank() == 4 and hand[3].get_rank() == 5:
+			return true
 	
 	var check = hand[0].get_rank()
 	for i in range(1, hand.size()):
@@ -212,19 +217,22 @@ func is_pair(hand: Array):
 	if pair_value(hand) == -1:
 		return false
 	return true
+	
+func three_of_a_kind_value(hand: Array) -> int:
+	var rank_counts = {}
 
+	for card in hand:
+		var rank = card.get_rank()
+		if not rank_counts.has(rank):
+			rank_counts[rank] = 1
+		else:
+			rank_counts[rank] += 1
 
-func three_of_a_kind_value(hand: Array):
-	for acard in hand:
-		for bcard in hand:
-			for ccard in hand:
-				if (acard.get_id() != bcard.get_id() and
-					acard.get_id() != ccard.get_id() and
-					bcard.get_id() != ccard.get_id() and
-					acard.get_rank() == bcard.get_rank() and
-					bcard.get_rank() == ccard.get_rank()):
-					return acard.get_rank()
+	for rank in rank_counts:
+		if rank_counts[rank] >= 3:
+			return rank
 	return -1
+
 
 func four_of_a_kind_value(hand: Array):
 	if hand.size() < 4:
@@ -385,3 +393,9 @@ func get_card_cost(data: Dictionary) -> int:
 			cost += 5
 	
 	return cost
+
+func get_suit_name(value: int) -> String:
+	for name in Suit:
+		if Suit[name] == value:
+			return name
+	return "none"

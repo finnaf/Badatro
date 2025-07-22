@@ -19,11 +19,11 @@ func score_card(card) -> Array:
 func score_jokers(speed, active_cards):
 	for joker in jokers:		
 		var editionval = CardManager.get_edition_val(joker)
-		await game.add_resource(joker, editionval)
+		await game.add_resources(joker, editionval)
 		
 		# get a dictionary
-		var scoreval = JokerManager.on_score(active_cards, joker)
-		await game.add_resource(joker, scoreval)
+		var scoreval = JokerManager.get_score_val(active_cards, joker, game.get_game_state())
+		await game.add_resources(joker, scoreval)
 
 func add(joker):
 	jokers.append(joker)

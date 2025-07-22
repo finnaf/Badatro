@@ -1,5 +1,6 @@
 extends Node2D
 
+var fulldeck = []
 var deck = []
 var hand = []
 var cards_remaining = 0
@@ -15,16 +16,13 @@ signal updateButtonsUI
 @onready var game = $".."
 @onready var jokers = $"../Mat/Jokers"
 
-func _ready():
-	setup()
-	begin_round()
-
 func setup():
-	deck = game.get_basic_deck()
-	shuffle()
+	fulldeck = game.get_basic_deck()
 
 func begin_round():
 	hand_size = game.get_hand_size()
+	deck = fulldeck.duplicate(true)
+	shuffle()
 	create_hand()
 	cards_remaining = game.get_deck_size()
 	deal()
@@ -65,6 +63,11 @@ func _on_play_button_pressed():
 	await count_animation(game.GAMESPEED, active_cards)
 	await score_animation(game.GAMESPEED, active_cards)
 	await jokers.score_jokers(game.GAMESPEED, active_cards)
+	
+	# free
+	for card in selected_cards:
+		card.queue_free()
+	selected_cards.clear()
 	
 	await game.end_turn()
 	
@@ -119,21 +122,19 @@ func score_animation(speed, active_cards):
 		
 		# ENHANCEMENTS
 		var enhancevals = CardManager.get_enhancement_val(card)
-		game.add_resource(card, enhancevals)
+		await game.add_resources(card, enhancevals)
 		
 		# EDITIONS
 		var editionvals = await CardManager.get_edition_val(card)
-		game.add_resource(card, editionvals)
+		await game.add_resources(card, editionvals)
 		
 		# JOKER ON CARD
-		var jokercardval = await jokers.score_card(card)
+		var jokercardvals = await jokers.score_card(card)
+		for cardvals in  jokercardvals:
+			await game.add_resources(card, cardvals)
 		#await get_tree().create_timer(speed).timeout
 	
 	await get_tree().create_timer(speed).timeout
-	# free
-	for card in selected_cards:
-		card.queue_free()
-	selected_cards.clear()
 	
 func sort_passed_cards(cards):
 	if is_rank_sort:
@@ -170,6 +171,9 @@ func _on_discard_button_pressed():
 	updateButtonsUI.emit()
 	
 func _on_card_clicked(card):
+	if (game.state != game.states.PLAYING):
+		return
+	
 	if (card in selected_cards):
 		selected_cards.erase(card)
 		card.deselect()
@@ -204,6 +208,40 @@ func get_hand_position(card_id):
 		if hand[i].id == card_id:
 			return i
 	return -1
+
+
+func get_checkdeck(is_full_deck: bool) -> Array:
+	var checkdeck
+	if (is_full_deck):
+		checkdeck = fulldeck
+	else:
+		checkdeck = deck
+	return checkdeck
+
+func get_deck_count(key: String, value: int, is_full_deck: bool) -> int:
+	var checkdeck = get_checkdeck(is_full_deck)
+	
+	var count = 0
+	for card in checkdeck:
+		if card[key] == value:
+			count += 1
+	return count
+func get_numbered_count(is_full_deck) -> int:
+	var checkdeck = get_checkdeck(is_full_deck)
+	
+	var count = 0
+	for card in checkdeck:
+		if card.rank < 11:
+			count += 1
+	return count
+func get_face_count(is_full_deck) -> int:
+	var checkdeck = get_checkdeck(is_full_deck)
+	var count = 0
+	
+	for card in checkdeck:
+		if card.rank > 10:
+			count += 1
+	return count
 
 func sort_hand():
 	if is_rank_sort:
@@ -244,7 +282,7 @@ func sort_suit():
 		elif a.is_empty() and b.is_empty():
 			return false
 		
-		return a["suit"] < b["suit"]
+		return a["suit"] > b["suit"]
 	)
 	
 	for card in get_children():

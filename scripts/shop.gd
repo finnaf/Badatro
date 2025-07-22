@@ -114,12 +114,11 @@ func get_main_card(xoffset: int):
 	
 	# decide if planet, tarot, joker or playing card
 	
+	var data = JokerManager.generate_joker_data()
 	card.setup({
-				"id": 0,
+				"id": data.id,
 				"type": CardManager.CardType.joker,
-				"enhancement": CardManager.Enhancement.none,
-				"edition": CardManager.Edition.none,
-				"seal": CardManager.Seal.none
+				"edition": data.edition,
 			})
 	
 	card.display_cost()
@@ -194,6 +193,8 @@ func _get_clicked(card):
 	booster_cards.erase(card)
 	in_booster_select = null
 	remove_child(card)
+	card.disconnect("card_clicked", 
+					Callable(self, "_in_booster_card_clicked"))
 	in_booster_count -= 1
 	jokers.add(card)
 	
@@ -209,6 +210,10 @@ func _in_booster_card_clicked(card):
 			in_booster_select.shop_deselect()
 		in_booster_select = card
 		card.shop_select()
+		
+		if (jokers.is_full()):
+			card.cost_label.disable()
+		
 		
 func buy_joker(joker):
 	joker.shop_deselect()
@@ -280,7 +285,9 @@ func update_reroll_display():
 func update_buy_labels():
 	for card in main:
 		if (card.cost_label):
-			if (card.cost_label.card_cost > game.money):
+			if (card.cost_label.card_cost > game.money or 
+				(card.data.type == CardManager.CardType.joker and 
+				jokers.is_full())):
 				card.cost_label.disable()
 			else:
 				card.cost_label.enable()
