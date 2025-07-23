@@ -1,5 +1,32 @@
 extends Node
 
+enum Benefit {
+	achips,
+	amult,
+	xmult,
+	achipsmult,
+	creation,
+	retrigger,
+	copy,
+	economy,
+	hands,
+	discards,
+	other
+}
+
+# description connective
+enum Connective {
+	none, # totally empty second row
+	when_scored,
+	contains,
+	on_discard,
+	held_hand,
+	blind_selected,
+	countdown,
+	final_hand,
+	probability
+}
+
 enum Rarity {
 	common,
 	uncommon,
@@ -93,33 +120,115 @@ func get_joker_shortname(value: int) -> String:
 	return "none"
 
 
-# name
-# rarity
-# cost
-# description
-func get_joker(joker: Jokers):
+
+func get_joker(joker: Jokers) -> Dictionary:
 	match joker:
 		Jokers.Joker:
-			return ["Joker", Rarity.common, 2, "+4 Mult"]
-		Jokers.GreedyJoker:
-			return ["Greedy Joker", Rarity.common, 5, "Played cards with Diamond suit give +3 Mult when scored"]
+			return {
+				"name" : "Joker",
+				"rarity" : Rarity.common,
+				"cost" : 2,
+				"description" : "+4 Mult",
+				"benefit" : Benefit.amult,
+				"benefit_val" : 4,
+				"connective" : Connective.none
+			}
+		Jokers.GreedyJoker:#
+			return {
+				"name" : "Greedy Joker",
+				"rarity" : Rarity.common,
+				"cost" : 5,
+				"description" : "Played cards with Diamond suit give +3 Mult when scored",
+				"benefit" : Benefit.amult,
+				"benefit_val" : 3,
+				"connective" : Connective.when_scored,
+				"condition" : CardManager.Suit.diamonds
+			}
 		Jokers.LustyJoker:
-			return ["Lusty Joker", Rarity.common, 5, "Played cards with Heart suit give +3 Mult when scored"]
+			return {
+				"name" : "Lusty Joker",
+				"rarity" : Rarity.common,
+				"cost" : 5,
+				"description" : "Played cards with Heart suit give +3 Mult when scored",
+				"benefit" : Benefit.amult,
+				"benefit_val" : 3,
+				"connective" : Connective.when_scored,
+				"condition" : CardManager.Suit.hearts,
+			}
 		Jokers.WrathfulJoker:
-			return ["Wrathful Joker", Rarity.common, 5, "Played cards with Spade suit give +3 Mult when scored"]
+			return {
+				"name" : "Wrathful Joker",
+				"rarity" : Rarity.common,
+				"cost" : 5,
+				"description" : "Played cards with Spade suit give +3 Mult when scored",
+				"benefit" : Benefit.amult,
+				"benefit_val" : 3,
+				"connective" : Connective.when_scored,
+				"condition" : CardManager.Suit.spades,
+			}
 		Jokers.GluttonousJoker:
-			return ["Gluttonous Joker", Rarity.common, 5, "Played cards with Club suit give +3 Mult when scored"]
+			return {
+				"name" : "Gluttonous Joker",
+				"rarity" : Rarity.common,
+				"cost" : 5,
+				"description" : "Played cards with Club suit give +3 Mult when scored",
+				"benefit" : Benefit.amult,
+				"benefit_val" : 3,
+				"connective" : Connective.when_scored,
+				"condition" : CardManager.Suit.clubs,
+			}
 		Jokers.JollyJoker:
-			return ["Jolly Joker", Rarity.common, 3, "+8 Mult if played hand contains a Pair"]
+			return {
+				"name" : "Jolly Joker",
+				"rarity" : Rarity.common,
+				"cost" : 3,
+				"description" :  "+8 Mult if played hand contains a Pair",
+				"benefit" : Benefit.amult,
+				"benefit_val" : 8777,
+				"connective" : Connective.contains
+			}
 		Jokers.ZanyJoker:
-			return ["Zany Joker", Rarity.common, 4, "+12 Mult if played hand contains a Three of a Kind"]
+			return {
+				"name" : "Zany Joker",
+				"rarity" : Rarity.common,
+				"cost" : 4,
+				"description" : "+12 Mult if played hand contains a Three of a Kind",
+				"benefit" : Benefit.amult,
+				"benefit_val" : 12,
+				"connective" : Connective.contains
+			}
 		Jokers.MadJoker:
-			return ["Mad Joker", Rarity.common, 4, "+10 Mult if played hand contains Two Pair"]
+			return {
+				"name" : "Mad Joker",
+				"rarity" : Rarity.common,
+				"cost" : 4,
+				"description" :  "+10 Mult if played hand contains Two Pair",
+				"benefit" : Benefit.amult,
+				"benefit_val" : 1077,
+				"connective" : Connective.contains
+			}
 		Jokers.CrazyJoker:
-			return ["Crazy Joker", Rarity.common, 4, "+12 Mult if played hand contains Straight"]
+			return {
+				"name" : "Crazy Joker",
+				"rarity" : Rarity.common,
+				"cost" : 4,
+				"description" : "+12 Mult if played hand contains Straight",
+				"benefit" : Benefit.amult,
+				"benefit_val" : 1207,
+				"connective" : Connective.contains
+			}
 		Jokers.DrollJoker:
-			return ["Droll Joker", Rarity.common, 4, "+10 Mult if played hand contains Flush"]
-
+			return {
+				"name" : "Droll Joker",
+				"rarity" : Rarity.common,
+				"cost" : 4,
+				"description" : "+10 Mult if played hand contains Flush",
+				"benefit" : Benefit.amult,
+				"benefit_val" : 1077,
+				"connective" : Connective.contains
+			}
+	return {}
+			
 # gets the value of the joker when its triggered
 # [chips, mult, xmult, money]
 func get_score_val(active_cards: Array, joker, state: Dictionary) -> Dictionary:

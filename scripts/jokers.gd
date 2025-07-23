@@ -16,7 +16,7 @@ func score_card(card) -> Array:
 		
 
 # score each joker and do animating
-func score_jokers(speed, active_cards):
+func score_jokers(active_cards):
 	for joker in jokers:		
 		var editionval = CardManager.get_edition_val(joker)
 		await game.add_resources(joker, editionval)

@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=15 format=3 uid="uid://drbu1qd2ihqa8"]
+[gd_resource type="SpriteFrames" load_steps=16 format=3 uid="uid://drbu1qd2ihqa8"]
 
 [ext_resource type="Texture2D" uid="uid://k3qx6ymbhvca" path="res://images/board/numbers-padded.png" id="1_f0mow"]
 [ext_resource type="Texture2D" uid="uid://dp7ur4ldk2yr1" path="res://images/board/plusmultiply.png" id="2_6hswy"]
@@ -51,6 +51,8 @@ region = Rect2(0, 0, 3, 3)
 atlas = ExtResource("2_6hswy")
 region = Rect2(0, 3, 3, 3)
 
+[sub_resource type="GDScript" id="GDScript_y658a"]
+
 [resource]
 animations = [{
 "frames": [{
@@ -94,3 +96,4 @@ animations = [{
 "name": &"default",
 "speed": 5.0
 }]
+script = SubResource("GDScript_y658a")

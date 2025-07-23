@@ -8,7 +8,7 @@ extends Sprite2D
 @onready var toggle_button = $ToggleButton
 @onready var fade = $"../FadedBackground"
 
-var WIDTH = 58
+const WIDTH = 51 # 62-11 for size of guaranteed card
 
 var shown_digits = []
 var shown_cards = []
@@ -21,12 +21,13 @@ func display(in_shop: bool):
 	self.visible = true
 	fade.visible = true
 	
+	clear_digits()
+	clear_cards()
+	
 	# toggle setup
 	if (in_shop):
 		is_full_deck = true
 		toggle_button.disabled = true
-		clear_digits()
-		clear_cards()
 	else:
 		is_full_deck = false
 		toggle_button.disabled = false
@@ -59,24 +60,39 @@ func load_cards():
 			return a["rank"] < b["rank"]
 		return a["suit"] < b["suit"]
 	)
-	var offset = Vector2(36, -32)
-	var prev = null
+	
+	var offset = Vector2(36, -31)
+	var prev
+	
+	if (checkdeck.size() > 0):
+		offset.x -= get_rank_offset(checkdeck[0].suit)
+		prev = checkdeck[0]
+		print(get_rank_spacing(checkdeck[0].suit), " ", get_rank_offset(checkdeck[0].suit))
+	
 	for i in range(checkdeck.size()):
 		var card = create_card(checkdeck[i])
 		
 		# offset changes
-		if prev != null and prev.suit != checkdeck[i].suit:
+		if prev.suit != checkdeck[i].suit:
+			print(get_rank_spacing(checkdeck[i].suit) , " ",  get_rank_offset(checkdeck[i].suit))
 			offset.y += 14
 			offset.x = 36
+			offset.x = 36 - get_rank_offset(checkdeck[i].suit)
 		
 		card.position = offset
-		offset.x -= get_rank_offset(checkdeck[i].suit, checkdeck[i].rank)
+		offset.x -= get_rank_spacing(checkdeck[i].suit)
 		prev = checkdeck[i]
 		shown_cards.append(card)
 
-func get_rank_offset(suit: int, rank: int) -> int:
-	return WIDTH / suit_counts[suit]
-	
+func get_rank_spacing(suit: int) -> int:
+	if suit_counts[suit] > 1:
+		return floor(WIDTH / (suit_counts[suit] - 1))
+	return 0
+
+func get_rank_offset(suit: int) -> int:
+	if suit_counts[suit] > 1:
+		return WIDTH % (suit_counts[suit] -1)
+	return WIDTH / 2
 
 func load_info():
 	load_ranks()
@@ -124,18 +140,21 @@ func load_suits():
 
 func place_digit_sprites(value, offset: Vector2):
 	var digits = Globals.convert_to_digits(value, 2, 99)
-	var ones = create_digit_sprite(Vector2(offset.x+4, offset.y), digits[1])
-	var tens = create_digit_sprite(offset, digits[0])
+	var ones = Globals.create_digit_sprite(digits[1], Vector2(offset.x+4, offset.y))
+	var tens = Globals.create_digit_sprite(digits[0], offset)
+	
+	add_child(ones)
+	add_child(tens)
 	shown_digits.append(ones)
 	shown_digits.append(tens)
 
-func create_digit_sprite(offset: Vector2, frame: int) -> AnimatedSprite2D:
-	var sprite := AnimatedSprite2D.new()
-	sprite.sprite_frames = digit_frames
-	sprite.frame = frame
-	sprite.global_position = offset
-	add_child(sprite)
-	return sprite
+#func create_digit_sprite(offset: Vector2, frame: int) -> AnimatedSprite2D:
+	#var sprite := AnimatedSprite2D.new()
+	#sprite.sprite_frames = digit_frames
+	#sprite.frame = frame
+	#sprite.global_position = offset
+	#add_child(sprite)
+	#return sprite
 
 func create_card(data: Dictionary) -> Area2D:
 	const CARD = preload("res://scenes/card.tscn")

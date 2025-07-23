@@ -105,8 +105,7 @@ func _on_card_clicked(card):
 			card.shop_select()
 
 func get_main_card(xoffset: int):
-	const CARD = preload("res://scenes/card.tscn")
-	var card = CARD.instantiate()
+	var card = preload("res://scenes/card.tscn").instantiate()
 	
 	add_child(card)
 	card.position.x = xoffset
@@ -116,7 +115,8 @@ func get_main_card(xoffset: int):
 	
 	var data = JokerManager.generate_joker_data()
 	card.setup({
-				"id": data.id,
+				"id": 3,
+				#"id": data.id,
 				"type": CardManager.CardType.joker,
 				"edition": data.edition,
 			})

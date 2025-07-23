@@ -5,11 +5,13 @@ signal buy_click_forwarded(card)
 
 @onready var image: Sprite2D = $Image
 @onready var anim: AnimationPlayer = $AnimationPlayer
+@onready var box: Script = preload("res://scripts/joker-descriptor.gd")
 
 var is_shop = false
 var flipped = true
 var tex: Texture2D = null
 var cost_label: Sprite2D = null
+var desc_box: Node2D = null
 
 const SELECT_DIST = 14
 const SHOP_SELECT_DIST = 5
@@ -21,8 +23,13 @@ var data = {
 	# rank & suit & enhancement & seal & raised for card
 	# booster_type and booster_size for boosters
 	# edition for card & joker
+	# scale_value for joker
 	# consumables TODO
 }
+
+func _ready():
+	connect("mouse_entered", Callable(self, "on_mouse_entered"))
+	connect("mouse_exited", Callable(self, "on_mouse_exited"))
 
 func setup(new_data: Dictionary):
 	data = new_data
@@ -53,7 +60,7 @@ func set_joker(joker: JokerManager.Jokers):
 	
 	var joker_data = JokerManager.get_joker(joker)
 	var path = ("res://images/cards/jokers/%s/%s.png" % 
-				[JokerManager.get_rarity_string(joker_data[1]), 
+				[JokerManager.get_rarity_string(joker_data.rarity), 
 				JokerManager.get_joker_shortname(joker)])
 	
 	tex = CardManager.get_card_texture(path)
@@ -66,7 +73,8 @@ func set_booster(booster: CardManager.BoosterType, size: CardManager.BoosterSize
 	tex = CardManager.get_card_texture(path)
 	if tex:
 		image.texture = tex
-	
+
+
 func flip():
 	if (data.type != CardManager.CardType.card and
 		data.type != CardManager.CardType.joker):
@@ -130,20 +138,39 @@ func _input_event(viewport, event, shape_idx):
 	var pressed = false
 	if (event is InputEventMouseButton and event.pressed 
 		and event.button_index == MOUSE_BUTTON_LEFT):
-		
-		if (data.type == CardManager.CardType.joker):
-			var jok_data = JokerManager.get_joker(data.id)
-			print(
-				JokerManager.get_rarity_string(jok_data[1]),
-				" ", 
-				jok_data[0],
-				" - ",
-				jok_data[3]
-			)
-				
-		emit_signal("card_clicked", self)
+			_on_clicked()		
+
+func _on_clicked():
+	if (data.type == CardManager.CardType.joker):
+		var jok_data = JokerManager.get_joker(data.id)
+		print(
+			JokerManager.get_rarity_string(jok_data.rarity),
+			" ", 
+			jok_data.name,
+			" - ",
+			jok_data.description
+		)
 			
+	emit_signal("card_clicked", self)
+
+func on_mouse_entered():
+	if not is_joker():
+		return
 		
+	var desc_data = JokerManager.get_joker(get_id())
+
+	desc_box = box.new(desc_data)
+	add_child(desc_box)
+	self.z_index = 2
+
+
+		
+
+func on_mouse_exited():
+	if not is_joker():
+		return
+	self.z_index = 0
+	desc_box.queue_free()
 
 func set_shop_card():
 	is_shop = true

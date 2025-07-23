@@ -25,6 +25,7 @@ func begin_round():
 	shuffle()
 	create_hand()
 	cards_remaining = game.get_deck_size()
+	is_rank_sort = true
 	deal()
 	sort_hand()
 			
@@ -35,8 +36,7 @@ func deal():
 			return
 		
 		var data = deck.pop_back()
-		const CARD = preload("res://scenes/card.tscn")
-		var card = CARD.instantiate()
+		var card = preload("res://scenes/card.tscn").instantiate()
 		
 		for i in range(hand_size):
 			if hand[i] == {}:
@@ -60,9 +60,9 @@ func _on_play_button_pressed():
 	active_cards = sort_passed_cards(active_cards)
 	game.play(active_cards)
 
-	await count_animation(game.GAMESPEED, active_cards)
-	await score_animation(game.GAMESPEED, active_cards)
-	await jokers.score_jokers(game.GAMESPEED, active_cards)
+	await count_animation(active_cards)
+	await score_animation(active_cards)
+	await jokers.score_jokers(active_cards)
 	
 	# free
 	for card in selected_cards:
@@ -81,7 +81,7 @@ func _on_play_button_pressed():
 	updateClickUI.emit()
 
 # does counting animation and discards selected cards
-func count_animation(speed, active_cards):
+func count_animation(active_cards):
 	selected_cards = sort_passed_cards(selected_cards)
 	
 	# move cards up from hand
@@ -97,14 +97,14 @@ func count_animation(speed, active_cards):
 		card.position.y -= 4
 		card.z_index = i
 		
-	await get_tree().create_timer(speed).timeout
+	await get_tree().create_timer(game.get_speed()).timeout
 	for i in range(active_cards.size()-1, -1, -1):
 		var card = active_cards[i]
 		card.position.y -= 4
 		
-		await get_tree().create_timer(speed).timeout
+		await get_tree().create_timer(game.get_speed()).timeout
 
-func score_animation(speed, active_cards):
+func score_animation(active_cards):
 	# SCORE LOOP
 	for i in range(1, active_cards.size()+1):
 		
@@ -112,13 +112,8 @@ func score_animation(speed, active_cards):
 		
 		# CHIPS
 		var cardval = CardManager.convert_rank_to_chipvalue(card.get_rank())
-		var alert = Globals.do_score_alert(card, true, true, cardval, speed, 0)
-		await game.add_chips(cardval)
-		
-		
-		updateClickUI.emit()
-		await get_tree().create_timer(speed).timeout
-		alert.queue_free()
+		await game.add_resources(card, {"chips" : cardval})
+
 		
 		# ENHANCEMENTS
 		var enhancevals = CardManager.get_enhancement_val(card)
@@ -132,9 +127,8 @@ func score_animation(speed, active_cards):
 		var jokercardvals = await jokers.score_card(card)
 		for cardvals in  jokercardvals:
 			await game.add_resources(card, cardvals)
-		#await get_tree().create_timer(speed).timeout
 	
-	await get_tree().create_timer(speed).timeout
+	await get_tree().create_timer(game.get_speed()).timeout
 	
 func sort_passed_cards(cards):
 	if is_rank_sort:

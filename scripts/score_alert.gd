@@ -16,9 +16,9 @@ func set_value(is_plus, is_chips, score: int):
 
 	var symbol
 	if is_plus:
-		symbol = create_sprite("10", offset)
+		symbol = Globals.create_digit_sprite(10, offset)
 	else:
-		symbol = create_sprite("11", offset)
+		symbol = Globals.create_digit_sprite(11, offset)
 	
 	if digits[0] == "1":
 		offset.x += digit_size.x - 1
@@ -36,16 +36,9 @@ func set_value(is_plus, is_chips, score: int):
 			if digits[i] == "1":
 				offset.x += digit_size.x - 2
 		
-		var sprite = create_sprite(digit, offset)
+		var sprite = Globals.create_digit_sprite(int(digit), offset)
 		add_child(sprite)
 		offset.x += digit_size.x + 1
-
-func create_sprite(value: String, offset: Vector2):
-	var sprite = AnimatedSprite2D.new()
-	sprite.frames = digit_frames
-	sprite.frame = int(value)
-	sprite.position = offset
-	return sprite
 
 func clear_score():
 	for digit in get_children():

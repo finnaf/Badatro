@@ -289,13 +289,14 @@ func pair_value(hand: Array):
 	return -1
 
 
-func convert_rank_to_chipvalue(rank: int):
+func convert_rank_to_chipvalue(rank: int) -> int:
 	if rank <= 10:
 		return rank
 	if rank <= 13:
 		return 10
 	if rank == 14:
 		return 11
+	return -1
 
 # returns value of enhancement chips, mult, xmult, money
 func get_enhancement_val(card) -> Dictionary:
@@ -373,7 +374,7 @@ func get_card_cost(data: Dictionary) -> int:
 	
 	var cost = 0
 	if (data.type == CardType.joker):
-		cost = JokerManager.get_joker(data.id)[2]
+		cost = JokerManager.get_joker(data.id).cost
 		
 	if (data.type == CardType.booster):
 		if (data.booster_size == BoosterSize.normal):

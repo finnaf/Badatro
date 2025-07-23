@@ -8,23 +8,27 @@ extends Node2D
 
 var seed = 1
 
-var GAMESPEED = 0.3
-var BASEHANDSIZE = 8
+const GAMESPEED = 0.05
+const INCRSPEED = GAMESPEED / 7
+const MAXSPEED = 0.05
+var gamespeed
 
-var BASEDECKSIZE = 52
+const BASEHANDSIZE = 8
+
+const BASEDECKSIZE = 52
 var decksize = 52
 
 var ante = 1
 var round = 1
 var blind = 0 # 0, 1 or 2
 
-var BASE_REROLL_COST = 5
+const BASE_REROLL_COST = 5
 var reroll_cost = 5
 
-var money = 4
+var money = 99
 
-var BASEHANDS = 4
-var BASEDISCARDS = 3
+const BASEHANDS = 4
+const BASEDISCARDS = 3
 var hands = 4
 var discards = 3
 
@@ -91,6 +95,8 @@ func setup(game_seed: int):
 	seed(seed) # for shuffling cards
 	JokerManager.new_game(seed) # for drawing jokers
 	
+	gamespeed = GAMESPEED
+	
 	deck.setup()
 	deck.begin_round()
 
@@ -104,6 +110,15 @@ func calculate_goal():
 
 func get_seed():
 	return seed
+	
+# for the increasing speed of cards
+func get_speed():
+	gamespeed = lerp(gamespeed, MAXSPEED, INCRSPEED)
+	#print(gamespeed)
+	return gamespeed
+
+func get_base_speed():
+	return GAMESPEED
 
 func get_deck_size():
 	return decksize
@@ -132,7 +147,7 @@ func get_ante():
 	return ante
 	
 func get_basic_deck() -> Array:
-	var ranks = range(2, 15)
+	var ranks = range(2, 15) #2-15
 	var deck = []
 	var count = 0
 		
@@ -211,6 +226,8 @@ func end_turn():
 	chips = 0
 	mult = 0
 	
+	gamespeed = GAMESPEED
+	
 	# check win
 	var req = BossManager.get_chip_req(ante, blind)
 	if score >= req:
@@ -269,25 +286,28 @@ func add_resources(card, dict: Dictionary):
 				true, dict.chips, GAMESPEED, offset)
 			await add_chips(dict.chips)
 			sidebar.update_chips()
-			await get_tree().create_timer(GAMESPEED).timeout
 		elif key == "mult":
 			alert = Globals.do_score_alert(card, true, 
 				false, dict.mult, GAMESPEED, offset)
 			await add_mult(dict.mult)
 			sidebar.update_mult()
-			await get_tree().create_timer(GAMESPEED).timeout
 		elif key == "xmult":
 			alert = Globals.do_score_alert(card, false, 
 				false, dict.xmult, GAMESPEED, offset)
 			await add_chips(dict.xmult)
 			sidebar.update_mult()
-			await get_tree().create_timer(GAMESPEED).timeout
 		elif key == "money":
 			alert = Globals.do_score_alert(card, true, 
 				true, dict.money, GAMESPEED, offset)
 			await add_money(dict.money)
 			sidebar.update_money()
-			await get_tree().create_timer(GAMESPEED).timeout
-	
-	if (alert):
-		alert.queue_free()
+		else:
+			continue
+		
+		# display
+		await get_tree().create_timer(get_speed()).timeout
+		
+		# delete
+		if (alert):
+			alert.queue_free()
+			await get_tree().create_timer(abs(get_speed() - 0.1) / 3).timeout	
