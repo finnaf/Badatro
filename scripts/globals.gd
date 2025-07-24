@@ -6,6 +6,8 @@ const YELLOW = Color(1, 0.7, 0.1)
 const RED = Color(0.929, 0.11, 0.141)
 const BLUE = Color(0.0, 0.650, 0.91)
 const WHITE = Color(1.0,1.0,1.0)
+const BLACK = Color(0.0,0.0,0.0)
+const GREY = Color(0.5, 0.5, 0.5)
 
 enum ResourceType {
 	chips,

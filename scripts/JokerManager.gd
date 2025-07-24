@@ -16,7 +16,7 @@ enum Benefit {
 
 # description connective
 enum Connective {
-	none, # totally empty second row
+	none,
 	when_scored,
 	contains,
 	on_discard,
@@ -25,6 +25,16 @@ enum Connective {
 	countdown,
 	final_hand,
 	probability
+}
+
+# duplication sucks but want a type matchup
+enum Condition {
+	none,
+	face,
+	spades, hearts, diamonds, clubs,
+	two, three, four, five, six, seven, eight, nine, ten, jack, queen, king, ace,
+	highcard, pair, twopair, threeofakind, fullhouse, flush, straight, 
+	straightflush, fourofakind, fiveofakind, flushhouse, flushfive
 }
 
 enum Rarity {
@@ -120,7 +130,7 @@ func get_joker_shortname(value: int) -> String:
 	return "none"
 
 
-
+# condition is so scuffed
 func get_joker(joker: Jokers) -> Dictionary:
 	match joker:
 		Jokers.Joker:
@@ -142,7 +152,7 @@ func get_joker(joker: Jokers) -> Dictionary:
 				"benefit" : Benefit.amult,
 				"benefit_val" : 3,
 				"connective" : Connective.when_scored,
-				"condition" : CardManager.Suit.diamonds
+				"condition" : Condition.diamonds
 			}
 		Jokers.LustyJoker:
 			return {
@@ -153,7 +163,7 @@ func get_joker(joker: Jokers) -> Dictionary:
 				"benefit" : Benefit.amult,
 				"benefit_val" : 3,
 				"connective" : Connective.when_scored,
-				"condition" : CardManager.Suit.hearts,
+				"condition" : Condition.hearts,
 			}
 		Jokers.WrathfulJoker:
 			return {
@@ -164,7 +174,7 @@ func get_joker(joker: Jokers) -> Dictionary:
 				"benefit" : Benefit.amult,
 				"benefit_val" : 3,
 				"connective" : Connective.when_scored,
-				"condition" : CardManager.Suit.spades,
+				"condition" : Condition.spades,
 			}
 		Jokers.GluttonousJoker:
 			return {
@@ -175,7 +185,7 @@ func get_joker(joker: Jokers) -> Dictionary:
 				"benefit" : Benefit.amult,
 				"benefit_val" : 3,
 				"connective" : Connective.when_scored,
-				"condition" : CardManager.Suit.clubs,
+				"condition" : Condition.clubs,
 			}
 		Jokers.JollyJoker:
 			return {
@@ -185,7 +195,8 @@ func get_joker(joker: Jokers) -> Dictionary:
 				"description" :  "+8 Mult if played hand contains a Pair",
 				"benefit" : Benefit.amult,
 				"benefit_val" : 8777,
-				"connective" : Connective.contains
+				"connective" : Connective.contains,
+				"condition" : Condition.pair,
 			}
 		Jokers.ZanyJoker:
 			return {
@@ -195,7 +206,8 @@ func get_joker(joker: Jokers) -> Dictionary:
 				"description" : "+12 Mult if played hand contains a Three of a Kind",
 				"benefit" : Benefit.amult,
 				"benefit_val" : 12,
-				"connective" : Connective.contains
+				"connective" : Connective.contains,
+				"condition" : Condition.threeofakind,
 			}
 		Jokers.MadJoker:
 			return {
@@ -205,7 +217,9 @@ func get_joker(joker: Jokers) -> Dictionary:
 				"description" :  "+10 Mult if played hand contains Two Pair",
 				"benefit" : Benefit.amult,
 				"benefit_val" : 1077,
-				"connective" : Connective.contains
+				"connective" : Connective.contains,
+				"condition" : Condition.twopair,
+				
 			}
 		Jokers.CrazyJoker:
 			return {
@@ -215,7 +229,8 @@ func get_joker(joker: Jokers) -> Dictionary:
 				"description" : "+12 Mult if played hand contains Straight",
 				"benefit" : Benefit.amult,
 				"benefit_val" : 1207,
-				"connective" : Connective.contains
+				"connective" : Connective.contains,
+				"condition" : Condition.straight,
 			}
 		Jokers.DrollJoker:
 			return {
@@ -225,7 +240,8 @@ func get_joker(joker: Jokers) -> Dictionary:
 				"description" : "+10 Mult if played hand contains Flush",
 				"benefit" : Benefit.amult,
 				"benefit_val" : 1077,
-				"connective" : Connective.contains
+				"connective" : Connective.contains,
+				"condition" : Condition.flush,
 			}
 	return {}
 			
