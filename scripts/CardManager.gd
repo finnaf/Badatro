@@ -374,7 +374,7 @@ func get_card_cost(data: Dictionary) -> int:
 	
 	var cost = 0
 	if (data.type == CardType.joker):
-		cost = JokerManager.get_joker(data.id).cost
+		cost = JokerManager.get_joker(data.id, data.rarity).cost
 		
 	if (data.type == CardType.booster):
 		if (data.booster_size == BoosterSize.normal):

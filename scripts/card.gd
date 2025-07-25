@@ -23,7 +23,7 @@ var data = {
 	# rank & suit & enhancement & seal & raised for card
 	# booster_type and booster_size for boosters
 	# edition for card & joker
-	# scale_value for joker
+	# rarity, scale_value for joker
 	# consumables TODO
 }
 
@@ -41,7 +41,7 @@ func setup(new_data: Dictionary):
 		CardManager.CardType.card:
 			set_card(data.rank, data.suit)
 		CardManager.CardType.joker:
-			set_joker(data.id)
+			set_joker(data.id, data.rarity)
 		CardManager.CardType.booster:
 			set_booster(data.id, data.booster_size)
 		CardManager.CardType.voucher:
@@ -54,14 +54,12 @@ func set_card(rank: int, suit: int):
 	if tex:
 		image.texture = tex
 
-func set_joker(joker: JokerManager.Jokers):
-	if (joker > JokerManager.Jokers.size()):
-		return
-	
-	var joker_data = JokerManager.get_joker(joker)
+func set_joker(joker_id, rarity):	
+	var joker_data = JokerManager.get_joker(joker_id, rarity)
+	data.rarity = joker_data.rarity # edge case where cant pick from given rarity
 	var path = ("res://images/cards/jokers/%s/%s.png" % 
-				[JokerManager.get_rarity_string(joker_data.rarity), 
-				JokerManager.get_joker_shortname(joker)])
+				[JokerManager.get_rarity_string(rarity), 
+				JokerManager.get_joker_shortname(joker_id, rarity)])
 	
 	tex = CardManager.get_card_texture(path)
 	if tex:
@@ -142,7 +140,7 @@ func _input_event(viewport, event, shape_idx):
 
 func _on_clicked():
 	if (data.type == CardManager.CardType.joker):
-		var jok_data = JokerManager.get_joker(data.id)
+		var jok_data = JokerManager.get_joker(get_id(), get_rarity())
 		print(
 			JokerManager.get_rarity_string(jok_data.rarity),
 			" ", 
@@ -157,7 +155,7 @@ func on_mouse_entered():
 	if not is_joker():
 		return
 	
-	var desc_data = JokerManager.get_joker(get_id())
+	var desc_data = JokerManager.get_joker(get_id(), get_rarity())
 	desc_box = box.new(desc_data)
 	add_child(desc_box)
 	self.z_index = 2
@@ -184,6 +182,10 @@ func get_rank():
 	return data.rank
 func get_id():
 	return data.id
+func get_rarity():
+	if (data.type == CardManager.CardType.joker):
+		return data.rarity
+	return null
 func is_raised():
 	if (data.type == CardManager.CardType.card):
 		return data.raised

@@ -116,6 +116,7 @@ func get_main_card(xoffset: int):
 	var data = JokerManager.generate_joker_data()
 	card.setup({
 				"id": data.id,
+				"rarity": data.rarity,
 				"type": CardManager.CardType.joker,
 				"edition": data.edition,
 			})
