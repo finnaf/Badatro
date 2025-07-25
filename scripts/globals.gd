@@ -16,8 +16,40 @@ enum ResourceType {
 	money,
 }
 
+var is_dragging: bool = false
+var is_pressed: bool = false
+var drag_target = null 
+
 func _ready():
 	digit_frames = load("res://resources/number-sprite-frames.tres")
+
+func _input(event):
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		is_pressed = event.pressed
+
+		if not event.pressed:
+			if is_dragging:
+				_on_global_drag_stop()
+				is_dragging = false
+			else:
+				if (drag_target):
+					drag_target.clicked()
+
+	elif event is InputEventMouseMotion:
+		if is_pressed and not is_dragging:
+			is_dragging = true
+			_on_global_drag_start()
+		
+		if is_dragging:
+			_on_global_drag_motion(event)
+
+func _on_global_drag_stop():
+	pass
+func _on_global_drag_start():
+	pass
+func _on_global_drag_motion(event):
+	#drag_target.position = event.relative
+	pass
 
 func convert_to_digits(number, length, max) -> Array:
 	if number > max:

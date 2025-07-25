@@ -7,8 +7,11 @@ signal buy_click_forwarded(card)
 @onready var anim: AnimationPlayer = $AnimationPlayer
 @onready var box: Script = preload("res://scripts/joker-descriptor.gd")
 
-var is_shop = false
-var flipped = true
+var pressed: bool = false
+var dragged: bool = false
+
+var is_shop: bool = false
+var flipped: bool = true
 var tex: Texture2D = null
 var cost_label: Sprite2D = null
 var desc_box: Node2D = null
@@ -133,10 +136,24 @@ func shop_deselect():
 	position.y += SHOP_SELECT_DIST
 
 func _input_event(viewport, event, shape_idx):
-	var pressed = false
-	if (event is InputEventMouseButton and event.pressed 
-		and event.button_index == MOUSE_BUTTON_LEFT):
-			_on_clicked()		
+	# when clicked, either click no move for info, or click & drag
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			pressed = true
+			dragged = false
+		else:
+			if not dragged:
+				_on_clicked()
+			pressed = false
+			dragged = false
+
+	elif event is InputEventMouseMotion:
+		if pressed:
+			dragged = true
+			_on_drag(event)
+
+func _on_drag(event):
+	print("dragging")
 
 func _on_clicked():
 	if (data.type == CardManager.CardType.joker):
