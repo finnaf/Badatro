@@ -19,6 +19,7 @@ enum Connective {
 	none,
 	when_scored,
 	contains,
+	is_,
 	on_discard,
 	held_hand,
 	blind_selected,

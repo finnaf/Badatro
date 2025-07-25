@@ -47,22 +47,22 @@ func generate_content(desc_data: Dictionary) -> float:
 	# TOP ROW
 	match desc_data.benefit:
 		JokerManager.Benefit.achips:
-			top_cursor = _place_symbol(10, DIGIT_SIZE, top_cursor, top_y, sprites, Globals.BLUE)
+			top_cursor = _place_digit(10, top_cursor, top_y, sprites, Globals.BLUE)
 			for d in str(desc_data.benefit_val):
 				top_cursor = _place_digit(int(d), top_cursor, top_y, sprites, Globals.BLUE)
 		JokerManager.Benefit.amult:
-			top_cursor = _place_symbol(10, DIGIT_SIZE, top_cursor, top_y, sprites, Globals.RED)
+			top_cursor = _place_digit(10, top_cursor, top_y, sprites, Globals.RED)
 			for d in str(desc_data.benefit_val):
 				top_cursor = _place_digit(int(d), top_cursor, top_y, sprites, Globals.RED)
 		JokerManager.Benefit.achipsmult:
-			top_cursor = _place_symbol(10, DIGIT_SIZE, top_cursor, top_y, sprites, Globals.BLUE)
+			top_cursor = _place_digit(10, top_cursor, top_y, sprites, Globals.BLUE)
 			for d in str(desc_data.benefit_val):
 				top_cursor = _place_digit(int(d), top_cursor, top_y, sprites, Globals.BLUE)
-			top_cursor = _place_symbol(10, DIGIT_SIZE, top_cursor, top_y, sprites, Globals.RED)
+			top_cursor = _place_digit(10, top_cursor, top_y, sprites, Globals.RED)
 			for d in str(desc_data.benefit_val):
 				top_cursor = _place_digit(int(d), top_cursor, top_y, sprites, Globals.RED)
 		JokerManager.Benefit.xmult:
-			top_cursor = _place_symbol(11, DIGIT_SIZE, top_cursor, top_y, sprites, Globals.RED)
+			top_cursor = _place_digit(11, top_cursor, top_y, sprites, Globals.RED)
 			for d in str(desc_data.benefit_val):
 				top_cursor = _place_digit(int(d), top_cursor, top_y, sprites, Globals.RED)
 	
@@ -71,10 +71,13 @@ func generate_content(desc_data: Dictionary) -> float:
 	match desc_data.connective:
 		JokerManager.Connective.when_scored:
 			bot_cursor = _place_symbol(0, DIGIT_SIZE, bot_cursor, bot_y, sprites, Globals.BLACK)
-			bot_cursor = _place_symbol(6, SMALL_DIGIT_SIZE, bot_cursor, bot_y, sprites, Globals.BLACK)
+			bot_cursor = _place_symbol(10, SMALL_DIGIT_SIZE, bot_cursor, bot_y, sprites, Globals.BLACK)
 		JokerManager.Connective.contains:
 			bot_cursor = _place_symbol(1, DIGIT_SIZE, bot_cursor, bot_y, sprites, Globals.BLACK)
-			bot_cursor = _place_symbol(6, SMALL_DIGIT_SIZE, bot_cursor, bot_y, sprites, Globals.BLACK)
+			bot_cursor = _place_symbol(10, SMALL_DIGIT_SIZE, bot_cursor, bot_y, sprites, Globals.BLACK)
+		JokerManager.Connective.is_:
+			bot_cursor = _place_symbol(2, DIGIT_SIZE, bot_cursor, bot_y, sprites, Globals.BLACK)
+			bot_cursor = _place_symbol(10, SMALL_DIGIT_SIZE, bot_cursor, bot_y, sprites, Globals.BLACK)
 		
 		_:
 			for s in sprites:
@@ -84,37 +87,37 @@ func generate_content(desc_data: Dictionary) -> float:
 
 	match desc_data.condition:
 		JokerManager.Condition.spades:
-			bot_cursor = _place_symbol(8, DIGIT_SIZE, bot_cursor, bot_y, sprites)
+			bot_cursor = _place_symbol(12, DIGIT_SIZE, bot_cursor, bot_y, sprites)
 		JokerManager.Condition.hearts:
-			bot_cursor = _place_symbol(9, DIGIT_SIZE, bot_cursor, bot_y, sprites)
+			bot_cursor = _place_symbol(13, DIGIT_SIZE, bot_cursor, bot_y, sprites)
 		JokerManager.Condition.diamonds:
-			bot_cursor = _place_symbol(10, DIGIT_SIZE, bot_cursor, bot_y, sprites)
+			bot_cursor = _place_symbol(14, DIGIT_SIZE, bot_cursor, bot_y, sprites)
 		JokerManager.Condition.clubs:
-			bot_cursor = _place_symbol(11, DIGIT_SIZE, bot_cursor, bot_y, sprites)
+			bot_cursor = _place_symbol(15, DIGIT_SIZE, bot_cursor, bot_y, sprites)
 		JokerManager.Condition.highcard:
-			bot_cursor = _place_symbol(12, HAND_SYM_SIZE, bot_cursor, bot_y, sprites)
-		JokerManager.Condition.pair:
-			bot_cursor = _place_symbol(13, HAND_SYM_SIZE, bot_cursor, bot_y, sprites)
-		JokerManager.Condition.twopair:
-			bot_cursor = _place_symbol(14, HAND_SYM_SIZE, bot_cursor, bot_y, sprites)
-		JokerManager.Condition.threeofakind:
-			bot_cursor = _place_symbol(15, HAND_SYM_SIZE, bot_cursor, bot_y, sprites)
-		JokerManager.Condition.straight:
 			bot_cursor = _place_symbol(16, HAND_SYM_SIZE, bot_cursor, bot_y, sprites)
-		JokerManager.Condition.flush:
+		JokerManager.Condition.pair:
 			bot_cursor = _place_symbol(17, HAND_SYM_SIZE, bot_cursor, bot_y, sprites)
-		JokerManager.Condition.fullhouse:
+		JokerManager.Condition.twopair:
 			bot_cursor = _place_symbol(18, HAND_SYM_SIZE, bot_cursor, bot_y, sprites)
-		JokerManager.Condition.fourofakind:
+		JokerManager.Condition.threeofakind:
 			bot_cursor = _place_symbol(19, HAND_SYM_SIZE, bot_cursor, bot_y, sprites)
-		JokerManager.Condition.straightflush:
+		JokerManager.Condition.straight:
 			bot_cursor = _place_symbol(20, HAND_SYM_SIZE, bot_cursor, bot_y, sprites)
-		JokerManager.Condition.fiveofakind:
+		JokerManager.Condition.flush:
 			bot_cursor = _place_symbol(21, HAND_SYM_SIZE, bot_cursor, bot_y, sprites)
-		JokerManager.Condition.flushhouse:
+		JokerManager.Condition.fullhouse:
 			bot_cursor = _place_symbol(22, HAND_SYM_SIZE, bot_cursor, bot_y, sprites)
-		JokerManager.Condition.flushfive:
+		JokerManager.Condition.fourofakind:
 			bot_cursor = _place_symbol(23, HAND_SYM_SIZE, bot_cursor, bot_y, sprites)
+		JokerManager.Condition.straightflush:
+			bot_cursor = _place_symbol(24, HAND_SYM_SIZE, bot_cursor, bot_y, sprites)
+		JokerManager.Condition.fiveofakind:
+			bot_cursor = _place_symbol(25, HAND_SYM_SIZE, bot_cursor, bot_y, sprites)
+		JokerManager.Condition.flushhouse:
+			bot_cursor = _place_symbol(26, HAND_SYM_SIZE, bot_cursor, bot_y, sprites)
+		JokerManager.Condition.flushfive:
+			bot_cursor = _place_symbol(27, HAND_SYM_SIZE, bot_cursor, bot_y, sprites)
 
 	var width = max(top_cursor, bot_cursor) + 1 # +1 for spacing from card
 
