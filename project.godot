@@ -21,6 +21,7 @@ CardManager="*res://scripts/CardManager.gd"
 BossManager="*res://scripts/BossManager.gd"
 Globals="*res://scripts/globals.gd"
 JokerManager="*res://scripts/JokerManager.gd"
+DragManager="*res://scripts/DragManager.gd"
 
 [display]
 

@@ -2,13 +2,11 @@ extends Area2D
 
 signal card_clicked(card)
 signal buy_click_forwarded(card)
+signal dragged(card)
 
 @onready var image: Sprite2D = $Image
 @onready var anim: AnimationPlayer = $AnimationPlayer
 @onready var box: Script = preload("res://scripts/joker-descriptor.gd")
-
-var pressed: bool = false
-var dragged: bool = false
 
 var is_shop: bool = false
 var flipped: bool = true
@@ -136,26 +134,19 @@ func shop_deselect():
 	position.y += SHOP_SELECT_DIST
 
 func _input_event(viewport, event, shape_idx):
-	# when clicked, either click no move for info, or click & drag
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
-			pressed = true
-			dragged = false
-		else:
-			if not dragged:
-				_on_clicked()
-			pressed = false
-			dragged = false
+			DragManager.start_drag(self, event.position)
 
-	elif event is InputEventMouseMotion:
-		if pressed:
-			dragged = true
-			_on_drag(event)
+func _on_drag_start():
+	pass
+func _on_drag_motion(event):
+	position += event.relative
+func _on_drag_end():
+	dragged.emit(self)
 
-func _on_drag(event):
-	print("dragging")
 
-func _on_clicked():
+func on_clicked():
 	if (data.type == CardManager.CardType.joker):
 		var jok_data = JokerManager.get_joker(get_id(), get_rarity())
 		print(
@@ -187,10 +178,19 @@ func set_shop_card():
 	is_shop = true
 func unset_shop_card():
 	is_shop = false
+func is_shop_card():
+	return is_shop
 func is_joker():
 	if (data.type == CardManager.CardType.joker):
 		return true
 	return false
+func is_card():
+	if (data.type == CardManager.CardType.card):
+		return true
+	return false
+func is_consumable():
+	if (data.type == CardManager.CardType.consumable):
+		return true
 func get_data():
 	return data
 func get_suit():

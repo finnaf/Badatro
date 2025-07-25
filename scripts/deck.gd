@@ -55,7 +55,6 @@ func deal():
 func _on_play_button_pressed():
 	if selected_cards.is_empty() or game.is_win():
 		return
-	
 	var active_cards = CardManager.get_active_cards(selected_cards, game.hand)
 	active_cards = sort_passed_cards(active_cards)
 	game.play(active_cards)
@@ -178,6 +177,35 @@ func _on_card_clicked(card):
 	game.set_hand(CardManager.calculate_hand(selected_cards))
 	updateClickUI.emit()
 
+func _on_card_dragged(dragged_card):
+	var furthest_card = null
+	for card in get_children():
+		if (dragged_card.position.x > card.position.x): # card is to the left
+			if (furthest_card == null or card.position.x > furthest_card.position.x):
+				furthest_card = card
+	
+	if (furthest_card != null):
+		
+		hand.erase(dragged_card.data)
+		
+		var index = get_index_from_node(furthest_card)
+		hand.insert(index, dragged_card.data)
+		return_hand()
+	
+	# dragged to the leftmost position
+	else:
+		hand.erase(dragged_card.data)
+		hand.append(dragged_card.data)
+		return_hand()
+		
+
+func get_index_from_node(node: Node2D) -> int:
+	for i in range(hand.size()):
+		if (hand[i].id == node.get_id()):
+			return i
+	return -1
+
+
 func create_hand():
 	for i in range(hand_size):
 		hand.append({})
@@ -257,15 +285,7 @@ func sort_rank():
 		return a["rank"] < b["rank"]
 	)
 	
-	for card in get_children():
-		if card.has_method("get_id"):
-			
-			for i in range(hand_size):
-				if hand[i] == {}:
-					continue
-				if card.get_id() == hand[i].id:
-					card.position.x = get_card_position(i, count_cards_in_hand())
-					card.z_index = i
+	return_hand()
 
 func sort_suit():	
 	hand.sort_custom(func(a, b):
@@ -279,6 +299,10 @@ func sort_suit():
 		return a["suit"] > b["suit"]
 	)
 	
+	return_hand()
+
+# place cards into hand order
+func return_hand():
 	for card in get_children():
 		if card.has_method("get_id"):
 			
@@ -287,7 +311,13 @@ func sort_suit():
 					continue
 				if card.get_id() == hand[i].id:
 					card.position.x = get_card_position(i, count_cards_in_hand())
+					
+					if card in selected_cards:
+						card.position.y = -14
+					else:
+						card.position.y = 0
 					card.z_index = i
+	
 
 func _on_sort_suit_button_pressed():
 	is_rank_sort = false
@@ -312,6 +342,7 @@ func count_cards_in_hand():
 func setup_connection():
 	for card in get_children():
 		card.connect("card_clicked", Callable(self, "_on_card_clicked"))
+		card.connect("dragged", Callable(self, "_on_card_dragged"))
 
 
 func _on_cash_out_button_pressed() -> void:

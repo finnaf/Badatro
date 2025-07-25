@@ -197,6 +197,7 @@ func _get_clicked(card):
 					Callable(self, "_in_booster_card_clicked"))
 	in_booster_count -= 1
 	jokers.add(card)
+	card.unset_shop_card()
 	
 	if (in_booster_count == 0):
 		close_booster()
