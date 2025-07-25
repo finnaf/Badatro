@@ -21,9 +21,9 @@ func setup():
 
 func begin_round():
 	hand_size = game.get_hand_size()
+	create_hand()
 	deck = fulldeck.duplicate(true)
 	shuffle()
-	create_hand()
 	cards_remaining = game.get_deck_size()
 	is_rank_sort = true
 	deal()
@@ -185,7 +185,6 @@ func _on_card_dragged(dragged_card):
 				furthest_card = card
 	
 	if (furthest_card != null):
-		
 		hand.erase(dragged_card.data)
 		
 		var index = get_index_from_node(furthest_card)
@@ -218,7 +217,7 @@ func delete_hand():
 	for card in get_children():
 		if card.has_method("get_data"):
 			card.queue_free()
-	clear_hand()
+	hand.clear()
 
 func shuffle():
 	deck.shuffle()
