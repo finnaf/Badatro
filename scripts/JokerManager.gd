@@ -194,7 +194,7 @@ func get_joker(joker: Jokers) -> Dictionary:
 				"cost" : 3,
 				"description" :  "+8 Mult if played hand contains a Pair",
 				"benefit" : Benefit.amult,
-				"benefit_val" : 8777,
+				"benefit_val" : 8,
 				"connective" : Connective.contains,
 				"condition" : Condition.pair,
 			}
@@ -216,7 +216,7 @@ func get_joker(joker: Jokers) -> Dictionary:
 				"cost" : 4,
 				"description" :  "+10 Mult if played hand contains Two Pair",
 				"benefit" : Benefit.amult,
-				"benefit_val" : 1077,
+				"benefit_val" : 10,
 				"connective" : Connective.contains,
 				"condition" : Condition.twopair,
 				
@@ -228,7 +228,7 @@ func get_joker(joker: Jokers) -> Dictionary:
 				"cost" : 4,
 				"description" : "+12 Mult if played hand contains Straight",
 				"benefit" : Benefit.amult,
-				"benefit_val" : 1207,
+				"benefit_val" : 12,
 				"connective" : Connective.contains,
 				"condition" : Condition.straight,
 			}
@@ -239,7 +239,7 @@ func get_joker(joker: Jokers) -> Dictionary:
 				"cost" : 4,
 				"description" : "+10 Mult if played hand contains Flush",
 				"benefit" : Benefit.amult,
-				"benefit_val" : 1077,
+				"benefit_val" : 10,
 				"connective" : Connective.contains,
 				"condition" : Condition.flush,
 			}

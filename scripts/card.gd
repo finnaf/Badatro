@@ -156,15 +156,11 @@ func _on_clicked():
 func on_mouse_entered():
 	if not is_joker():
 		return
-		
+	
 	var desc_data = JokerManager.get_joker(get_id())
-
 	desc_box = box.new(desc_data)
 	add_child(desc_box)
 	self.z_index = 2
-
-
-		
 
 func on_mouse_exited():
 	if not is_joker():

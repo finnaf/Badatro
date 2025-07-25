@@ -7,7 +7,7 @@ const RED = Color(0.929, 0.11, 0.141)
 const BLUE = Color(0.0, 0.650, 0.91)
 const WHITE = Color(1.0,1.0,1.0)
 const BLACK = Color(0.0,0.0,0.0)
-const GREY = Color(0.5, 0.5, 0.5)
+const GREY = Color(0.498, 0.498, 0.498)
 
 enum ResourceType {
 	chips,
@@ -40,7 +40,7 @@ func do_score_alert(card, is_plus: bool, is_chips: bool,
 	card.add_child(score_alert)
 	return score_alert
 
-func create_digit_sprite(value: int, offset: Vector2):
+func create_digit_sprite(value: int, offset: Vector2) -> AnimatedSprite2D:
 	var sprite = AnimatedSprite2D.new()
 	sprite.frames = digit_frames
 	sprite.frame = value
