@@ -49,7 +49,7 @@ func setup(new_data: Dictionary):
 		CardManager.CardType.booster:
 			set_booster(data.id, data.booster_size)
 		CardManager.CardType.voucher:
-			pass
+			set_voucher(data.id)
 	
 func set_card(rank: int, suit: int):
 	var suit_str = CardManager.get_suit_name(suit)
@@ -75,6 +75,11 @@ func set_booster(booster: CardManager.BoosterType, size: CardManager.BoosterSize
 	if tex:
 		image.texture = tex
 
+func set_voucher(voucher: CardManager.VoucherType):
+	var path = ("res://images/cards/vouchers/voucher.png")
+	tex = CardManager.get_card_texture(path)
+	if tex:
+		image.texture = tex
 
 func flip():
 	if (data.type != CardManager.CardType.card and
@@ -161,11 +166,16 @@ func on_clicked():
 	emit_signal("card_clicked", self)
 
 func on_mouse_entered():
-	
-	if not is_shop_card():
-		self.scale = FOCUS_SIZE
-	if not is_joker():
+	if (MouseManager.is_dragging):
 		return
+	if is_shop_card():
+		return
+	if not is_joker():
+		self.scale = FOCUS_SIZE
+		return
+
+	self.scale = JOK_FOCUS_SIZE
+
 	
 	var desc_data = JokerManager.get_joker(get_id(), get_rarity())
 	desc_box = box.new(desc_data)
@@ -173,16 +183,24 @@ func on_mouse_entered():
 	self.z_index = 2
 
 func on_mouse_exited():
-	self.scale = Vector2(1.0, 1.0)
+	if (MouseManager.is_dragging):
+		return
+
+	self.scale = Vector2.ONE
 	if not is_joker():
 		return
 	self.z_index = 0
-	desc_box.queue_free()
+	
+	if (desc_box):
+		desc_box.queue_free()
 
 func set_shop_card():
 	is_shop = true
 func unset_shop_card():
 	is_shop = false
+func hide_cost_only():
+	if (cost_label):
+		cost_label.hide_cost()
 func is_shop_card():
 	return is_shop
 func is_joker():

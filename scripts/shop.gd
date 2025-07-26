@@ -1,5 +1,7 @@
 extends Node2D
 
+const CARD = preload("res://scenes/card.tscn")
+
 var MAIN_MAX = 2 # dont go above 5
 var cards_remaining
 var packs_remaining
@@ -7,6 +9,7 @@ var vouchers_remaining
 
 var main: Array = []
 var boosters: Array = []
+var vouchers: Array = []
 var booster_cards: Array = []
 
 var main_select = null
@@ -17,6 +20,7 @@ var in_booster: bool = false
 var in_booster_count: int = 0
 
 const BOOSTER_OFFSET = 27
+const VOUCHER_X_OFFSET = -20
 
 @onready var sidebar = $ShopSidebar
 @onready var background = $ShopBackground
@@ -69,6 +73,8 @@ func set_pack_background():
 		card.visible = not in_booster
 	for pack in boosters:
 		pack.visible = not in_booster
+	for voucher in vouchers:
+		voucher.visible = not in_booster
 
 func load_cards():
 	load_main()
@@ -76,6 +82,8 @@ func load_cards():
 	var offsets = get_card_x_offsets(packs_remaining)
 	for i in range(packs_remaining):
 		get_booster(offsets[1] + (i*offsets[0]))
+	
+	load_voucher()
 
 # load the main section of the shop
 func load_main():
@@ -105,7 +113,7 @@ func _on_card_clicked(card):
 			card.shop_select()
 
 func get_main_card(xoffset: int):
-	var card = preload("res://scenes/card.tscn").instantiate()
+	var card = CARD.instantiate()
 	
 	add_child(card)
 	card.position.x = xoffset
@@ -126,8 +134,7 @@ func get_main_card(xoffset: int):
 	main.append(card)
 
 func get_booster(xoffset: int):
-	const BOOSTER = preload("res://scenes/card.tscn")
-	var booster = BOOSTER.instantiate()
+	var booster = CARD.instantiate()
 	
 	add_child(booster)
 	booster.position.x = xoffset
@@ -141,6 +148,20 @@ func get_booster(xoffset: int):
 	booster.display_cost()
 	booster.set_shop_card()
 	boosters.append(booster)
+
+func load_voucher():
+	var voucher = CARD.instantiate()
+	add_child(voucher)
+	voucher.position.x = VOUCHER_X_OFFSET
+	voucher.position.y = BOOSTER_OFFSET
+	voucher.setup({
+				"id": CardManager.VoucherType.voucher,
+				"type": CardManager.CardType.voucher,
+			})
+	voucher.display_cost()
+	voucher.hide_cost_only()
+	voucher.set_shop_card()
+	vouchers.append(voucher)
 
 # returns offset, and starting offset
 func get_card_x_offsets(total: int):
@@ -186,6 +207,10 @@ func _buy_attempt(card):
 	elif (card.data.type == CardManager.CardType.booster):
 		if (game.spend_money(cost)):
 			open_booster(card)
+	
+	elif (card.data.type == CardManager.CardType.voucher):
+		if (game.spend_money(cost)):
+			buy_voucher(card)
 
 # in a booster, the get is clicked
 func _get_clicked(card):
@@ -225,6 +250,10 @@ func buy_joker(joker):
 	jokers.add(joker)
 	main.erase(joker)
 
+func buy_voucher(voucher):
+	vouchers.erase(voucher)
+	voucher.queue_free()
+
 func open_booster(booster):
 	boosters.erase(booster)
 	booster.queue_free()
@@ -249,7 +278,6 @@ func close_booster():
 		booster_cards.clear()
 
 func open_buffoon(size: CardManager.BoosterSize):
-	const JOKER = preload("res://scenes/card.tscn")
 	var joker_count = 2
 	in_booster_count = 1
 	
@@ -260,7 +288,7 @@ func open_buffoon(size: CardManager.BoosterSize):
 		in_booster_count = 2
 		
 	for i in range(joker_count):
-		var joker = JOKER.instantiate()
+		var joker = CARD.instantiate()
 		add_child(joker)
 		booster_cards.append(joker)
 		
@@ -294,6 +322,13 @@ func update_buy_labels():
 				card.cost_label.enable()
 	
 	for card in boosters:
+		if (card.cost_label):
+			if (card.cost_label.card_cost > game.money):
+				card.cost_label.disable()
+			else:
+				card.cost_label.enable()
+	
+	for card in vouchers:
 		if (card.cost_label):
 			if (card.cost_label.card_cost > game.money):
 				card.cost_label.disable()

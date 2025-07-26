@@ -44,6 +44,10 @@ enum CardType {
 	consumable
 }
 
+enum VoucherType {
+	voucher,
+}
+
 enum BoosterType {
 	buffoon,
 	arcana,
@@ -383,6 +387,8 @@ func get_card_cost(data: Dictionary) -> int:
 			cost += 6
 		else: # mega
 			cost += 8
+	elif (data.type == CardType.voucher):
+		cost += 10
 		
 	if (data.has("edition")):
 		if (data.edition == Edition.foil):

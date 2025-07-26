@@ -7,6 +7,8 @@ var is_dragging := false
 var drag_target = null
 var drag_start_position := Vector2.ZERO
 
+const BIG_Z_VALUE = 100
+
 const DRAG_THRESHOLD := 4
 
 func _input(event):
@@ -37,6 +39,7 @@ func _input(event):
 func start_drag(card: Area2D, start_pos: Vector2):
 	drag_target = card
 	drag_start_position = start_pos
+	drag_target.z_index = BIG_Z_VALUE
 	is_pressed = true
 	is_dragging = false
 	
