@@ -6,7 +6,7 @@ extends Node2D
 @onready var shop = $"Shop"
 @onready var deck = $Deck
 
-var seed = 1
+var seed = 3
 
 const GAMESPEED = 0.5
 const INCRSPEED = GAMESPEED / 7

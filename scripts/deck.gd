@@ -55,8 +55,9 @@ func deal():
 func _on_play_button_pressed():
 	if selected_cards.is_empty() or game.is_win():
 		return
+	# cards currently arrayed in the order they were selected, so:
+	selected_cards = sort_by_position(selected_cards)
 	var active_cards = CardManager.get_active_cards(selected_cards, game.hand)
-	active_cards = sort_passed_cards(active_cards)
 	game.play(active_cards)
 
 	await count_animation(active_cards)
@@ -80,17 +81,14 @@ func _on_play_button_pressed():
 	updateClickUI.emit()
 
 # does counting animation and discards selected cards
-func count_animation(active_cards):
-	selected_cards = sort_passed_cards(selected_cards)
-	
+func count_animation(active_cards):	
 	# move cards up from hand
 	for i in range(selected_cards.size()):
 		var card = selected_cards[i]
 		
-		# remove from hand and reorder hand
+		# remove from hand and adjust
 		var index = get_hand_position(card.get_id())
 		hand[index] = {}
-		sort_hand()
 		
 		card.position.x = get_card_position(i, selected_cards.size())
 		card.position.y -= 4
@@ -128,6 +126,12 @@ func score_animation(active_cards):
 			await game.add_resources(card, cardvals)
 	
 	await get_tree().create_timer(game.get_speed()).timeout
+
+func sort_by_position(array) -> Array:
+	array.sort_custom(func(a, b):
+		return a.position.x > b.position.x
+	)
+	return array
 	
 func sort_passed_cards(cards):
 	if is_rank_sort:
