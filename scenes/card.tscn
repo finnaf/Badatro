@@ -20,3 +20,5 @@ texture = ExtResource("2_ktuci")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(5.5, 6.5)
 shape = SubResource("RectangleShape2D_rjlel")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

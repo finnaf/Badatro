@@ -47,3 +47,13 @@ func create_digit_sprite(value: int, offset: Vector2) -> AnimatedSprite2D:
 	sprite.position = offset
 	sprite.z_index = 1
 	return sprite
+
+func do_shake(node: Node, weight = 1.02):
+	var shake_size = Vector2(weight, weight)
+	var height_adjust = (((shake_size.y - 1) / 13) / 2)
+	
+	node.scale = shake_size
+	node.position.y -= height_adjust
+	await get_tree().create_timer(0.1).timeout
+	node.scale = Vector2.ONE
+	node.position.y += height_adjust

@@ -38,27 +38,31 @@ func _ready():
 func setup(new_data: Dictionary):
 	data = new_data
 	
-	if not new_data.has("type"):
+	if not data.has("type"):
 		print("Invalid access to setup method.")
 		return
 	match data.type:
 		CardManager.CardType.card:
-			set_card(data.rank, data.suit)
+			set_card_tex(data.rank, data.suit)
 		CardManager.CardType.joker:
-			set_joker(data.id, data.rarity)
+			set_joker_tex(data.id, data.rarity)
 		CardManager.CardType.booster:
-			set_booster(data.id, data.booster_size)
+			set_booster_tex(data.id, data.booster_size)
 		CardManager.CardType.voucher:
-			set_voucher(data.id)
+			set_voucher_tex(data.id)
+		CardManager.CardType.consumable:
+			set_consumable_tex(data.consumable_type)
+	if data.has("edition"):
+		draw_edition(data.edition)
 	
-func set_card(rank: int, suit: int):
+func set_card_tex(rank: int, suit: int):
 	var suit_str = CardManager.get_suit_name(suit)
 	var path = "res://images/cards/%s/%s%s.png" % [suit_str, str(rank), suit_str]
 	tex = CardManager.get_card_texture(path)
 	if tex:
 		image.texture = tex
 
-func set_joker(joker_id, rarity):	
+func set_joker_tex(joker_id, rarity):	
 	var joker_data = JokerManager.get_joker(joker_id, rarity)
 	var path = ("res://images/cards/jokers/%s/%s.png" % 
 				[JokerManager.get_rarity_string(rarity), 
@@ -68,18 +72,30 @@ func set_joker(joker_id, rarity):
 	if tex:
 		image.texture = tex
 
-func set_booster(booster: CardManager.BoosterType, size: CardManager.BoosterSize):	
+func set_booster_tex(booster: CardManager.BoosterType, size: CardManager.BoosterSize):	
 	var path = ("res://images/cards/boosters/%s-%s.png" % 
 				[str(booster), str(size)])
 	tex = CardManager.get_card_texture(path)
 	if tex:
 		image.texture = tex
 
-func set_voucher(voucher: CardManager.VoucherType):
+func set_voucher_tex(voucher: CardManager.VoucherType):
 	var path = ("res://images/cards/vouchers/voucher.png")
 	tex = CardManager.get_card_texture(path)
 	if tex:
 		image.texture = tex
+
+func set_consumable_tex(consumable: CardManager.ConsumableType):
+	var path = ("res://images/cards/planets/planet_bg.png")
+	tex = CardManager.get_card_texture(path)
+	if tex:
+		print("valid tex")
+		image.texture = tex
+	else:
+		print("invalid tex")
+
+func draw_edition(edition: CardManager.Edition):
+	var animation
 
 func flip():
 	if (data.type != CardManager.CardType.card and
@@ -168,14 +184,17 @@ func on_clicked():
 func on_mouse_entered():
 	if (MouseManager.is_dragging):
 		return
-	if is_shop_card():
-		return
-	if not is_joker():
-		self.scale = FOCUS_SIZE
-		return
-
-	self.scale = JOK_FOCUS_SIZE
-
+	
+	if not is_shop_card():
+		if is_joker():
+			self.scale = JOK_FOCUS_SIZE
+		else:
+			self.scale = FOCUS_SIZE
+			return
+	else:
+		Globals.do_shake(self, 1.01)
+		if not is_joker():
+			return
 	
 	var desc_data = JokerManager.get_joker(get_id(), get_rarity())
 	desc_box = box.new(desc_data)

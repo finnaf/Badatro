@@ -8,7 +8,7 @@ extends Node2D
 
 var seed = 3
 
-const GAMESPEED = 0.1
+const GAMESPEED = 0.2
 const INCRSPEED = GAMESPEED / 7
 const MAXSPEED = 0.05
 var gamespeed
@@ -21,6 +21,8 @@ var decksize = 52
 var ante = 1
 var round = 1
 var blind = 0 # 0, 1 or 2
+
+var voucher_count = 1
 
 const BASE_REROLL_COST = 5
 var reroll_cost = 5
@@ -198,6 +200,11 @@ func play(cards: Array):
 func process_reroll():
 	reroll_cost += 1
 
+func is_voucher():
+	if voucher_count > 0:
+		return true
+	return false
+
 # returns false if doesn't succeed
 func spend_money(cost: int) -> bool:
 	if (money >= cost):
@@ -253,8 +260,17 @@ func cashout():
 	WinUI.visible = false
 	reset_score()
 	reroll_cost = BASE_REROLL_COST
+	update_blind()
+	sidebar.update_ante()
 	shop.open()
 	state = states.SHOPPING
+
+func update_blind():
+	blind += 1
+	if blind > 2:
+		voucher_count = 1
+		blind = 0
+		ante += 1
 
 func next_round():
 	shop.close()
@@ -262,13 +278,7 @@ func next_round():
 	# TODO add choosing blinds
 	
 	round += 1
-	blind += 1
-	if blind > 2:
-		blind = 0
-		ante += 1
-	
 	sidebar.update_round()
-	sidebar.update_ante()
 	state = states.PLAYING
 	BottomButtons.visible = true
 	updateGoalUI.emit()

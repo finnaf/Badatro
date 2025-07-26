@@ -67,14 +67,12 @@ func load_cards():
 	if (checkdeck.size() > 0):
 		offset.x -= get_rank_offset(checkdeck[0].suit)
 		prev = checkdeck[0]
-		print(get_rank_spacing(checkdeck[0].suit), " ", get_rank_offset(checkdeck[0].suit))
 	
 	for i in range(checkdeck.size()):
 		var card = create_card(checkdeck[i])
 		
 		# offset changes
 		if prev.suit != checkdeck[i].suit:
-			print(get_rank_spacing(checkdeck[i].suit) , " ",  get_rank_offset(checkdeck[i].suit))
 			offset.y += 14
 			offset.x = 36
 			offset.x = 36 - get_rank_offset(checkdeck[i].suit)

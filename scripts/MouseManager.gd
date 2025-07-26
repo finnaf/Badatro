@@ -30,6 +30,7 @@ func _input(event):
 		if is_pressed and not is_dragging:
 			if can_drag and event.position.distance_to(drag_start_position) > DRAG_THRESHOLD:
 				is_dragging = true
+				drag_target.z_index += BIG_Z_VALUE
 				if drag_target:
 					drag_target._on_drag_start()
 
@@ -39,7 +40,6 @@ func _input(event):
 func start_drag(card: Area2D, start_pos: Vector2):
 	drag_target = card
 	drag_start_position = start_pos
-	drag_target.z_index = BIG_Z_VALUE
 	is_pressed = true
 	is_dragging = false
 	
@@ -48,4 +48,5 @@ func start_drag(card: Area2D, start_pos: Vector2):
 
 func _end_drag():
 	if drag_target:
+		drag_target.z_index -= BIG_Z_VALUE
 		drag_target._on_drag_end()

@@ -59,9 +59,12 @@ func close():
 		card.queue_free()
 	for pack in boosters:
 		pack.queue_free()
+	for voucher in vouchers:
+		voucher.queue_free()
 	self.visible = false
 	main.clear()
 	boosters.clear()
+	vouchers.clear()
 	deck_info.exit_shop()
 
 func set_pack_background():
@@ -83,7 +86,8 @@ func load_cards():
 	for i in range(packs_remaining):
 		get_booster(offsets[1] + (i*offsets[0]))
 	
-	load_voucher()
+	if game.is_voucher():
+		load_voucher()
 
 # load the main section of the shop
 func load_main():
@@ -125,7 +129,8 @@ func get_main_card(xoffset: int):
 	card.setup({
 				"id": data.id,
 				"rarity": data.rarity,
-				"type": CardManager.CardType.joker,
+				"type": CardManager.CardType.consumable,
+				"consumable_type": CardManager.ConsumableType.planet,
 				"edition": data.edition,
 			})
 	
@@ -211,6 +216,7 @@ func _buy_attempt(card):
 	elif (card.data.type == CardManager.CardType.voucher):
 		if (game.spend_money(cost)):
 			buy_voucher(card)
+			game.voucher_count -= 1
 
 # in a booster, the get is clicked
 func _get_clicked(card):
