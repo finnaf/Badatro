@@ -147,6 +147,11 @@ func generate_joker_data() -> Dictionary:
 		"edition": edition,
 	}
 	
+	
+	if (data.id == -1):
+		data.id = 1
+		data.rarity = Rarity.common
+	
 	return data
 
 # convert id to enum string name

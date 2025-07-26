@@ -1,5 +1,6 @@
 extends Node
 
+# DRAG
 var can_drag := false
 var is_pressed := false
 var is_dragging := false
@@ -33,7 +34,7 @@ func _input(event):
 		if is_dragging and drag_target:
 			drag_target._on_drag_motion(event)
 
-func start_drag(card: Node, start_pos: Vector2):
+func start_drag(card: Area2D, start_pos: Vector2):
 	drag_target = card
 	drag_start_position = start_pos
 	is_pressed = true

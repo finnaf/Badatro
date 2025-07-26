@@ -14,6 +14,9 @@ var tex: Texture2D = null
 var cost_label: Sprite2D = null
 var desc_box: Node2D = null
 
+const FOCUS_SIZE = Vector2(1.0909090909, 1.07692307692)
+const JOK_FOCUS_SIZE = Vector2(1.0909090909, 1.06666666)
+
 const SELECT_DIST = 14
 const SHOP_SELECT_DIST = 5
 
@@ -57,7 +60,6 @@ func set_card(rank: int, suit: int):
 
 func set_joker(joker_id, rarity):	
 	var joker_data = JokerManager.get_joker(joker_id, rarity)
-	data.rarity = joker_data.rarity # edge case where cant pick from given rarity
 	var path = ("res://images/cards/jokers/%s/%s.png" % 
 				[JokerManager.get_rarity_string(rarity), 
 				JokerManager.get_joker_shortname(joker_id, rarity)])
@@ -136,7 +138,7 @@ func shop_deselect():
 func _input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
-			DragManager.start_drag(self, event.position)
+			MouseManager.start_drag(self, event.position)
 
 func _on_drag_start():
 	pass
@@ -144,7 +146,6 @@ func _on_drag_motion(event):
 	position += event.relative
 func _on_drag_end():
 	dragged.emit(self)
-
 
 func on_clicked():
 	if (data.type == CardManager.CardType.joker):
@@ -160,6 +161,9 @@ func on_clicked():
 	emit_signal("card_clicked", self)
 
 func on_mouse_entered():
+	
+	if not is_shop_card():
+		self.scale = FOCUS_SIZE
 	if not is_joker():
 		return
 	
@@ -169,6 +173,7 @@ func on_mouse_entered():
 	self.z_index = 2
 
 func on_mouse_exited():
+	self.scale = Vector2(1.0, 1.0)
 	if not is_joker():
 		return
 	self.z_index = 0

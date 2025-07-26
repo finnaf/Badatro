@@ -8,7 +8,7 @@ extends Node2D
 
 var seed = 3
 
-const GAMESPEED = 0.5
+const GAMESPEED = 0.1
 const INCRSPEED = GAMESPEED / 7
 const MAXSPEED = 0.05
 var gamespeed
