@@ -2,6 +2,8 @@ extends Area2D
 
 signal card_clicked(card)
 signal buy_click_forwarded(card)
+signal use_click_forwarded(card)
+signal sell_click_forwarded(card)
 signal dragged(card)
 
 @export var symbols: SpriteFrames
@@ -13,7 +15,7 @@ signal dragged(card)
 var is_shop: bool = false
 var flipped: bool = true
 var tex: Texture2D = null
-var cost_label: Sprite2D = null
+var card_buttons: Sprite2D = null
 var desc_box: Node2D = null
 
 var is_focused: bool = false
@@ -130,34 +132,42 @@ func deselect():
 
 func display_cost():
 	var cost_val = CardManager.get_card_cost(data, 1)
+	card_buttons = preload("res://scenes/card-info-small.tscn").instantiate()
+	add_child(card_buttons)
+	card_buttons.set_value(cost_val, data.type)
 	
-	const COST = preload("res://scenes/card-info-small.tscn")
-	cost_label = COST.instantiate()
-	add_child(cost_label)
-	cost_label.set_value(cost_val, data.type)
-	
-	cost_label.connect("buy_clicked",
-						Callable(self, "_on_buy_clicked_on_label"))
+	card_buttons.connect("buy_clicked", Callable(self, "_on_buy_clicked_on_label"))
+	card_buttons.connect("use_clicked", Callable(self, "_on_use_clicked_on_label"))
+	card_buttons.connect("sell_clicked", Callable(self, "_on_sell_clicked_on_label"))
 
-func delete_cost():
-	if (cost_label):
-		cost_label.queue_free()
+func delete_card_buttons():
+	if (card_buttons):
+		card_buttons.queue_free()
 
 func _on_buy_clicked_on_label(card):
 	emit_signal("buy_click_forwarded", self)
+func _on_use_clicked_on_label(card):
+	emit_signal("use_click_forwarded", self)
+func _on_sell_clicked_on_label(card):
+	emit_signal("sell_click_forwarded", self)
 
 func shop_select():
-	if cost_label == null:
+	if card_buttons == null:
 		return
 		
 	position.y -= SHOP_SELECT_DIST
-	cost_label.display_button()
+	card_buttons.display_button()
+	
+	if (is_consumable()):
+		card_buttons.display_use()
 
 func shop_deselect():
-	if cost_label == null:
+	if card_buttons == null:
 		return
 	
-	cost_label.hide_button()
+	card_buttons.hide_button()
+	if (is_consumable()):
+		card_buttons.hide_use()
 	position.y += SHOP_SELECT_DIST
 
 func _input_event(viewport, event, shape_idx):
@@ -186,7 +196,7 @@ func on_clicked():
 	emit_signal("card_clicked", self)
 
 func on_mouse_entered():
-	if (MouseManager.is_dragging):
+	if (MouseManager.is_dragging or MouseManager.card_disabled(self)):
 		return
 	
 	if is_shop_card():
@@ -211,7 +221,7 @@ func on_mouse_entered():
 		add_child(desc_box)
 
 func on_mouse_exited():
-	if (MouseManager.is_dragging):
+	if (MouseManager.is_dragging or MouseManager.card_disabled(self)):
 		return
 	
 	reset_focus()
@@ -231,14 +241,24 @@ func reset_focus():
 		self.z_index -= 1
 		desc_box.queue_free()
 		desc_box = null
+
+func set_consumable(): # turns sell and use visible
+	card_buttons.use_button = visible
+	card_buttons.sell_button = visible
 			
 func set_shop_card():
 	is_shop = true
 func unset_shop_card():
 	is_shop = false
 func hide_cost_only():
-	if (cost_label):
-		cost_label.hide_cost()
+	if (card_buttons):
+		card_buttons.hide_cost()
+func hide_buy_only():
+	if (card_buttons):
+		card_buttons.hide_button()
+
+
+
 func is_shop_card():
 	return is_shop
 func is_joker():
@@ -252,6 +272,7 @@ func is_card():
 func is_consumable():
 	if (data.type == CardManager.CardType.consumable):
 		return true
+
 func get_data():
 	return data
 func get_suit():

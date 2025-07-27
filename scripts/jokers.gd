@@ -3,7 +3,8 @@ extends Sprite2D
 @onready var game = $"../.."
 
 var jokers = []
-var MAX_JOKERS = 5
+var max_jokers = 5
+const BASE_MAX_JOKERS = 5
 
 # score the card for each joker, return values for animating
 func score_card(card) -> Array:
@@ -51,7 +52,7 @@ func _on_card_dragged(d_joker):
 	reorganise_jokers()
 
 func is_full():
-	if (jokers.size() < MAX_JOKERS):
+	if (jokers.size() < max_jokers):
 		return false
 	return true
 

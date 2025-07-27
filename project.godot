@@ -22,6 +22,7 @@ BossManager="*res://scripts/BossManager.gd"
 Globals="*res://scripts/globals.gd"
 JokerManager="*res://scripts/JokerManager.gd"
 MouseManager="*res://scripts/MouseManager.gd"
+ConsumableManager="*res://scripts/ConsumableManager.gd"
 
 [display]
 

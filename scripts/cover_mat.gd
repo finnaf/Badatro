@@ -39,10 +39,15 @@ func display(in_shop: bool):
 	
 	load_info()
 	load_cards()
+	disable_other_cards()
+
+func disable_other_cards():
+	MouseManager.disable(shown_cards)
 
 func close():
 	self.visible = false
 	fade.visible = false
+	MouseManager.enable()
 
 func raise():
 	self.position.y -= 4
@@ -145,14 +150,6 @@ func place_digit_sprites(value, offset: Vector2):
 	add_child(tens)
 	shown_digits.append(ones)
 	shown_digits.append(tens)
-
-#func create_digit_sprite(offset: Vector2, frame: int) -> AnimatedSprite2D:
-	#var sprite := AnimatedSprite2D.new()
-	#sprite.sprite_frames = digit_frames
-	#sprite.frame = frame
-	#sprite.global_position = offset
-	#add_child(sprite)
-	#return sprite
 
 func create_card(data: Dictionary) -> Area2D:
 	const CARD = preload("res://scenes/card.tscn")

@@ -26,6 +26,7 @@ const VOUCHER_X_OFFSET = -20
 @onready var background = $ShopBackground
 @onready var skip_button = $SkipButton
 @onready var jokers = $"../Mat/Jokers"
+@onready var consumables = $"../Mat/Consumables"
 @onready var deck_info = $"../Mat/DeckInfo"
 @onready var game = $".."
 
@@ -186,11 +187,10 @@ func get_card_x_offsets(total: int):
 func setup_connections():
 	update_buy_labels()
 	for card in get_children():
-		if card.has_method("is_flipped"):
-			card.connect("card_clicked", 
-						Callable(self, "_on_card_clicked"))
-			card.connect("buy_click_forwarded", 
-						Callable(self, "_buy_attempt"))
+		if card.has_method("is_flipped"): # is a card
+			card.connect("card_clicked", Callable(self, "_on_card_clicked"))
+			card.connect("buy_click_forwarded", Callable(self, "_buy_attempt"))
+			card.connect("use_click_forwarded", Callable(self, "_use_attempt"))
 
 func setup_booster_connections():
 	for card in booster_cards:
@@ -200,6 +200,9 @@ func setup_booster_connections():
 			Callable(self, "_get_clicked"))
 
 func _buy_attempt(card):
+	if MouseManager.is_disabled:
+		return
+	
 	# TODO also constellation cards
 	
 	var cost = CardManager.get_card_cost(card.data, game.get_discount_percent())
@@ -208,6 +211,12 @@ func _buy_attempt(card):
 			return
 		if (game.spend_money(cost)):
 			buy_joker(card)
+	
+	elif (card.data.type == CardManager.CardType.consumable):
+		if (consumables.is_full()):
+			return
+		if (game.spend_money(cost)):
+			buy_consumable(card)
 	
 	elif (card.data.type == CardManager.CardType.booster):
 		if (game.spend_money(cost)):
@@ -218,14 +227,25 @@ func _buy_attempt(card):
 			buy_voucher(card)
 			game.voucher_count -= 1
 
+func _use_attempt(consumable):
+	var cost = CardManager.get_card_cost(consumable.data, game.get_discount_percent())
+	var can_use = ConsumableManager.can_use(game.get_game_state())
+	if (can_use and game.spend_money(cost)):
+		consumables.use(consumable)
+	
+	consumable.queue_free()
+	main.erase(consumable)
+
 # in a booster, the get is clicked
 func _get_clicked(card):
-	card.delete_cost()
+	if MouseManager.is_disabled:
+		return
+	
+	card.delete_card_buttons()
 	booster_cards.erase(card)
 	in_booster_select = null
 	remove_child(card)
-	card.disconnect("card_clicked", 
-					Callable(self, "_in_booster_card_clicked"))
+	card.disconnect("card_clicked", Callable(self, "_in_booster_card_clicked"))
 	in_booster_count -= 1
 	jokers.add(card)
 	card.unset_shop_card()
@@ -233,6 +253,7 @@ func _get_clicked(card):
 	if (in_booster_count == 0):
 		close_booster()
 
+# in booster, card is clicked
 func _in_booster_card_clicked(card):
 	if card == in_booster_select:
 		in_booster_select = null
@@ -249,12 +270,22 @@ func _in_booster_card_clicked(card):
 		
 func buy_joker(joker):
 	joker.shop_deselect()
-	joker.delete_cost()
+	joker.delete_card_buttons()
 	joker.unset_shop_card()
 	
 	remove_child(joker)
-	jokers.add(joker)
 	main.erase(joker)
+	jokers.add(joker)
+
+func buy_consumable(consumable):
+	print("buy")
+	consumable.shop_deselect()
+	consumable.delete_card_buttons()
+	consumable.unset_shop_card()
+	
+	remove_child(consumable)
+	main.erase(consumable)
+	consumables.add(consumable)
 
 func buy_voucher(voucher):
 	vouchers.erase(voucher)
@@ -301,8 +332,8 @@ func open_buffoon(size: CardManager.BoosterSize):
 		# create a card info, hide top cost
 		joker.display_cost()
 		joker.set_shop_card()
-		joker.cost_label.switch_label(true)
-		joker.cost_label.hide_button()
+		joker.card_buttons.switch_label(true)
+		joker.card_buttons.hide_button()
 		
 		joker.position = Vector2((i*13), 5)
 		
@@ -319,29 +350,32 @@ func update_reroll_display():
 
 func update_buy_labels():
 	for card in main:
-		if (card.cost_label):
-			if (card.cost_label.card_cost > game.money or 
+		if (card.card_buttons):
+			if (card.card_buttons.card_cost > game.money or 
 				(card.data.type == CardManager.CardType.joker and 
 				jokers.is_full())):
-				card.cost_label.disable()
+				card.card_buttons.disable()
 			else:
-				card.cost_label.enable()
+				card.card_buttons.enable()
 	
 	for card in boosters:
-		if (card.cost_label):
-			if (card.cost_label.card_cost > game.money):
-				card.cost_label.disable()
+		if (card.card_buttons):
+			if (card.card_buttons.card_cost > game.money):
+				card.card_buttons.disable()
 			else:
-				card.cost_label.enable()
+				card.card_buttons.enable()
 	
 	for card in vouchers:
-		if (card.cost_label):
-			if (card.cost_label.card_cost > game.money):
-				card.cost_label.disable()
+		if (card.card_buttons):
+			if (card.card_buttons.card_cost > game.money):
+				card.card_buttons.disable()
 			else:
-				card.cost_label.enable()
+				card.card_buttons.enable()
 				
 func _on_reroll_button_pressed() -> void:
+	if MouseManager.is_disabled:
+		return
+	
 	var cost = game.get_reroll_cost()
 	
 	# failed to buy
@@ -358,5 +392,8 @@ func _on_reroll_button_pressed() -> void:
 	setup_connections()
 
 func _on_skip_button_pressed() -> void:
+	if MouseManager.is_disabled:
+		return
+	
 	if (in_booster):
 		close_booster()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://n0pgrtq40qtg"]
+[gd_scene load_steps=9 format=3 uid="uid://n0pgrtq40qtg"]
 
 [ext_resource type="Texture2D" uid="uid://j50fqyjlshjh" path="res://images/cards/misc/cost-background.png" id="1_f6iml"]
 [ext_resource type="Script" uid="uid://cuqxibma8oe3l" path="res://scripts/card-info-small.gd" id="2_trfud"]
@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://458as6v43duv" path="res://images/board/shop/buy-label.png" id="4_trfud"]
 [ext_resource type="Texture2D" uid="uid://cm4uu507d74on" path="res://images/board/shop/get-label.png" id="4_x2aci"]
 [ext_resource type="Texture2D" uid="uid://dtwhg3tyofjko" path="res://images/board/shop/buy-label-disabled.png" id="5_y0kki"]
+[ext_resource type="Texture2D" uid="uid://45hxrylpg1hv" path="res://images/board/shop/use-label.png" id="6_y6fai"]
+[ext_resource type="Texture2D" uid="uid://cg67e57ircdjw" path="res://images/board/shop/sell-label.png" id="8_nfuq2"]
 
 [node name="Label" type="Sprite2D"]
 texture_filter = 1
@@ -15,6 +17,24 @@ script = ExtResource("2_trfud")
 digit_frames = ExtResource("3_y0kki")
 get_tex = ExtResource("4_x2aci")
 buy_tex = ExtResource("4_trfud")
+
+[node name="Use" type="TextureButton" parent="."]
+visible = false
+offset_left = 6.0
+offset_top = 11.0
+offset_right = 17.0
+offset_bottom = 16.0
+texture_normal = ExtResource("6_y6fai")
+texture_disabled = ExtResource("5_y0kki")
+
+[node name="Sell" type="TextureButton" parent="."]
+visible = false
+offset_left = 6.0
+offset_top = 5.0
+offset_right = 17.0
+offset_bottom = 10.0
+texture_normal = ExtResource("8_nfuq2")
+texture_disabled = ExtResource("5_y0kki")
 
 [node name="Button" type="TextureButton" parent="."]
 visible = false

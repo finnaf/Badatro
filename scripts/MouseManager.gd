@@ -1,6 +1,8 @@
 extends Node
 
-# DRAG
+var is_disabled := false
+var exceptions := []
+
 var can_drag := false
 var is_pressed := false
 var is_dragging := false
@@ -38,6 +40,9 @@ func _input(event):
 			drag_target._on_drag_motion(event)
 
 func start_drag(card: Area2D, start_pos: Vector2):
+	if (is_disabled): # TODO all default card positions in mat
+		return
+	
 	drag_target = card
 	drag_start_position = start_pos
 	is_pressed = true
@@ -50,3 +55,19 @@ func _end_drag():
 	if drag_target:
 		drag_target.z_index -= BIG_Z_VALUE
 		drag_target._on_drag_end()
+
+
+func disable(exc: Array):
+	is_disabled = true
+	exceptions = exc
+
+func enable():
+	is_disabled = false
+
+func card_disabled(card: Area2D):
+	if (not is_disabled):
+		return false
+	if card in exceptions:
+		return false
+	return true
+	

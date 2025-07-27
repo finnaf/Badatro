@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://cijoautimuua5"]
+[gd_scene load_steps=54 format=3 uid="uid://cijoautimuua5"]
 
 [ext_resource type="Script" uid="uid://c7vv5i4f5v710" path="res://scripts/game.gd" id="1_ca42v"]
 [ext_resource type="Texture2D" uid="uid://cv0tqpisxhrod" path="res://images/board/mat/mat.png" id="2_qnb83"]
@@ -21,7 +21,6 @@
 [ext_resource type="Texture2D" uid="uid://n8br4mtr224o" path="res://images/board/sidebar/shop-sidebar-2.png" id="14_pl11u"]
 [ext_resource type="Script" uid="uid://dp8isqxsoevh" path="res://scripts/sidebar.gd" id="14_suyxu"]
 [ext_resource type="Texture2D" uid="uid://by84gotttlsfl" path="res://images/board/sidebar/shop-sidebar-3.png" id="15_bhx41"]
-[ext_resource type="Script" uid="uid://4i8h0qfcinpl" path="res://scripts/consumables.gd" id="15_pr1ej"]
 [ext_resource type="Texture2D" uid="uid://8mkiimnrgjke" path="res://images/board/cash-out/cash-out-disabled.png" id="15_rysoc"]
 [ext_resource type="Texture2D" uid="uid://yolk82kxpyqc" path="res://images/cards/back.png" id="15_suyxu"]
 [ext_resource type="Texture2D" uid="uid://ci46j8ptxdskk" path="res://images/board/cash-out/cash-out-hands.png" id="16_ca42v"]
@@ -325,7 +324,6 @@ script = ExtResource("13_qouja")
 position = Vector2(38, -30)
 texture = ExtResource("13_suyxu")
 offset = Vector2(0, 0.5)
-script = ExtResource("15_pr1ej")
 
 [node name="MoneyCountUI" type="VBoxContainer" parent="Mat"]
 visible = false
@@ -489,8 +487,8 @@ texture_normal = ExtResource("27_gxtfn")
 visible = false
 offset_left = 16.0
 offset_top = 35.0
-offset_right = 33.0
-offset_bottom = 44.0
+offset_right = 56.0
+offset_bottom = 75.0
 texture_normal = ExtResource("28_js0lu")
 
 [connection signal="pressed" from="Mat/BottomButtons/PlayButton" to="Mat/Sidebar" method="_on_play_button_pressed"]

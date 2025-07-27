@@ -4,14 +4,20 @@ extends Sprite2D
 @export var get_tex: Texture2D
 @export var buy_tex: Texture2D
 @onready var button: TextureButton = $Button
+@onready var use_button: TextureButton = $Use
+@onready var sell_button: TextureButton = $Sell
 
 var card_cost
 
 signal buy_clicked(card)
+signal use_clicked(card)
 
 func _ready():
 	self.position += Vector2(5, -4)
-	$Button.pressed.connect(_on_pressed)
+	self.z_index += 1
+	button.pressed.connect(_on_pressed)
+	use_button.pressed.connect(_on_use_pressed)
+	sell_button.pressed.connect(_on_sell_pressed)
 
 func switch_label(is_get: bool):
 	if (is_get):
@@ -21,7 +27,12 @@ func switch_label(is_get: bool):
 	else:
 		show_cost()
 		button.texture_normal = buy_tex
-	
+
+func _on_sell_pressed():
+	emit_signal("sell_clicked", self)
+
+func _on_use_pressed():
+	emit_signal("use_clicked", self)
 
 func _on_pressed():
 	emit_signal("buy_clicked", self)
@@ -61,7 +72,7 @@ func set_value(cost: int, type: CardManager.CardType):
 
 func clear_score():
 	for digit in get_children():
-		if digit != $Button:
+		if digit != button and digit != use_button:
 			digit.queue_free()
 
 func create_sprite(value: String, offset: Vector2):
@@ -81,6 +92,11 @@ func display_button():
 	button.visible = true
 func hide_button():
 	button.visible = false
+func display_use():
+	use_button.visible = true
+func hide_use():
+	use_button.visible = false
+	
 func disable():
 	button.disabled = true
 func enable():
