@@ -280,7 +280,7 @@ func buy_joker(joker):
 func buy_consumable(consumable):
 	print("buy")
 	consumable.shop_deselect()
-	consumable.delete_card_buttons()
+	consumable.hide_card_buttons()
 	consumable.unset_shop_card()
 	
 	remove_child(consumable)

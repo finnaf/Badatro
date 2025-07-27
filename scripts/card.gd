@@ -256,8 +256,11 @@ func hide_cost_only():
 func hide_buy_only():
 	if (card_buttons):
 		card_buttons.hide_button()
-
-
+func hide_card_buttons():
+	card_buttons.hide_button()
+	card_buttons.hide_use()
+	card_buttons.hide_cost()
+	card_buttons.hide_sell()
 
 func is_shop_card():
 	return is_shop

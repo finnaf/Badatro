@@ -72,7 +72,7 @@ func set_value(cost: int, type: CardManager.CardType):
 
 func clear_score():
 	for digit in get_children():
-		if digit != button and digit != use_button:
+		if digit != button and digit != use_button and digit != sell_button:
 			digit.queue_free()
 
 func create_sprite(value: String, offset: Vector2):
@@ -96,6 +96,8 @@ func display_use():
 	use_button.visible = true
 func hide_use():
 	use_button.visible = false
+func hide_sell():
+	sell_button.visible = false
 	
 func disable():
 	button.disabled = true
