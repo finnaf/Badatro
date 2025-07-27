@@ -4,6 +4,8 @@ signal card_clicked(card)
 signal buy_click_forwarded(card)
 signal dragged(card)
 
+@export var symbols: SpriteFrames
+
 @onready var image: Sprite2D = $Image
 @onready var anim: AnimationPlayer = $AnimationPlayer
 @onready var box: Script = preload("res://scripts/joker-descriptor.gd")
@@ -14,6 +16,7 @@ var tex: Texture2D = null
 var cost_label: Sprite2D = null
 var desc_box: Node2D = null
 
+var is_focused: bool = false
 const FOCUS_SIZE = Vector2(1.0909090909, 1.07692307692)
 const JOK_FOCUS_SIZE = Vector2(1.0909090909, 1.06666666)
 
@@ -86,13 +89,14 @@ func set_voucher_tex(voucher: CardManager.VoucherType):
 		image.texture = tex
 
 func set_consumable_tex(consumable: CardManager.ConsumableType):
-	var path = ("res://images/cards/planets/planet_bg.png")
-	tex = CardManager.get_card_texture(path)
-	if tex:
-		print("valid tex")
-		image.texture = tex
-	else:
-		print("invalid tex")
+	match consumable:
+		CardManager.ConsumableType.planet:
+			var path = ("res://images/cards/planets/planet_bg.png")
+			tex = CardManager.get_card_texture(path)
+			if tex:
+				image.texture = tex
+			
+			add_child(Globals.create_symbol_sprite(randi_range(0, 11), "planets", Vector2(5.5, 8.5)))
 
 func draw_edition(edition: CardManager.Edition):
 	var animation
@@ -125,7 +129,7 @@ func deselect():
 		data.raised = false
 
 func display_cost():
-	var cost_val = CardManager.get_card_cost(data)
+	var cost_val = CardManager.get_card_cost(data, 1)
 	
 	const COST = preload("res://scenes/card-info-small.tscn")
 	cost_label = COST.instantiate()
@@ -185,34 +189,49 @@ func on_mouse_entered():
 	if (MouseManager.is_dragging):
 		return
 	
-	if not is_shop_card():
-		if is_joker():
-			self.scale = JOK_FOCUS_SIZE
-		else:
-			self.scale = FOCUS_SIZE
-			return
-	else:
+	if is_shop_card():
 		Globals.do_shake(self, 1.01)
 		if not is_joker():
 			return
+	else:
+		if is_joker():
+			self.position.y += 1
+			self.scale = JOK_FOCUS_SIZE
+		else:
+			self.position.y -= 1
+			self.scale = FOCUS_SIZE
+		
+		is_focused = true
+		self.z_index += 5
 	
-	var desc_data = JokerManager.get_joker(get_id(), get_rarity())
-	desc_box = box.new(desc_data)
-	add_child(desc_box)
-	self.z_index = 2
+	if is_joker():
+		self.z_index += 1 # for descriptor to be able to fit between bg and card
+		var desc_data = JokerManager.get_joker(get_id(), get_rarity())
+		desc_box = box.new(desc_data)
+		add_child(desc_box)
 
 func on_mouse_exited():
 	if (MouseManager.is_dragging):
 		return
-
-	self.scale = Vector2.ONE
-	if not is_joker():
-		return
-	self.z_index = 0
 	
-	if (desc_box):
-		desc_box.queue_free()
+	reset_focus()
 
+func reset_focus():
+	if is_focused:
+		if is_joker():
+			self.position.y -= 1
+		else:
+			self.position.y += 1
+		
+		self.scale = Vector2.ONE
+		self.z_index -= 5
+		is_focused = false
+	
+	if desc_box:
+		self.z_index -= 1
+		desc_box.queue_free()
+		desc_box = null
+			
 func set_shop_card():
 	is_shop = true
 func unset_shop_card():

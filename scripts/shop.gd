@@ -202,7 +202,7 @@ func setup_booster_connections():
 func _buy_attempt(card):
 	# TODO also constellation cards
 	
-	var cost = CardManager.get_card_cost(card.data)
+	var cost = CardManager.get_card_cost(card.data, game.get_discount_percent())
 	if (card.data.type == CardManager.CardType.joker):
 		if (jokers.is_full()):
 			return

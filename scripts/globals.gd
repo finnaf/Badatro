@@ -1,6 +1,7 @@
 extends Node
 
 var digit_frames
+const symbol_frames = preload("res://resources/symbols.tres")
 
 const YELLOW = Color(1, 0.7, 0.1)
 const RED = Color(0.929, 0.11, 0.141)
@@ -16,6 +17,7 @@ enum ResourceType {
 	money,
 }
 
+# TODO fix this error (why cant it be preloaded)
 func _ready():
 	digit_frames = load("res://resources/number-sprite-frames.tres")
 
@@ -46,6 +48,15 @@ func create_digit_sprite(value: int, offset: Vector2) -> AnimatedSprite2D:
 	sprite.frame = value
 	sprite.position = offset
 	sprite.z_index = 1
+	return sprite
+
+func create_symbol_sprite(frame: int, ani, offset: Vector2) -> AnimatedSprite2D:
+	var sprite = AnimatedSprite2D.new()
+	sprite.frames = symbol_frames
+	sprite.animation = ani
+	sprite.position = offset
+	sprite.z_index = 1
+	sprite.frame = frame
 	return sprite
 
 func do_shake(node: Node, weight = 1.02):

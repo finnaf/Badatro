@@ -373,22 +373,33 @@ func get_active_cards(cards, hand):
 	
 	return active_cards
 
-func get_card_cost(data: Dictionary) -> int:
+func get_card_cost(data: Dictionary, discount_percent: float) -> int:
 	# TODO consumables
 	
 	var cost = 0
-	if (data.type == CardType.joker):
-		cost = JokerManager.get_joker(data.id, data.rarity).cost
+	match data.type:
+		CardType.joker:
+			cost = JokerManager.get_joker(data.id, data.rarity).cost
 		
-	if (data.type == CardType.booster):
-		if (data.booster_size == BoosterSize.normal):
-			cost += 4
-		elif (data.booster_size == BoosterSize.jumbo):
-			cost += 6
-		else: # mega
-			cost += 8
-	elif (data.type == CardType.voucher):
-		cost += 10
+		CardType.booster:
+			if (data.booster_size == BoosterSize.normal):
+				cost += 4
+			elif (data.booster_size == BoosterSize.jumbo):
+				cost += 6
+			else: # mega
+				cost += 8
+		
+		CardType.voucher:
+			cost += 10
+		
+		CardType.consumable:
+			if (data.consumable_type == CardManager.ConsumableType.spectral):
+				cost += 4
+			else:
+				cost += 3
+		
+		CardType.card:
+			cost += 1
 		
 	if (data.has("edition")):
 		if (data.edition == Edition.foil):
@@ -398,8 +409,17 @@ func get_card_cost(data: Dictionary) -> int:
 		elif (data.edition == Edition.polychrome or
 			data.edition == Edition.negative):
 			cost += 5
-	
+			
+	cost = floor(cost * discount_percent)
+	if cost < 1:
+		return 1
 	return cost
+
+func get_sell_price(data: Dictionary, discount_percent: float) -> int:
+	var price = floor(get_card_cost(data, discount_percent) / 2)
+	if price < 1:
+		return 1
+	return price
 
 func get_suit_name(value: int) -> String:
 	for name in Suit:

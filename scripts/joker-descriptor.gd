@@ -13,8 +13,6 @@ var pos: Vector2i
 var size: Vector2i
 var col: Color
 
-const symbol_frames = preload("res://resources/symbols.tres")
-
 func _init(desc_data: Dictionary):
 	var width = generate_content(desc_data)
 	
@@ -34,8 +32,6 @@ func _draw():
 	draw_rect(Rect2(pos, size), col)
 	draw_rect(Rect2(Vector2(pos.x+1, pos.y+1), 
 				Vector2(size.x-2, size.y-2)), Globals.WHITE)
-
-
 
 func generate_content(desc_data: Dictionary) -> float:
 	var top_y = 3.5
@@ -125,21 +121,12 @@ func generate_content(desc_data: Dictionary) -> float:
 		s.position.x -= width
 		add_child(s)
 
-	return width		
-
-# currently using magic floaty numbers from spriteframe but i just want this online
-func create_symbol_sprite(frame: int, offset: Vector2) -> AnimatedSprite2D:
-	var sprite = AnimatedSprite2D.new()
-	sprite.frames = symbol_frames
-	sprite.position = offset
-	sprite.z_index = 1
-	sprite.frame = frame
-	return sprite
+	return width
 
 func _place_symbol(frame: int, width: int, cursor: float, y: float,
 							list: Array, colour = null) -> float:
 	cursor += width * 0.5 # centre of sprite
-	var s := create_symbol_sprite(frame, Vector2(cursor + HALF, y))
+	var s := Globals.create_symbol_sprite(frame, "default", Vector2(cursor + HALF, y))
 	if (colour != null):
 		s.modulate = colour
 	list.append(s)

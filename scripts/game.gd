@@ -129,6 +129,11 @@ func get_hand_size():
 	var hand_size = BASEHANDSIZE
 	return hand_size
 
+func get_discount_percent():
+	# clearance sale = 0.75
+	# liquidation = 0.5
+	return 1
+
 func get_money_gained():
 	if blind == 0:
 		return 3

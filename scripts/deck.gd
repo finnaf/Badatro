@@ -193,13 +193,15 @@ func _on_card_dragged(dragged_card):
 		
 		var index = get_index_from_node(furthest_card)
 		hand.insert(index, dragged_card.data)
-		return_hand()
+		return_hand(false)
 	
 	# dragged to the leftmost position
 	else:
 		hand.erase(dragged_card.data)
 		hand.append(dragged_card.data)
-		return_hand()
+		return_hand(false)
+	
+	dragged_card.position.y -= 1 # this counteracts the focus end effect
 		
 
 func get_index_from_node(node: Node2D) -> int:
@@ -305,7 +307,7 @@ func sort_suit():
 	return_hand()
 
 # place cards into hand order
-func return_hand():
+func return_hand(reconfig_z = true):
 	for card in get_children():
 		if card.has_method("get_id"):
 			
@@ -319,7 +321,9 @@ func return_hand():
 						card.position.y = -14
 					else:
 						card.position.y = 0
-					card.z_index = i
+					
+					if reconfig_z:
+						card.z_index = i
 	
 
 func _on_sort_suit_button_pressed():

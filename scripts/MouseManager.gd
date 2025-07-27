@@ -30,8 +30,8 @@ func _input(event):
 		if is_pressed and not is_dragging:
 			if can_drag and event.position.distance_to(drag_start_position) > DRAG_THRESHOLD:
 				is_dragging = true
-				drag_target.z_index += BIG_Z_VALUE
 				if drag_target:
+					drag_target.z_index += BIG_Z_VALUE
 					drag_target._on_drag_start()
 
 		if is_dragging and drag_target:
