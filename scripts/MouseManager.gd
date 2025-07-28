@@ -43,17 +43,21 @@ func start_drag(card: Area2D, start_pos: Vector2):
 	if (is_disabled): # TODO all default card positions in mat
 		return
 	
+	if (card.has_method("reset_focus")):
+		card.reset_focus()
+	
 	drag_target = card
 	drag_start_position = start_pos
 	is_pressed = true
 	is_dragging = false
 	
-	if (not card.is_shop_card() and (card.is_card() or card.is_joker() or card.is_consumable())):
-		can_drag = true
+	can_drag = (not card.is_shop_card()) and (card.is_card() or card.is_joker() or card.is_consumable())
 
 func _end_drag():
 	if drag_target:
 		drag_target.z_index -= BIG_Z_VALUE
+		if (drag_target.has_method("reset_focus")):
+			drag_target.reset_focus()
 		drag_target._on_drag_end()
 
 

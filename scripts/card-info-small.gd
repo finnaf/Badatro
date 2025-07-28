@@ -1,41 +1,47 @@
 extends Sprite2D
 
+# has:
+# cost
+# buy / get / sell button
+# use button
+
 @export var digit_frames: SpriteFrames
-@export var get_tex: Texture2D
+@export var bg: Texture2D
 @export var buy_tex: Texture2D
+@export var get_tex: Texture2D
+@export var sell_tex: Texture2D
 @onready var button: TextureButton = $Button
 @onready var use_button: TextureButton = $Use
-@onready var sell_button: TextureButton = $Sell
 
 var card_cost
 
-signal buy_clicked(card)
+signal button_clicked(card)
 signal use_clicked(card)
 
 func _ready():
 	self.position += Vector2(5, -4)
-	self.z_index += 1
+	self.texture = bg
+	#self.z_index += 1
 	button.pressed.connect(_on_pressed)
 	use_button.pressed.connect(_on_use_pressed)
-	sell_button.pressed.connect(_on_sell_pressed)
+	
+	hide_use()
+	hide_button()
 
-func switch_label(is_get: bool):
-	if (is_get):
-		hide_cost()
-		button.texture_normal = get_tex
-		display_button()
-	else:
-		show_cost()
+# 0 - buy, 1 - get, 2 - sell
+func switch_label(button_type: int):
+	if (button_type == 0):
 		button.texture_normal = buy_tex
+	elif (button_type == 1):
+		button.texture_normal = get_tex	
+	else:
+		button.texture_normal = sell_tex
 
-func _on_sell_pressed():
-	emit_signal("sell_clicked", self)
 
 func _on_use_pressed():
 	emit_signal("use_clicked", self)
-
 func _on_pressed():
-	emit_signal("buy_clicked", self)
+	emit_signal("button_clicked", self)
 
 func set_value(cost: int, type: CardManager.CardType):
 	clear_score()
@@ -72,7 +78,7 @@ func set_value(cost: int, type: CardManager.CardType):
 
 func clear_score():
 	for digit in get_children():
-		if digit != button and digit != use_button and digit != sell_button:
+		if digit != button and digit != use_button:
 			digit.queue_free()
 
 func create_sprite(value: String, offset: Vector2):
@@ -82,24 +88,29 @@ func create_sprite(value: String, offset: Vector2):
 	sprite.position = offset
 	return sprite
 
+# TOP LABEL
 func hide_cost():
 	clear_score()
 	self.texture = null
 func show_cost():
+	self.texture = bg
 	set_value(card_cost, CardManager.CardType.joker)
-	# cba, add background too
-func display_button():
-	button.visible = true
+
+# BOTTOM LABEL
 func hide_button():
 	button.visible = false
+func display_button():
+	button.visible = true
+
+# SIDE LABEL
 func display_use():
 	use_button.visible = true
 func hide_use():
 	use_button.visible = false
-func hide_sell():
-	sell_button.visible = false
 	
 func disable():
 	button.disabled = true
+	use_button.disabled = true
 func enable():
 	button.disabled = false
+	use_button.disabled = false

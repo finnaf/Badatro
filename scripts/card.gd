@@ -1,9 +1,8 @@
 extends Area2D
 
 signal card_clicked(card)
-signal buy_click_forwarded(card)
+signal button_click_forwarded(card)
 signal use_click_forwarded(card)
-signal sell_click_forwarded(card)
 signal dragged(card)
 
 @export var symbols: SpriteFrames
@@ -12,13 +11,14 @@ signal dragged(card)
 @onready var anim: AnimationPlayer = $AnimationPlayer
 @onready var box: Script = preload("res://scripts/joker-descriptor.gd")
 
+var is_focused: bool = false
 var is_shop: bool = false
 var flipped: bool = true
+
 var tex: Texture2D = null
 var card_buttons: Sprite2D = null
 var desc_box: Node2D = null
 
-var is_focused: bool = false
 const FOCUS_SIZE = Vector2(1.0909090909, 1.07692307692)
 const JOK_FOCUS_SIZE = Vector2(1.0909090909, 1.06666666)
 
@@ -66,7 +66,6 @@ func set_card_tex(rank: int, suit: int):
 	tex = CardManager.get_card_texture(path)
 	if tex:
 		image.texture = tex
-
 func set_joker_tex(joker_id, rarity):	
 	var joker_data = JokerManager.get_joker(joker_id, rarity)
 	var path = ("res://images/cards/jokers/%s/%s.png" % 
@@ -76,20 +75,17 @@ func set_joker_tex(joker_id, rarity):
 	tex = CardManager.get_card_texture(path)
 	if tex:
 		image.texture = tex
-
 func set_booster_tex(booster: CardManager.BoosterType, size: CardManager.BoosterSize):	
 	var path = ("res://images/cards/boosters/%s-%s.png" % 
 				[str(booster), str(size)])
 	tex = CardManager.get_card_texture(path)
 	if tex:
 		image.texture = tex
-
 func set_voucher_tex(voucher: CardManager.VoucherType):
 	var path = ("res://images/cards/vouchers/voucher.png")
 	tex = CardManager.get_card_texture(path)
 	if tex:
 		image.texture = tex
-
 func set_consumable_tex(consumable: CardManager.ConsumableType):
 	match consumable:
 		CardManager.ConsumableType.planet:
@@ -100,7 +96,7 @@ func set_consumable_tex(consumable: CardManager.ConsumableType):
 			
 			add_child(Globals.create_symbol_sprite(randi_range(0, 11), "planets", Vector2(5.5, 8.5)))
 
-func draw_edition(edition: CardManager.Edition):
+func draw_edition(edition: CardManager.Edition): # TODO
 	var animation
 
 func flip():
@@ -130,26 +126,14 @@ func deselect():
 		position.y += SELECT_DIST
 		data.raised = false
 
-func display_cost():
-	var cost_val = CardManager.get_card_cost(data, 1)
-	card_buttons = preload("res://scenes/card-info-small.tscn").instantiate()
-	add_child(card_buttons)
-	card_buttons.set_value(cost_val, data.type)
-	
-	card_buttons.connect("buy_clicked", Callable(self, "_on_buy_clicked_on_label"))
-	card_buttons.connect("use_clicked", Callable(self, "_on_use_clicked_on_label"))
-	card_buttons.connect("sell_clicked", Callable(self, "_on_sell_clicked_on_label"))
-
 func delete_card_buttons():
 	if (card_buttons):
 		card_buttons.queue_free()
 
-func _on_buy_clicked_on_label(card):
-	emit_signal("buy_click_forwarded", self)
+func _on_button_clicked_on_label(card):
+	emit_signal("button_click_forwarded", self)
 func _on_use_clicked_on_label(card):
 	emit_signal("use_click_forwarded", self)
-func _on_sell_clicked_on_label(card):
-	emit_signal("sell_click_forwarded", self)
 
 func shop_select():
 	if card_buttons == null:
@@ -228,42 +212,63 @@ func on_mouse_exited():
 
 func reset_focus():
 	if is_focused:
-		if is_joker():
-			self.position.y -= 1
+		if is_shop_card():
+			pass
+		elif is_joker():
+			position.y -= 1
 		else:
-			self.position.y += 1
+			position.y += 1
 		
-		self.scale = Vector2.ONE
-		self.z_index -= 5
+		scale = Vector2.ONE
+		z_index -= 5
 		is_focused = false
 	
 	if desc_box:
-		self.z_index -= 1
+		z_index -= 1
 		desc_box.queue_free()
 		desc_box = null
 
-func set_consumable(): # turns sell and use visible
-	card_buttons.use_button = visible
-	card_buttons.sell_button = visible
 			
 func set_shop_card():
 	is_shop = true
 func unset_shop_card():
 	is_shop = false
+func is_shop_card():
+	return is_shop
+
+func display_cost():
+	var cost_val = CardManager.get_card_cost(data, 1)
+	card_buttons = preload("res://scenes/card-info-small.tscn").instantiate()
+	add_child(card_buttons)
+	card_buttons.set_value(cost_val, data.type)
+	
+	card_buttons.connect("button_clicked", Callable(self, "_on_button_clicked_on_label"))
+	card_buttons.connect("use_clicked", Callable(self, "_on_use_clicked_on_label"))
+
+func display_sell_price(): # expects card_buttons to be instantiated
+	var sell_val = CardManager.get_sell_price(data, 1)
+	card_buttons.set_value(sell_val, data.type)
+	card_buttons.switch_label(2) # switch to "SEL"
+
+
+func setup_consumable():
+	# has use and cost and sell
+	pass
+
+
+
 func hide_cost_only():
 	if (card_buttons):
 		card_buttons.hide_cost()
-func hide_buy_only():
+func hide_button_only():
 	if (card_buttons):
 		card_buttons.hide_button()
-func hide_card_buttons():
-	card_buttons.hide_button()
-	card_buttons.hide_use()
-	card_buttons.hide_cost()
-	card_buttons.hide_sell()
+func hide_use_only():
+	if (card_buttons):
+		card_buttons.hide_use()
+func hide_buttons():
+	card_buttons.hide()
 
-func is_shop_card():
-	return is_shop
 func is_joker():
 	if (data.type == CardManager.CardType.joker):
 		return true

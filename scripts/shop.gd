@@ -68,18 +68,6 @@ func close():
 	vouchers.clear()
 	deck_info.exit_shop()
 
-func set_pack_background():
-	skip_button.visible = in_booster
-	background.visible = not in_booster
-	deck_info.visible = not in_booster
-	
-	for card in main:
-		card.visible = not in_booster
-	for pack in boosters:
-		pack.visible = not in_booster
-	for voucher in vouchers:
-		voucher.visible = not in_booster
-
 func load_cards():
 	load_main()
 	
@@ -189,22 +177,19 @@ func setup_connections():
 	for card in get_children():
 		if card.has_method("is_flipped"): # is a card
 			card.connect("card_clicked", Callable(self, "_on_card_clicked"))
-			card.connect("buy_click_forwarded", Callable(self, "_buy_attempt"))
+			card.connect("button_click_forwarded", Callable(self, "_buy_attempt"))
 			card.connect("use_click_forwarded", Callable(self, "_use_attempt"))
 
 func setup_booster_connections():
 	for card in booster_cards:
 		card.connect("card_clicked", 
 						Callable(self, "_in_booster_card_clicked"))
-		card.connect("buy_click_forwarded", 
-			Callable(self, "_get_clicked"))
+		card.connect("button_click_forwarded", Callable(self, "_get_clicked"))
 
 func _buy_attempt(card):
 	if MouseManager.is_disabled:
 		return
-	
-	# TODO also constellation cards
-	
+		
 	var cost = CardManager.get_card_cost(card.data, game.get_discount_percent())
 	if (card.data.type == CardManager.CardType.joker):
 		if (jokers.is_full()):
@@ -270,7 +255,7 @@ func _in_booster_card_clicked(card):
 		
 func buy_joker(joker):
 	joker.shop_deselect()
-	joker.delete_card_buttons()
+	joker.hide_buttons()
 	joker.unset_shop_card()
 	
 	remove_child(joker)
@@ -278,9 +263,8 @@ func buy_joker(joker):
 	jokers.add(joker)
 
 func buy_consumable(consumable):
-	print("buy")
 	consumable.shop_deselect()
-	consumable.hide_card_buttons()
+	consumable.hide_buttons()
 	consumable.unset_shop_card()
 	
 	remove_child(consumable)
@@ -339,6 +323,20 @@ func open_buffoon(size: CardManager.BoosterSize):
 		
 		var data = JokerManager.generate_joker_data()
 		joker.setup(data)
+
+
+func set_pack_background():
+	skip_button.visible = in_booster
+	background.visible = not in_booster
+	deck_info.visible = not in_booster
+	
+	for card in main:
+		card.visible = not in_booster
+	for pack in boosters:
+		pack.visible = not in_booster
+	for voucher in vouchers:
+		voucher.visible = not in_booster
+
 
 func update_reroll_display():
 	var digits = Globals.convert_to_digits(

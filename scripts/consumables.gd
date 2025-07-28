@@ -18,7 +18,7 @@ func use(consum):
 	pass
 
 func _on_clicked(card):
-	card.set_consumable()
+	card.display_sell_price()
 
 # 
 func use_attempt():

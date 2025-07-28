@@ -199,10 +199,7 @@ func _on_card_dragged(dragged_card):
 	else:
 		hand.erase(dragged_card.data)
 		hand.append(dragged_card.data)
-		return_hand(false)
-	
-	dragged_card.position.y -= 1 # this counteracts the focus end effect
-		
+		return_hand(false)		
 
 func get_index_from_node(node: Node2D) -> int:
 	for i in range(hand.size()):
