@@ -183,10 +183,17 @@ func get_game_state() -> Dictionary:
 		"discards": discards,
 	}
 
+func upgrade_hand(hand: String):
+	levels[hand] += 1
+	print("upgraded hand: ", hand)
+
 func set_hand(new_hand: String):
 	hand = new_hand
-	chips = CardManager.base_values[hand][0] + (levels[hand] * CardManager.planet_values[hand][0])
-	mult = CardManager.base_values[hand][1] + (levels[hand] * CardManager.planet_values[hand][1])
+	chips = CardManager.base_values[hand][0] + (levels[hand] * ConsumableManager.planet_values[hand][0])
+	mult = CardManager.base_values[hand][1] + (levels[hand] * ConsumableManager.planet_values[hand][1])
+	
+	sidebar.update_chips()
+	sidebar.update_mult()
 
 func can_discard():
 	if discards <= 0 or state != states.PLAYING:

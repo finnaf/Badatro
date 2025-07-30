@@ -17,8 +17,17 @@ func add(consum):
 	reorganise_consumables()
 	connect_consumables()
 
-func use(consum):
-	pass
+func use(selected_cards: Array, consumable: Node):
+	
+	if (consumable.is_planet()):
+		var hand = ConsumableManager.get_planet_name(consumable.data.id)
+		print(hand, " ", consumable.data.id)
+		await game.upgrade_hand(hand)
+		
+		# update current hand if is playing
+		if game.state == game.states.PLAYING:
+			game.set_hand(hand)
+		
 
 func _on_clicked(card):
 	if (card == consum_select):
@@ -42,7 +51,7 @@ func _on_sell(card):
 # 
 func use_attempt(card):
 	if (ConsumableManager.can_use([], card)):
-		ConsumableManager.use([], card)
+		use([], card)
 		_delete_consumable(card)
 
 func reorganise_consumables():

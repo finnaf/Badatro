@@ -220,7 +220,7 @@ func _use_attempt(consumable):
 	var cost = CardManager.get_card_cost(consumable.data, game.get_discount_percent())
 	var can_use = ConsumableManager.can_use([], consumable)
 	if (can_use and game.spend_money(cost)):
-		consumables.use(consumable)
+		consumables.use([], consumable)
 	
 	consumable.queue_free()
 	main.erase(consumable)

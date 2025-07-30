@@ -20,7 +20,6 @@ var card_buttons: Sprite2D = null
 var desc_box: Node2D = null
 
 const FOCUS_SIZE = Vector2(1.0909090909, 1.07692307692)
-const JOK_FOCUS_SIZE = Vector2(1.0909090909, 1.06666666)
 
 const SHIFT_DIST = Vector2(0.5, 0.5)
 const SELECT_DIST = 14
@@ -57,7 +56,7 @@ func setup(new_data: Dictionary):
 		CardManager.CardType.voucher:
 			set_voucher_tex(data.id)
 		CardManager.CardType.consumable:
-			set_consumable_tex(data.consumable_type)
+			set_consumable_tex(data.consumable_type, data.id)
 	if data.has("edition"):
 		draw_edition(data.edition)
 	
@@ -87,7 +86,7 @@ func set_voucher_tex(voucher: CardManager.VoucherType):
 	tex = CardManager.get_card_texture(path)
 	if tex:
 		image.texture = tex
-func set_consumable_tex(consumable: CardManager.ConsumableType):
+func set_consumable_tex(consumable: CardManager.ConsumableType, id):
 	match consumable:
 		CardManager.ConsumableType.planet:
 			var path = ("res://images/cards/planets/planet_bg.png")
@@ -95,7 +94,7 @@ func set_consumable_tex(consumable: CardManager.ConsumableType):
 			if tex:
 				image.texture = tex
 			
-			add_child(Globals.create_symbol_sprite(randi_range(0, 11), "planets", Vector2(5.5, 8.5)))
+			add_child(Globals.create_symbol_sprite(id, "planets", Vector2(5.5, 8.5)))
 
 func draw_edition(edition: CardManager.Edition): # TODO
 	var animation
@@ -190,8 +189,7 @@ func on_mouse_entered():
 			return
 	else:
 		if is_joker():
-			self.position += SHIFT_DIST
-			self.scale = JOK_FOCUS_SIZE
+			pass # removing joker focusing
 		else:
 			self.position -= SHIFT_DIST
 			self.scale = FOCUS_SIZE
@@ -216,7 +214,7 @@ func reset_focus():
 		if is_shop_card():
 			pass
 		elif is_joker():
-			position -= SHIFT_DIST
+			pass
 		else:
 			position += SHIFT_DIST
 		

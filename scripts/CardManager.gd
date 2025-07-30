@@ -85,22 +85,6 @@ var base_values = {
 	"none": [0, 0]
 }
 
-var planet_values = {
-	"flush five": [50, 3],
-	"flush house": [40, 4],
-	"five of a kind": [35, 3],
-	"straight flush": [40, 4],
-	"four of a kind": [30, 3],
-	"full house": [25, 2],
-	"flush": [15, 2],
-	"straight": [30, 3],
-	"three of a kind": [20, 2],
-	"two pair": [20, 1],
-	"pair": [15, 1],
-	"high card": [10, 1],
-	"none": [0, 0]
-}
-
 func get_card_texture(path: String) -> Texture2D:
 	if ResourceLoader.exists(path):
 		return load(path)
