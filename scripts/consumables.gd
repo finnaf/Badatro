@@ -67,7 +67,7 @@ func is_full():
 func get_consumable_position(i):
 	var spacing = round((26)/consumables.size())
 	var total_width = (consumables.size() - 1) * spacing
-	return ((i * spacing) - (total_width/2)) - 5
+	return ((i * spacing) - (total_width/2)) - 6
 
 func connect_consumables():
 	for card in consumables:

@@ -25,6 +25,7 @@ func _ready():
 	self.texture = bg
 	button.pressed.connect(_on_pressed)
 	use_button.pressed.connect(_on_use_pressed)
+	use_button.modulate = Globals.YELLOW # always starts with a yellow use (costs money)
 	
 	hide_use()
 	hide_button()
@@ -45,6 +46,7 @@ func switch_label(button_type: int):
 
 func switch_use_side():
 	use_button.position.x -= 16
+	use_button.modulate = Globals.WHITE
 
 func _on_use_pressed():
 	emit_signal("use_clicked", self)

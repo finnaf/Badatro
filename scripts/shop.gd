@@ -7,6 +7,8 @@ var cards_remaining
 var packs_remaining
 var vouchers_remaining
 
+var rng = RandomNumberGenerator.new()
+
 var main: Array = []
 var boosters: Array = []
 var vouchers: Array = []
@@ -39,6 +41,9 @@ func _ready():
 	RerollCostOnes.modulate = Globals.YELLOW
 	RerollCostTens.modulate = Globals.YELLOW
 	RerollCostHundreds.modulate = Globals.YELLOW
+
+func set_seed(seed: int):
+	rng.seed = seed + 2
 
 func prep_values():
 	cards_remaining = MAIN_MAX
@@ -84,27 +89,6 @@ func load_main():
 	for i in range(cards_remaining):
 		get_main_card(offsets[1] + (i*offsets[0]))
 
-# only one main section or booster card selected at a time
-func _on_card_clicked(card):
-	if (card.data.type == CardManager.CardType.booster):
-		if (card == booster_select):
-			booster_select = null
-			card.shop_deselect()
-		else:
-			if booster_select != null:
-				booster_select.shop_deselect()
-			booster_select = card
-			card.shop_select()
-	else:
-		if (card == main_select):
-			main_select = null
-			card.shop_deselect()
-		else:
-			if main_select != null:
-				main_select.shop_deselect()
-			main_select = card
-			card.shop_select()
-
 func get_main_card(xoffset: int):
 	var card = CARD.instantiate()
 	
@@ -113,15 +97,34 @@ func get_main_card(xoffset: int):
 	card.position.y += 1
 	
 	# decide if planet, tarot, joker or playing card
+	const W_JOK = 20
+	const W_TAR = 4
+	const W_PLA = 4
 	
-	var data = JokerManager.generate_joker_data()
-	card.setup({
-				"id": data.id,
-				"rarity": data.rarity,
-				"type": CardManager.CardType.consumable,
-				"consumable_type": CardManager.ConsumableType.planet,
-				"edition": data.edition,
-			})
+	# 20 -4 -4
+	var type_thresh = rng.randi_range(0, W_JOK + W_TAR + W_TAR)
+	
+	if type_thresh < W_JOK: # jok
+		var data = JokerManager.generate_joker_data()
+		card.setup({
+			"id": data.id,
+			"rarity": data.rarity,
+			"type": CardManager.CardType.joker,
+			"consumable_type": CardManager.ConsumableType.planet,
+			"edition": data.edition,
+		})
+	elif type_thresh < W_JOK + W_TAR: # tarot TODO
+		card.setup({
+			"id": 0,
+			"type": CardManager.CardType.consumable,
+			"consumable_type": CardManager.ConsumableType.planet,
+		})
+	else: # planet
+		card.setup({
+			"id": 1,
+			"type": CardManager.CardType.consumable,
+			"consumable_type": CardManager.ConsumableType.planet,
+		})
 	
 	card.display_cost()
 	card.set_shop_card()
@@ -185,36 +188,58 @@ func setup_booster_connections():
 		card.connect("card_clicked", Callable(self, "_in_booster_card_clicked"))
 		card.connect("button_click_forwarded", Callable(self, "_get_clicked"))
 
+# only one main section or booster card selected at a time
+func _on_card_clicked(card):
+	if (card.data.type == CardManager.CardType.booster):
+		if (card == booster_select):
+			booster_select = null
+			card.shop_deselect()
+		else:
+			if booster_select != null:
+				booster_select.shop_deselect()
+			booster_select = card
+			card.shop_select()
+	else:
+		if (card == main_select):
+			main_select = null
+			card.shop_deselect()
+		else:
+			if main_select != null:
+				main_select.shop_deselect()
+			main_select = card
+			card.shop_select()
+
 func _buy_attempt(card):
 	if MouseManager.is_disabled:
 		return
 		
 	var cost = CardManager.get_card_cost(card.data, game.get_discount_percent())
 	if (card.data.type == CardManager.CardType.joker):
-		if (jokers.is_full()):
+		if (jokers.is_full() or not game.spend_money(cost)):
 			return
-		if (game.spend_money(cost)):
-			buy_joker(card)
+		buy_joker(card)
 	
 	elif (card.data.type == CardManager.CardType.consumable):
-		if (consumables.is_full()):
+		if (consumables.is_full() or not game.spend_money(cost)):
 			return
-		if (game.spend_money(cost)):
-			buy_consumable(card)
-			
-			card.disconnect("use_click_forwarded", Callable(self, "_use_attempt"))
-			card.disconnect("button_click_forwarded", Callable(self, "_buy_attempt"))
-			card.disconnect("card_clicked", Callable(self, "_on_card_clicked"))
+		buy_consumable(card)
 	
 	elif (card.data.type == CardManager.CardType.booster):
-		if (game.spend_money(cost)):
-			open_booster(card)
-			card.disconnect("card_clicked", Callable(self, "_in_booster_card_clicked"))
+		if (not game.spend_money(cost)):
+			return
+		open_booster(card)
+		
 	
 	elif (card.data.type == CardManager.CardType.voucher):
 		if (game.spend_money(cost)):
 			buy_voucher(card)
 			game.voucher_count -= 1
+		return
+	
+	# disconnect from all card signals if it is successfully bought
+	card.disconnect("use_click_forwarded", Callable(self, "_use_attempt"))
+	card.disconnect("button_click_forwarded", Callable(self, "_buy_attempt"))
+	card.disconnect("card_clicked", Callable(self, "_on_card_clicked"))
 
 func _use_attempt(consumable):
 	var cost = CardManager.get_card_cost(consumable.data, game.get_discount_percent())
@@ -230,13 +255,18 @@ func _get_clicked(card):
 	if MouseManager.is_disabled:
 		return
 	
-	card.delete_card_buttons()
+
 	booster_cards.erase(card)
 	in_booster_select = null
-	remove_child(card)
 	in_booster_count -= 1
-	jokers.add(card)
-	card.unset_shop_card()
+	
+	if (card.data.type == CardManager.CardType.joker):
+		buy_joker(card)
+	else:
+		print("invalid type got")
+	
+	card.disconnect("card_clicked", Callable(self, "_in_booster_card_clicked"))
+	card.disconnect("button_click_forwarded", Callable(self, "_get_clicked"))
 	
 	if (in_booster_count == 0):
 		close_booster()
@@ -329,7 +359,6 @@ func open_buffoon(size: CardManager.BoosterSize):
 		joker.setup(data)
 		joker.display_cost()
 		joker.card_buttons.switch_label(1)
-		joker.card_buttons.display_button()
 		joker.hide_cost_only()
 		joker.hide_use_only()
 

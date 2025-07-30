@@ -94,7 +94,8 @@ func _ready():
 func setup(game_seed: int):
 	seed = game_seed
 	seed(seed) # for shuffling cards
-	JokerManager.new_game(seed) # for drawing jokers
+	shop.set_seed(game_seed) # for what type will appear
+	JokerManager.new_game(game_seed) # for drawing jokers
 	
 	gamespeed = GAMESPEED
 	

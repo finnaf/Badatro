@@ -62,9 +62,10 @@ func create_symbol_sprite(frame: int, ani, offset: Vector2) -> AnimatedSprite2D:
 func do_shake(node: Node, weight = 1.02):
 	var shake_size = Vector2(weight, weight)
 	var height_adjust = (((shake_size.y - 1) / 13) / 2)
+	var width_adjust = (((shake_size.x - 1) / 11) / 2)
 	
 	node.scale = shake_size
-	node.position.y -= height_adjust
+	node.position -= Vector2(height_adjust, width_adjust)
 	await get_tree().create_timer(0.1).timeout
 	node.scale = Vector2.ONE
-	node.position.y += height_adjust
+	node.position += Vector2(height_adjust, width_adjust)

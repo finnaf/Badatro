@@ -2,6 +2,7 @@ extends Sprite2D
 
 @onready var game = $"../.."
 
+var jok_select = null
 var jokers = []
 var max_jokers = 5
 const BASE_MAX_JOKERS = 5
@@ -30,6 +31,7 @@ func add(joker):
 	jokers.append(joker)
 	add_child(joker)
 	joker.position = Vector2(0,-6)
+	joker.card_buttons.z_index += 5
 	reorganise_jokers()
 	connect_jokers()
 
@@ -51,6 +53,27 @@ func _on_card_dragged(d_joker):
 	jokers.insert(insert_index, d_joker)
 	reorganise_jokers()
 
+func _on_clicked(card):
+	if (card == jok_select):
+		jok_select = null
+		card.jok_deselect()
+	else:
+		if jok_select != null:
+			jok_select.consum_deselect()
+		jok_select = card
+		card.jok_select()
+
+func _on_sell(card):
+	game.add_money(CardManager.get_sell_price(card.data, 1))
+	_delete_joker(card)
+
+func _delete_joker(card):
+	jokers.erase(card)
+	if (jok_select == card):
+		jok_select = null
+	card.queue_free()
+
+
 func is_full():
 	if (jokers.size() < max_jokers):
 		return false
@@ -64,3 +87,5 @@ func get_joker_position(i):
 func connect_jokers():
 	for joker in jokers:
 		joker.connect("dragged", Callable(self, "_on_card_dragged"))
+		joker.connect("card_clicked", Callable(self, "_on_clicked"))
+		joker.connect("button_click_forwarded", Callable(self, "_on_sell"))

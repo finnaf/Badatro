@@ -135,25 +135,6 @@ func _on_button_clicked_on_label(card):
 func _on_use_clicked_on_label(card):
 	emit_signal("use_click_forwarded", self)
 
-func shop_select():
-	if card_buttons == null:
-		return
-		
-	position.y -= SHOP_SELECT_DIST
-	card_buttons.display_button()
-	
-	if (is_consumable()):
-		card_buttons.display_use()
-
-func shop_deselect():
-	if card_buttons == null:
-		return
-	
-	card_buttons.hide_button()
-	if (is_consumable()):
-		card_buttons.hide_use()
-	position.y += SHOP_SELECT_DIST
-
 func _input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
@@ -258,13 +239,37 @@ func setup_consumable():
 	
 	consum_deselect()
 	
+func shop_select():
+	if card_buttons == null:
+		return
+		
+	position.y -= SHOP_SELECT_DIST
+	card_buttons.display_button()
+	
+	if (is_consumable()):
+		card_buttons.display_use()
+func shop_deselect():
+	if card_buttons == null:
+		return
+	
+	card_buttons.hide_button()
+	if (is_consumable()):
+		card_buttons.hide_use()
+	position.y += SHOP_SELECT_DIST
+
+func jok_select():
+	setup_sell_price()
+	card_buttons.show()
+	card_buttons.display_button()
+func jok_deselect():
+	card_buttons.hide_button()
+	card_buttons.clear_score()
 
 func consum_select():
 	setup_sell_price()
 	card_buttons.show()
 	card_buttons.display_use()
 	card_buttons.display_button()
-
 func consum_deselect():
 	card_buttons.hide_use()
 	card_buttons.hide_button()
