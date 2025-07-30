@@ -10,7 +10,6 @@ var drag_target = null
 var drag_start_position := Vector2.ZERO
 
 const BIG_Z_VALUE = 100
-
 const DRAG_THRESHOLD := 4
 
 func _input(event):

@@ -2,8 +2,8 @@ extends Sprite2D
 
 # has:
 # cost
-# buy / get / sell button
 # use button
+# buy / get / sell button
 
 @export var digit_frames: SpriteFrames
 @export var bg: Texture2D
@@ -15,13 +15,14 @@ extends Sprite2D
 
 var card_cost
 
+var nums = []
+
 signal button_clicked(card)
 signal use_clicked(card)
 
 func _ready():
 	self.position += Vector2(5, -4)
 	self.texture = bg
-	#self.z_index += 1
 	button.pressed.connect(_on_pressed)
 	use_button.pressed.connect(_on_use_pressed)
 	
@@ -35,8 +36,15 @@ func switch_label(button_type: int):
 	elif (button_type == 1):
 		button.texture_normal = get_tex	
 	else:
+		# needs to be below to be seen
+		for digit in nums:
+			digit.position.y += 20
+		
 		button.texture_normal = sell_tex
+		self.texture = null
 
+func switch_use_side():
+	use_button.position.x -= 16
 
 func _on_use_pressed():
 	emit_signal("use_clicked", self)
@@ -74,12 +82,13 @@ func set_value(cost: int, type: CardManager.CardType):
 		var sprite = create_sprite(digit, offset)
 		sprite.modulate = Globals.YELLOW
 		add_child(sprite)
+		nums.append(sprite)
 		offset.x += 4
 
 func clear_score():
-	for digit in get_children():
-		if digit != button and digit != use_button:
-			digit.queue_free()
+	for digit in nums:
+		digit.queue_free()
+	nums.clear()
 
 func create_sprite(value: String, offset: Vector2):
 	var sprite = AnimatedSprite2D.new()

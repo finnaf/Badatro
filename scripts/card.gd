@@ -22,6 +22,7 @@ var desc_box: Node2D = null
 const FOCUS_SIZE = Vector2(1.0909090909, 1.07692307692)
 const JOK_FOCUS_SIZE = Vector2(1.0909090909, 1.06666666)
 
+const SHIFT_DIST = Vector2(0.5, 0.5)
 const SELECT_DIST = 14
 const SHOP_SELECT_DIST = 5
 
@@ -33,7 +34,7 @@ var data = {
 	# booster_type and booster_size for boosters
 	# edition for card & joker
 	# rarity, scale_value for joker
-	# consumables TODO
+	# consumable_type for consumables
 }
 
 func _ready():
@@ -189,10 +190,10 @@ func on_mouse_entered():
 			return
 	else:
 		if is_joker():
-			self.position.y += 1
+			self.position += SHIFT_DIST
 			self.scale = JOK_FOCUS_SIZE
 		else:
-			self.position.y -= 1
+			self.position -= SHIFT_DIST
 			self.scale = FOCUS_SIZE
 		
 		is_focused = true
@@ -215,9 +216,9 @@ func reset_focus():
 		if is_shop_card():
 			pass
 		elif is_joker():
-			position.y -= 1
+			position -= SHIFT_DIST
 		else:
-			position.y += 1
+			position += SHIFT_DIST
 		
 		scale = Vector2.ONE
 		z_index -= 5
@@ -245,17 +246,36 @@ func display_cost():
 	card_buttons.connect("button_clicked", Callable(self, "_on_button_clicked_on_label"))
 	card_buttons.connect("use_clicked", Callable(self, "_on_use_clicked_on_label"))
 
-func display_sell_price(): # expects card_buttons to be instantiated
-	var sell_val = CardManager.get_sell_price(data, 1)
-	card_buttons.set_value(sell_val, data.type)
-	card_buttons.switch_label(2) # switch to "SEL"
+func setup_sell_price():
+	if (card_buttons):
+		var sell_val = CardManager.get_sell_price(data, 1)
+		card_buttons.set_value(sell_val, data.type)
+		card_buttons.switch_label(2)
 
 
 func setup_consumable():
-	# has use and cost and sell
-	pass
+	card_buttons.z_index += 5
+	setup_sell_price()
+	card_buttons.switch_use_side()
+	
+	consum_deselect()
+	
 
+func consum_select():
+	setup_sell_price()
+	card_buttons.show()
+	card_buttons.display_use()
+	card_buttons.display_button()
 
+func consum_deselect():
+	card_buttons.hide_use()
+	card_buttons.hide_button()
+	card_buttons.clear_score()
+
+func display_use():
+	if (card_buttons):
+		card_buttons.show()
+		card_buttons.display_use()
 
 func hide_cost_only():
 	if (card_buttons):
@@ -280,6 +300,11 @@ func is_card():
 func is_consumable():
 	if (data.type == CardManager.CardType.consumable):
 		return true
+func is_planet():
+	if (is_consumable() and 
+		data.consumable_type == CardManager.ConsumableType.planet):
+			return true
+	return false
 
 func get_data():
 	return data

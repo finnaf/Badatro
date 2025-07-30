@@ -182,8 +182,7 @@ func setup_connections():
 
 func setup_booster_connections():
 	for card in booster_cards:
-		card.connect("card_clicked", 
-						Callable(self, "_in_booster_card_clicked"))
+		card.connect("card_clicked", Callable(self, "_in_booster_card_clicked"))
 		card.connect("button_click_forwarded", Callable(self, "_get_clicked"))
 
 func _buy_attempt(card):
@@ -202,10 +201,15 @@ func _buy_attempt(card):
 			return
 		if (game.spend_money(cost)):
 			buy_consumable(card)
+			
+			card.disconnect("use_click_forwarded", Callable(self, "_use_attempt"))
+			card.disconnect("button_click_forwarded", Callable(self, "_buy_attempt"))
+			card.disconnect("card_clicked", Callable(self, "_on_card_clicked"))
 	
 	elif (card.data.type == CardManager.CardType.booster):
 		if (game.spend_money(cost)):
 			open_booster(card)
+			card.disconnect("card_clicked", Callable(self, "_in_booster_card_clicked"))
 	
 	elif (card.data.type == CardManager.CardType.voucher):
 		if (game.spend_money(cost)):
@@ -214,7 +218,7 @@ func _buy_attempt(card):
 
 func _use_attempt(consumable):
 	var cost = CardManager.get_card_cost(consumable.data, game.get_discount_percent())
-	var can_use = ConsumableManager.can_use(game.get_game_state())
+	var can_use = ConsumableManager.can_use([], consumable)
 	if (can_use and game.spend_money(cost)):
 		consumables.use(consumable)
 	
@@ -230,7 +234,6 @@ func _get_clicked(card):
 	booster_cards.erase(card)
 	in_booster_select = null
 	remove_child(card)
-	card.disconnect("card_clicked", Callable(self, "_in_booster_card_clicked"))
 	in_booster_count -= 1
 	jokers.add(card)
 	card.unset_shop_card()
@@ -260,6 +263,8 @@ func buy_joker(joker):
 	
 	remove_child(joker)
 	main.erase(joker)
+	main_select = null
+	
 	jokers.add(joker)
 
 func buy_consumable(consumable):
@@ -269,6 +274,8 @@ func buy_consumable(consumable):
 	
 	remove_child(consumable)
 	main.erase(consumable)
+	main_select = null
+	
 	consumables.add(consumable)
 
 func buy_voucher(voucher):
@@ -314,15 +321,17 @@ func open_buffoon(size: CardManager.BoosterSize):
 		booster_cards.append(joker)
 		
 		# create a card info, hide top cost
-		joker.display_cost()
 		joker.set_shop_card()
-		joker.card_buttons.switch_label(true)
-		joker.card_buttons.hide_button()
 		
 		joker.position = Vector2((i*13), 5)
 		
 		var data = JokerManager.generate_joker_data()
 		joker.setup(data)
+		joker.display_cost()
+		joker.card_buttons.switch_label(1)
+		joker.card_buttons.display_button()
+		joker.hide_cost_only()
+		joker.hide_use_only()
 
 
 func set_pack_background():

@@ -86,7 +86,6 @@ signal updateMoneyUI
 signal updateScoreUI
 signal updateGoalUI
 signal updateCashoutUI
-signal playCards
 
 func _ready():
 	updateGoalUI.emit()
@@ -222,15 +221,19 @@ func spend_money(cost: int) -> bool:
 
 func add_money(value: int):
 	money += value
+	sidebar.update_money()
 
 func add_chips(value: int):
 	chips += value
+	sidebar.update_chips()
 
 func add_mult(value: int):
 	mult += value
+	sidebar.update_mult()
 
 func mult_mult(value: float):
 	mult *= value
+	sidebar.update_mult()
 
 func end_turn():
 	score += chips * mult
@@ -300,22 +303,18 @@ func add_resources(card, dict: Dictionary):
 			alert = Globals.do_score_alert(card, true, 
 				true, dict.chips, GAMESPEED, offset)
 			await add_chips(dict.chips)
-			sidebar.update_chips()
 		elif key == "mult":
 			alert = Globals.do_score_alert(card, true, 
 				false, dict.mult, GAMESPEED, offset)
 			await add_mult(dict.mult)
-			sidebar.update_mult()
 		elif key == "xmult":
 			alert = Globals.do_score_alert(card, false, 
 				false, dict.xmult, GAMESPEED, offset)
 			await add_chips(dict.xmult)
-			sidebar.update_mult()
 		elif key == "money":
 			alert = Globals.do_score_alert(card, true, 
 				true, dict.money, GAMESPEED, offset)
 			await add_money(dict.money)
-			sidebar.update_money()
 		else:
 			continue
 		

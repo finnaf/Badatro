@@ -373,9 +373,7 @@ func get_active_cards(cards, hand):
 	
 	return active_cards
 
-func get_card_cost(data: Dictionary, discount_percent: float) -> int:
-	# TODO consumables
-	
+func get_card_cost(data: Dictionary, discount_percent: float) -> int:	
 	var cost = 0
 	match data.type:
 		CardType.joker:
