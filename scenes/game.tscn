@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://cijoautimuua5"]
+[gd_scene load_steps=57 format=3 uid="uid://cijoautimuua5"]
 
 [ext_resource type="Script" uid="uid://c7vv5i4f5v710" path="res://scripts/game.gd" id="1_ca42v"]
 [ext_resource type="Texture2D" uid="uid://cv0tqpisxhrod" path="res://images/board/mat/mat.png" id="2_qnb83"]
@@ -10,9 +10,11 @@
 [ext_resource type="Texture2D" uid="uid://bvayywyipweyk" path="res://images/board/bottom-buttons/play-grey.png" id="8_bt5mj"]
 [ext_resource type="Texture2D" uid="uid://k0jxldpehadk" path="res://images/board/sidebar/sidebar.png" id="9_e1j6l"]
 [ext_resource type="Texture2D" uid="uid://bsembqx4tn0eg" path="res://images/board/numbers.png" id="11_dinhu"]
+[ext_resource type="Texture2D" uid="uid://btyjj6alhpcsu" path="res://images/board/sidebar/buttons/info.png" id="12_0sl42"]
 [ext_resource type="Texture2D" uid="uid://e0j8ab05p427" path="res://images/board/mat/joker-area.png" id="12_sww3w"]
 [ext_resource type="Texture2D" uid="uid://bdw3okq5fdjf2" path="res://images/board/sidebar/shop-sidebar-1.png" id="13_e1j6l"]
 [ext_resource type="Texture2D" uid="uid://bvqaaorm7bpd6" path="res://images/board/cash-out/cash-out.png" id="13_ir15t"]
+[ext_resource type="Texture2D" uid="uid://bvtudkaj4go8g" path="res://images/board/sidebar/buttons/settings.png" id="13_oaba0"]
 [ext_resource type="Script" uid="uid://qj0k6hkypgdi" path="res://scripts/shop.gd" id="13_pl11u"]
 [ext_resource type="Script" uid="uid://c0i0j38gje1kl" path="res://scripts/jokers.gd" id="13_qouja"]
 [ext_resource type="Script" uid="uid://csv1wj8wihwq1" path="res://scripts/cashout.gd" id="13_ssvqc"]
@@ -314,6 +316,20 @@ sprite_frames = SubResource("SpriteFrames_f1jbl")
 [node name="GoalThousands" type="AnimatedSprite2D" parent="Mat/Sidebar"]
 position = Vector2(-6, -27.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="RunInfo" type="TextureButton" parent="Mat"]
+offset_left = -49.0
+offset_top = -9.0
+offset_right = -34.0
+offset_bottom = -2.0
+texture_hover = ExtResource("12_0sl42")
+
+[node name="Settings" type="TextureButton" parent="Mat"]
+offset_left = -49.0
+offset_top = -1.0
+offset_right = -34.0
+offset_bottom = 6.0
+texture_hover = ExtResource("13_oaba0")
 
 [node name="Jokers" type="Sprite2D" parent="Mat"]
 position = Vector2(-4, -30)

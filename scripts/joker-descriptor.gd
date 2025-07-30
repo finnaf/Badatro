@@ -22,9 +22,9 @@ func _init(desc_data: Dictionary):
 	
 	match desc_data.rarity:
 		JokerManager.Rarity.common:
-			col = Globals.GREY
-		JokerManager.Rarity.uncommon:
 			col = Globals.BLUE
+		JokerManager.Rarity.uncommon:
+			col = Globals.GREEN
 		JokerManager.Rarity.rare:
 			col = Globals.RED
 

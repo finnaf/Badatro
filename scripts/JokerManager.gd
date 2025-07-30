@@ -56,11 +56,11 @@ enum CommonJokers {
 	MadJoker,
 	CrazyJoker,
 	DrollJoker,
-	#SlyJoker,
-	#WilyJoker,
-	#CleverJoker,
-	#DeviousJoker,
-	#CraftyJoker,
+	SlyJoker,
+	WilyJoker,
+	CleverJoker,
+	DeviousJoker,
+	CraftyJoker,
 	#HalfJoker,
 	#JokerStencil,
 	#FourFingers,
@@ -69,7 +69,7 @@ enum CommonJokers {
 }
 
 enum UncommonJokers {
-	
+	JokerStencil,
 }
 
 enum RareJokers {
@@ -171,7 +171,7 @@ func get_joker_shortname(value: int, rarity: Rarity) -> String:
 					return joker
 	return "none"
 
-# get additional information about joker
+# get additional information about joker (mostly for descriptor, not scoring)
 func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 	if (rarity == Rarity.common):
 		match joker_id:
@@ -285,8 +285,74 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"connective" : Connective.contains,
 					"condition" : Condition.flush,
 				}
+			CommonJokers.SlyJoker:
+				return {
+					"name" : "Sly Joker",
+					"rarity" : Rarity.common,
+					"cost" : 3,
+					"description" : "+50 Chips if played hand contains a Pair",
+					"benefit" : Benefit.achips,
+					"benefit_val" : 50,
+					"connective" : Connective.contains,
+					"condition" : Condition.pair,
+				}
+			CommonJokers.WilyJoker:
+				return {
+					"name" : "Wily Joker",
+					"rarity" : Rarity.common,
+					"cost" : 4,
+					"description" : "+100 Chips if played hand contains a Three of a Kind",
+					"benefit" : Benefit.achips,
+					"benefit_val" : 100,
+					"connective" : Connective.contains,
+					"condition" : Condition.threeofakind,
+				}
+			CommonJokers.CleverJoker:
+				return {
+					"name" : "Clever Joker",
+					"rarity" : Rarity.common,
+					"cost" : 4,
+					"description" : "+80 Chips if played hand contains a Two Pair",
+					"benefit" : Benefit.achips,
+					"benefit_val" : 80,
+					"connective" : Connective.contains,
+					"condition" : Condition.twopair,
+				}
+			CommonJokers.DeviousJoker:
+				return {
+					"name" : "Devious Joker",
+					"rarity" : Rarity.common,
+					"cost" : 4,
+					"description" : "+100 Chips if played hand contains a Straight",
+					"benefit" : Benefit.achips,
+					"benefit_val" : 100,
+					"connective" : Connective.contains,
+					"condition" : Condition.straight,
+				}
+			CommonJokers.CraftyJoker:
+				return {
+					"name" : "Crafty Joker",
+					"rarity" : Rarity.common,
+					"cost" : 4,
+					"description" : "+80 Chips if played hand contains a Flush",
+					"benefit" : Benefit.achips,
+					"benefit_val" : 80,
+					"connective" : Connective.contains,
+					"condition" : Condition.flush,
+				}
 	if (rarity == Rarity.uncommon):
-		pass
+		match joker_id:
+			UncommonJokers.JokerStencil:
+				return {
+					"name" : "Joker Stencil",
+					"rarity" : Rarity.uncommon,
+					"cost" : 8,
+					"description" : "X1 Mult for each empty Joker slot. Joker Stencil included",
+					"benefit" : Benefit.xmult,
+					"benefit_val" : 5, # TODO temp
+					"connective" : Connective.none,
+					#"condition" : Condition.flush,
+				}
 	elif (rarity == Rarity.rare):
 		pass
 	return {
@@ -316,6 +382,16 @@ func get_score_val(active_cards: Array, joker, state: Dictionary) -> Dictionary:
 				return score_crazy_joker(active_cards)
 			CommonJokers.DrollJoker:
 				return score_droll_joker(active_cards)
+			CommonJokers.SlyJoker:
+				return score_sly_joker(active_cards)
+			CommonJokers.WilyJoker:
+				return score_wily_joker(active_cards)
+			CommonJokers.CleverJoker:
+				return score_clever_joker(active_cards)
+			CommonJokers.DeviousJoker:
+				return score_devious_joker(active_cards)
+			CommonJokers.CraftyJoker:
+				return score_crafty_joker(active_cards)
 	return {}
 
 func score_jolly_joker(cards) -> Dictionary:
@@ -337,6 +413,26 @@ func score_crazy_joker(cards) -> Dictionary:
 func score_droll_joker(cards) -> Dictionary:
 	if (CardManager.is_flush(cards)):
 		return {"mult": 10}
+	return {}
+func score_sly_joker(cards) -> Dictionary:
+	if (CardManager.is_pair(cards)):
+		return {"chips": 50}
+	return {}
+func score_wily_joker(cards) -> Dictionary:
+	if (CardManager.is_three_of_a_kind(cards)):
+		return {"chips": 100}
+	return {}
+func score_clever_joker(cards) -> Dictionary:
+	if (CardManager.is_two_pair(cards)):
+		return {"chips": 80}
+	return {}
+func score_devious_joker(cards) -> Dictionary:
+	if (CardManager.is_straight(cards)):
+		return {"chips": 100}
+	return {}
+func score_crafty_joker(cards) -> Dictionary:
+	if (CardManager.is_flush(cards)):
+		return {"chips": 80}
 	return {}
 
 # gets the value of the joker from a specific card being triggered
