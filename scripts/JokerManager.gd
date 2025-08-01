@@ -30,12 +30,13 @@ enum Connective {
 
 # duplication sucks but want a type matchup
 enum Condition {
-	none,
+	none, to,
 	face,
+	cards, discards, hands,
 	spades, hearts, diamonds, clubs,
-	two, three, four, five, six, seven, eight, nine, ten, jack, queen, king, ace,
+	zero, one, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king, ace,
 	highcard, pair, twopair, threeofakind, fullhouse, flush, straight, 
-	straightflush, fourofakind, fiveofakind, flushhouse, flushfive
+	straightflush, fourofakind, fiveofakind, flushhouse, flushfive,
 }
 
 enum Rarity {
@@ -61,11 +62,13 @@ enum CommonJokers {
 	CleverJoker,
 	DeviousJoker,
 	CraftyJoker,
-	#HalfJoker,
-	#JokerStencil,
-	#FourFingers,
-	#Mime,
+	HalfJoker,
 	#CreditCard,
+	Banner,
+	MysticSummit,
+	#8Ball,
+	Misprint,
+	RaisedFist,
 }
 
 enum UncommonJokers {
@@ -73,7 +76,26 @@ enum UncommonJokers {
 }
 
 enum RareJokers {
-	
+	#DNA,
+	#Vagabond,
+	#Baron,
+	#Obelisk,
+	#BaseballCard
+	#AncientJoker,
+	#Campfire,
+	#Blueprint,
+	#WeeJoker,
+	#HitTheRoad,
+	TheDuo,
+	TheTrio,
+	TheFamily,
+	TheOrder,
+	TheTribe,
+	#Stuntman,
+	#InvisibleJoker,
+	#Brainstorm,
+	#DriversLicense
+	#BurntJoker
 }
 
 enum LegendaryJokers {
@@ -82,10 +104,12 @@ enum LegendaryJokers {
 
 var rng_joker = RandomNumberGenerator.new()
 var rng_edition = RandomNumberGenerator.new()
+var rng = RandomNumberGenerator.new()			# within jokers
 
 func new_game(seed: int):
-	rng_joker.seed = seed
-	rng_edition.seed = seed + 1
+	rng_joker.seed = seed + 1
+	rng_edition.seed = seed + 2
+	rng.seed = seed + 3
 
 func get_rarity_string(rarity: Rarity) -> String:
 	match rarity:
@@ -194,7 +218,7 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"benefit" : Benefit.amult,
 					"benefit_val" : 3,
 					"connective" : Connective.when_scored,
-					"condition" : Condition.diamonds
+					"condition_0" : Condition.diamonds
 				}
 			CommonJokers.LustyJoker:
 				return {
@@ -205,7 +229,7 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"benefit" : Benefit.amult,
 					"benefit_val" : 3,
 					"connective" : Connective.when_scored,
-					"condition" : Condition.hearts,
+					"condition_0" : Condition.hearts,
 				}
 			CommonJokers.WrathfulJoker:
 				return {
@@ -216,7 +240,7 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"benefit" : Benefit.amult,
 					"benefit_val" : 3,
 					"connective" : Connective.when_scored,
-					"condition" : Condition.spades,
+					"condition_0" : Condition.spades,
 				}
 			CommonJokers.GluttonousJoker:
 				return {
@@ -227,7 +251,7 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"benefit" : Benefit.amult,
 					"benefit_val" : 3,
 					"connective" : Connective.when_scored,
-					"condition" : Condition.clubs,
+					"condition_0" : Condition.clubs,
 				}
 			CommonJokers.JollyJoker:
 				return {
@@ -238,7 +262,7 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"benefit" : Benefit.amult,
 					"benefit_val" : 8,
 					"connective" : Connective.contains,
-					"condition" : Condition.pair,
+					"condition_0" : Condition.pair,
 				}
 			CommonJokers.ZanyJoker:
 				return {
@@ -249,7 +273,7 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"benefit" : Benefit.amult,
 					"benefit_val" : 12,
 					"connective" : Connective.contains,
-					"condition" : Condition.threeofakind,
+					"condition_0" : Condition.threeofakind,
 				}
 			CommonJokers.MadJoker:
 				return {
@@ -260,7 +284,7 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"benefit" : Benefit.amult,
 					"benefit_val" : 10,
 					"connective" : Connective.contains,
-					"condition" : Condition.twopair,
+					"condition_0" : Condition.twopair,
 					
 				}
 			CommonJokers.CrazyJoker:
@@ -272,7 +296,7 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"benefit" : Benefit.amult,
 					"benefit_val" : 12,
 					"connective" : Connective.contains,
-					"condition" : Condition.straight,
+					"condition_0" : Condition.straight,
 				}
 			CommonJokers.DrollJoker:
 				return {
@@ -283,7 +307,7 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"benefit" : Benefit.amult,
 					"benefit_val" : 10,
 					"connective" : Connective.contains,
-					"condition" : Condition.flush,
+					"condition_0" : Condition.flush,
 				}
 			CommonJokers.SlyJoker:
 				return {
@@ -294,7 +318,7 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"benefit" : Benefit.achips,
 					"benefit_val" : 50,
 					"connective" : Connective.contains,
-					"condition" : Condition.pair,
+					"condition_0" : Condition.pair,
 				}
 			CommonJokers.WilyJoker:
 				return {
@@ -305,7 +329,7 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"benefit" : Benefit.achips,
 					"benefit_val" : 100,
 					"connective" : Connective.contains,
-					"condition" : Condition.threeofakind,
+					"condition_0" : Condition.threeofakind,
 				}
 			CommonJokers.CleverJoker:
 				return {
@@ -316,7 +340,7 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"benefit" : Benefit.achips,
 					"benefit_val" : 80,
 					"connective" : Connective.contains,
-					"condition" : Condition.twopair,
+					"condition_0" : Condition.twopair,
 				}
 			CommonJokers.DeviousJoker:
 				return {
@@ -327,7 +351,7 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"benefit" : Benefit.achips,
 					"benefit_val" : 100,
 					"connective" : Connective.contains,
-					"condition" : Condition.straight,
+					"condition_0" : Condition.straight,
 				}
 			CommonJokers.CraftyJoker:
 				return {
@@ -338,7 +362,63 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"benefit" : Benefit.achips,
 					"benefit_val" : 80,
 					"connective" : Connective.contains,
-					"condition" : Condition.flush,
+					"condition_0" : Condition.flush,
+				}
+			CommonJokers.HalfJoker:
+				return {
+					"name" : "Half Joker",
+					"rarity" : Rarity.common,
+					"cost" : 5,
+					"description" : "+20 Mult if played hand contains 3 or fewer cards",
+					"benefit" : Benefit.amult,
+					"benefit_val" : 20,
+					"connective" : Connective.contains,
+					"condition_0" : Condition.three,
+					"condition_1" : Condition.to,
+					"condition_2" : Condition.zero,
+					"condition_3" : Condition.cards,
+				}
+			CommonJokers.Banner:
+				return {
+					"name" : "Banner",
+					"rarity" : Rarity.common,
+					"cost" : 5,
+					"description" : "+30 Chips for each remaining discard",
+					"benefit" : Benefit.achips,
+					"benefit_val" : 30,
+					"connective" : Connective.contains,
+					"condition_0" : Condition.flush, # TODO
+				}
+			CommonJokers.MysticSummit:
+				return {
+					"name" : "Mystic Summit",
+					"rarity" : Rarity.common,
+					"cost" : 5,
+					"description" : "+15 Mult when 0 discards remaining",
+					"benefit" : Benefit.amult,
+					"benefit_val" : 15,
+					"connective" : Connective.contains, # when -> 0D
+					"condition_0" : Condition.flush, # TODO
+				}
+			CommonJokers.Misprint:
+				return {
+					"name" : "Misprint",
+					"rarity" : Rarity.common,
+					"cost" : 4,
+					"description" : "+0-23 Mult",
+					"benefit" : Benefit.amult,
+					"benefit_val" : 23,
+					"connective" : Connective.none,
+				}
+			CommonJokers.RaisedFist:
+				return {
+					"name" : "Raised Fist",
+					"rarity" : Rarity.common,
+					"cost" : 5,
+					"description" : "Adds double the rank of lowest ranked card held in hand to Mult",
+					"benefit" : Benefit.amult,
+					"benefit_val" : 0,
+					"connective" : Connective.none,
 				}
 	if (rarity == Rarity.uncommon):
 		match joker_id:
@@ -354,7 +434,62 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					#"condition" : Condition.flush,
 				}
 	elif (rarity == Rarity.rare):
-		pass
+		match joker_id:
+			RareJokers.TheDuo:
+				return {
+					"name" : "The Duo",
+					"rarity" : Rarity.rare,
+					"cost" : 8,
+					"description" : "X2 Mult if played hand contains a Pair",
+					"benefit" : Benefit.xmult,
+					"benefit_val" : 2,
+					"connective" : Connective.contains,
+					"condition_0" : Condition.pair,
+				}
+			RareJokers.TheTrio:
+				return {
+					"name" : "The Trio",
+					"rarity" : Rarity.rare,
+					"cost" : 8,
+					"description" : "X3 Mult if played hand contains a Three of a Kind",
+					"benefit" : Benefit.xmult,
+					"benefit_val" : 3,
+					"connective" : Connective.contains,
+					"condition_0" : Condition.threeofakind,
+				}
+			RareJokers.TheFamily:
+				return {
+					"name" : "The Family",
+					"rarity" : Rarity.rare,
+					"cost" : 8,
+					"description" : "X4 Mult if played hand contains a Four of a Kind",
+					"benefit" : Benefit.xmult,
+					"benefit_val" : 4,
+					"connective" : Connective.contains,
+					"condition_0" : Condition.fourofakind,
+				}
+			RareJokers.TheOrder:
+				return {
+					"name" : "The Order",
+					"rarity" : Rarity.rare,
+					"cost" : 8,
+					"description" : "X3 Mult if played hand contains a Straight",
+					"benefit" : Benefit.xmult,
+					"benefit_val" : 3,
+					"connective" : Connective.contains,
+					"condition_0" : Condition.straight,
+				}
+			RareJokers.TheTribe:
+				return {
+					"name" : "The Tribe",
+					"rarity" : Rarity.rare,
+					"cost" : 8,
+					"description" : "X2 Mult if played hand contains a Flush",
+					"benefit" : Benefit.xmult,
+					"benefit_val" : 2,
+					"connective" : Connective.contains,
+					"condition_0" : Condition.flush,
+				}
 	return {
 		"name" : "Joker",
 		"rarity" : Rarity.common,
@@ -367,7 +502,7 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 			
 # gets the value of the joker when its triggered
 # [chips, mult, xmult, money]
-func get_score_val(active_cards: Array, joker, state: Dictionary) -> Dictionary:
+func get_score_val(active_cards: Array, joker: Node, state: Dictionary) -> Dictionary:
 	if (joker.get_rarity() == Rarity.common):
 		match joker.data.id:
 			CommonJokers.Joker:
@@ -392,8 +527,38 @@ func get_score_val(active_cards: Array, joker, state: Dictionary) -> Dictionary:
 				return score_devious_joker(active_cards)
 			CommonJokers.CraftyJoker:
 				return score_crafty_joker(active_cards)
+			CommonJokers.HalfJoker:
+				return score_half_joker(state.played_cards.size())
+			CommonJokers.Banner:
+				return score_banner(state.discards)
+			CommonJokers.MysticSummit:
+				return score_mystic_summit(state.discards)
+			CommonJokers.Misprint:
+				return score_misprint()
+			CommonJokers.RaisedFist:
+				return score_raised_fist(state.held_cards)
+	
+	elif (joker.get_rarity() == Rarity.uncommon):
+		match joker.data.id:
+			UncommonJokers.JokerStencil:
+				return score_stencil_joker(state.jokers, state.max_jokers)
+	
+	elif (joker.get_rarity() == Rarity.rare):
+		match joker.data.id:
+			RareJokers.TheDuo:
+				return score_the_duo(active_cards)
+			RareJokers.TheTrio:
+				return score_the_trio(active_cards)
+			RareJokers.TheFamily:
+				return score_the_family(active_cards)
+			RareJokers.TheOrder:
+				return score_the_order(active_cards)
+			RareJokers.TheTribe:
+				return score_the_tribe(active_cards)
+	
 	return {}
 
+# common jokers
 func score_jolly_joker(cards) -> Dictionary:
 	if (CardManager.is_pair(cards)):
 		return {"mult": 8}
@@ -434,6 +599,75 @@ func score_crafty_joker(cards) -> Dictionary:
 	if (CardManager.is_flush(cards)):
 		return {"chips": 80}
 	return {}
+func score_half_joker(size) -> Dictionary:
+	if (size <= 3):
+		return {"mult": 20}
+	return {}
+func score_banner(discards) -> Dictionary:
+	if (discards > 0):
+		return {"chips": 30*discards}
+	return {}
+func score_mystic_summit(discards) -> Dictionary:
+	if (discards == 0):
+		return {"mult": 15}
+	return {}
+func score_misprint() -> Dictionary:
+	var val = rng.randi_range(0, 23)
+	if (val == 0):
+		return {}
+	return {"mult": val}
+func score_raised_fist(hand) -> Dictionary:
+	if (hand.size() == 0):
+		return {}
+	
+	hand.sort_custom(func(a, b):
+		if a.is_empty() and not b.is_empty():
+			return false
+		elif b.is_empty() and not a.is_empty():
+			return true
+		elif a.is_empty() and b.is_empty():
+			return false
+		
+		return a.rank > b.rank
+	)
+	
+	return {"mult": hand[0].rank}
+
+# uncommon jokers
+func score_stencil_joker(jokers, max_jokers) -> Dictionary: # needs joker size and joker count
+	# joker stencil
+	var empty_slots = max_jokers - jokers.size()
+	for joker in jokers:
+		if (joker.get_id() == JokerManager.UncommonJokers.JokerStencil and
+			joker.get_rarity() == JokerManager.Rarity.uncommon):
+				empty_slots += 1
+	
+	if (empty_slots > 0):
+		return {"xmult": empty_slots}
+	return {}
+
+# rare jokers
+func score_the_duo(cards) -> Dictionary:
+	if (CardManager.is_pair(cards)):
+		return {"xmult": 2}
+	return {}
+func score_the_trio(cards) -> Dictionary:
+	if (CardManager.is_three_of_a_kind(cards)):
+		return {"xmult": 3}
+	return {}
+func score_the_family(cards) -> Dictionary:
+	if (CardManager.is_four_of_a_kind(cards)):
+		return {"xmult": 4}
+	return {}
+func score_the_order(cards) -> Dictionary:
+	if (CardManager.is_straight(cards)):
+		return {"xmult": 3}
+	return {}
+func score_the_tribe(cards) -> Dictionary:
+	if (CardManager.is_flush(cards)):
+		return {"xmult": 2}
+	return {}
+	
 
 # gets the value of the joker from a specific card being triggered
 # chips, mult, xmult, money

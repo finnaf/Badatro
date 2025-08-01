@@ -27,7 +27,7 @@ var voucher_count = 1
 const BASE_REROLL_COST = 5
 var reroll_cost = 5
 
-var money = 99
+var money = 9999
 
 const BASEHANDS = 4
 const BASEDISCARDS = 3
@@ -93,9 +93,9 @@ func _ready():
 
 func setup(game_seed: int):
 	seed = game_seed
-	seed(seed) # for shuffling cards
-	shop.set_seed(game_seed) # for what type will appear
-	JokerManager.new_game(game_seed) # for drawing jokers
+	seed(seed) 							# for shuffling cards
+	shop.set_seed(game_seed) 			# for what type will appear
+	JokerManager.new_game(game_seed)	# for drawing jokers and in card rng
 	
 	gamespeed = GAMESPEED
 	

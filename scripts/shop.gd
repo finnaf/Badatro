@@ -107,7 +107,8 @@ func get_main_card(xoffset: int):
 	if type_thresh < W_JOK: # jok
 		var data = JokerManager.generate_joker_data()
 		card.setup({
-			"id": data.id,
+			#"id": data.id,
+			"id": JokerManager.CommonJokers.HalfJoker,
 			"rarity": data.rarity,
 			"type": CardManager.CardType.joker,
 			"consumable_type": CardManager.ConsumableType.planet,

@@ -24,7 +24,7 @@ func _init(desc_data: Dictionary):
 		JokerManager.Rarity.common:
 			col = Globals.BLUE
 		JokerManager.Rarity.uncommon:
-			col = Globals.GREEN
+			col = Globals.DARKGREEN
 		JokerManager.Rarity.rare:
 			col = Globals.RED
 
@@ -80,8 +80,26 @@ func generate_content(desc_data: Dictionary) -> float:
 				s.position.x -= (top_x + 1)
 				add_child(s)
 			return (top_x + 1)
+	
+	var index = 0
+	while true:
+		var key = "condition_%d" % index
+		if desc_data.has(key):
+			bot_x = _do_condition(desc_data[key], bot_x, bot_y, sprites)
+		else:
+			break
+		index += 1
 
-	match desc_data.condition:
+	var width = max(top_x, bot_x) + 1 # +1 for spacing from card
+
+	for s in sprites:
+		s.position.x -= width
+		add_child(s)
+
+	return width
+
+func _do_condition(cond, bot_x, bot_y, sprites):
+	match cond:		
 		JokerManager.Condition.spades:
 			bot_x = _place_symbol(12, DIGIT_SIZE, bot_x, bot_y, sprites)
 		JokerManager.Condition.hearts:
@@ -90,6 +108,7 @@ func generate_content(desc_data: Dictionary) -> float:
 			bot_x = _place_symbol(14, DIGIT_SIZE, bot_x, bot_y, sprites)
 		JokerManager.Condition.clubs:
 			bot_x = _place_symbol(15, DIGIT_SIZE, bot_x, bot_y, sprites)
+	
 		JokerManager.Condition.highcard:
 			bot_x = _place_symbol(16, HAND_SYM_SIZE, bot_x, bot_y, sprites)
 		JokerManager.Condition.pair:
@@ -114,14 +133,20 @@ func generate_content(desc_data: Dictionary) -> float:
 			bot_x = _place_symbol(26, HAND_SYM_SIZE, bot_x, bot_y, sprites)
 		JokerManager.Condition.flushfive:
 			bot_x = _place_symbol(27, HAND_SYM_SIZE, bot_x, bot_y, sprites)
-
-	var width = max(top_x, bot_x) + 1 # +1 for spacing from card
-
-	for s in sprites:
-		s.position.x -= width
-		add_child(s)
-
-	return width
+		
+		JokerManager.Condition.cards:
+			bot_x = _place_symbol(1, DIGIT_SIZE, bot_x, bot_y, sprites, Globals.BLACK)
+		JokerManager.Condition.to:
+			bot_x = _place_symbol(28, SMALL_DIGIT_SIZE+1, bot_x, bot_y, sprites, Globals.BLACK)
+		
+		# numbers (awful way to this)
+		JokerManager.Condition.zero:
+			bot_x = _place_digit(0, bot_x, bot_y, sprites, Globals.BLACK)
+		JokerManager.Condition.two:
+			bot_x = _place_digit(2, bot_x, bot_y, sprites, Globals.BLACK)
+		JokerManager.Condition.three:
+			bot_x = _place_digit(3, bot_x, bot_y, sprites, Globals.BLACK)
+	return bot_x
 
 func _place_symbol(frame: int, width: int, cursor: float, y: float,
 							list: Array, colour = null) -> float:

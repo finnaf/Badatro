@@ -1,6 +1,7 @@
 extends Sprite2D
 
 @onready var game = $"../.."
+@onready var deck = $"../../Deck"
 
 var jok_select = null
 var jokers = []
@@ -19,13 +20,27 @@ func score_card(card) -> Array:
 
 # score each joker and do animating
 func score_jokers(active_cards):
+	
+	# get all values needed for joker scoring
+	var state = get_joker_score_state()
+	
+	
 	for joker in jokers:		
 		var editionval = CardManager.get_edition_val(joker)
 		await game.add_resources(joker, editionval)
 		
-		# get a dictionary
-		var scoreval = JokerManager.get_score_val(active_cards, joker, game.get_game_state())
+		var scoreval = JokerManager.get_score_val(active_cards, joker, state)
 		await game.add_resources(joker, scoreval)
+
+func get_joker_score_state() -> Dictionary:
+	var state: Dictionary = game.get_game_state()
+	state.merge(deck.get_game_state())
+	state.merge({
+		"jokers": jokers,
+		"max_jokers": max_jokers,
+	})
+	
+	return state
 
 func add(joker):
 	jokers.append(joker)

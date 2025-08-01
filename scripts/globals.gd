@@ -10,6 +10,7 @@ const WHITE = Color(1.0,1.0,1.0)
 const BLACK = Color(0.0,0.0,0.0)
 const GREY = Color(0.498, 0.498, 0.498)
 const GREEN = Color(0.016, 0.478, 0.102)
+const DARKGREEN = Color(0.016, 0.376, 0.098)
 
 enum ResourceType {
 	chips,
