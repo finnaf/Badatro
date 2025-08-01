@@ -103,10 +103,20 @@ func _do_benefit(data, i, top_x, top_y, sprites):
 				top_x = _place_digit(int(d), top_x, top_y, sprites, Globals.BLUE)
 		JokerManager.Benefit.multnum:
 			var ben_val = "benefit_val_%d" % i
+			var variable = data[ben_val]
+			
+			if (variable == int(variable)):
+				data[ben_val] = int(variable)
+			
 			for d in str(data[ben_val]):
 				top_x = _place_digit(int(d), top_x, top_y, sprites, Globals.RED)
+		JokerManager.Benefit.to:
+			top_x = _place_symbol(28, SMALL_DIGIT_SIZE+1, top_x, top_y, sprites, Globals.BLACK)
 	
 	return top_x
+
+func is_float_int(val: float) -> bool:
+	return val == int(val)
 		
 func _do_condition(cond, bot_x, bot_y, sprites):
 	match cond:		

@@ -361,7 +361,7 @@ func get_card_cost(data: Dictionary, discount_percent: float) -> int:
 	var cost = 0
 	match data.type:
 		CardType.joker:
-			cost = JokerManager.get_joker(data.id, data.rarity).cost
+			cost = JokerManager.get_joker(data.id, data.rarity, 0).cost
 		
 		CardType.booster:
 			if (data.booster_size == BoosterSize.normal):

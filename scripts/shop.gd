@@ -107,8 +107,8 @@ func get_main_card(xoffset: int):
 	if type_thresh < W_JOK: # jok
 		var data = JokerManager.generate_joker_data()
 		card.setup({
-			"id": data.id,
-			#"id": JokerManager.CommonJokers.HalfJoker,
+			#"id": data.id,
+			"id": JokerManager.UncommonJokers.JokerStencil,
 			"rarity": data.rarity,
 			"type": CardManager.CardType.joker,
 			"consumable_type": CardManager.ConsumableType.planet,
@@ -129,6 +129,7 @@ func get_main_card(xoffset: int):
 	
 	card.display_cost()
 	card.set_shop_card()
+	jokers.update_variable(card)
 	main.append(card)
 
 func get_booster(xoffset: int):
@@ -362,6 +363,8 @@ func open_buffoon(size: CardManager.BoosterSize):
 		joker.card_buttons.switch_label(1)
 		joker.hide_cost_only()
 		joker.hide_use_only()
+		
+		jokers.update_variable(joker)
 
 
 func set_pack_background():

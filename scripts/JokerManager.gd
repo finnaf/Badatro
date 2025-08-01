@@ -12,6 +12,7 @@ enum Benefit {
 	economy,
 	hands,
 	discards,
+	to,
 	other
 }
 
@@ -197,7 +198,7 @@ func get_joker_shortname(value: int, rarity: Rarity) -> String:
 	return "none"
 
 # get additional information about joker (mostly for descriptor, not scoring)
-func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
+func get_joker(joker_id: int, rarity: Rarity, variable: float) -> Dictionary:
 	if (rarity == Rarity.common):
 		match joker_id:
 			CommonJokers.Joker:
@@ -428,6 +429,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"benefit_0" : Benefit.addmult,
 					"benefit_1" : Benefit.multnum,
 					"benefit_val_1" : 0,
+					"benefit_2" : Benefit.to,
+					"benefit_3" : Benefit.multnum,
+					"benefit_val_3" : 23,
 					"connective" : Connective.none,
 				}
 			CommonJokers.RaisedFist: # TODO
@@ -451,9 +455,8 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"description" : "X1 Mult for each empty Joker slot. Joker Stencil included",
 					"benefit_0" : Benefit.xmult,
 					"benefit_1" : Benefit.multnum,
-					"benefit_val_1" : 5,
+					"benefit_val_1" : variable,
 					"connective" : Connective.none,
-					#"condition" : Condition.flush,
 				}
 	elif (rarity == Rarity.rare):
 		match joker_id:
@@ -671,7 +674,7 @@ func score_stencil_joker(jokers, max_jokers) -> Dictionary: # needs joker size a
 				empty_slots += 1
 	
 	if (empty_slots > 0):
-		return {"xmult": empty_slots}
+		return {"xmult": empty_slots, "eq_variable": empty_slots}
 	return {}
 
 # rare jokers

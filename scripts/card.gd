@@ -32,7 +32,7 @@ var data = {
 	# rank & suit & enhancement & seal & raised for card
 	# booster_type and booster_size for boosters
 	# edition for card & joker
-	# rarity, scale_value for joker
+	# rarity, variable (optional) for joker
 	# consumable_type for consumables
 }
 
@@ -67,7 +67,7 @@ func set_card_tex(rank: int, suit: int):
 	if tex:
 		image.texture = tex
 func set_joker_tex(joker_id, rarity):	
-	var joker_data = JokerManager.get_joker(joker_id, rarity)
+	var joker_data = JokerManager.get_joker(joker_id, rarity, get_variable_val())
 	var path = ("res://images/cards/jokers/%s/%s.png" % 
 				[JokerManager.get_rarity_string(rarity), 
 				JokerManager.get_joker_shortname(joker_id, rarity)])
@@ -149,7 +149,7 @@ func _on_drag_end():
 
 func on_clicked():
 	if (data.type == CardManager.CardType.joker):
-		var jok_data = JokerManager.get_joker(get_id(), get_rarity())
+		var jok_data = JokerManager.get_joker(get_id(), get_rarity(), get_variable_val())
 		print(
 			JokerManager.get_rarity_string(jok_data.rarity),
 			" ", 
@@ -180,7 +180,7 @@ func on_mouse_entered():
 	
 	if is_joker():
 		self.z_index += 1 # for descriptor to be able to fit between bg and card
-		var desc_data = JokerManager.get_joker(get_id(), get_rarity())
+		var desc_data = JokerManager.get_joker(get_id(), get_rarity(), get_variable_val())
 		desc_box = box.new(desc_data)
 		add_child(desc_box)
 
@@ -308,6 +308,11 @@ func is_planet():
 		data.consumable_type == CardManager.ConsumableType.planet):
 			return true
 	return false
+
+func get_variable_val():
+	if (data.has("variable")):
+		return data.variable
+	return 0
 
 func get_data():
 	return data

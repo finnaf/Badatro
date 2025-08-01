@@ -24,13 +24,14 @@ func score_jokers(active_cards):
 	# get all values needed for joker scoring
 	var state = get_joker_score_state()
 	
-	
 	for joker in jokers:		
 		var editionval = CardManager.get_edition_val(joker)
 		await game.add_resources(joker, editionval)
 		
 		var scoreval = JokerManager.get_score_val(active_cards, joker, state)
 		await game.add_resources(joker, scoreval)
+		
+		update_variable(joker, state, scoreval)
 
 func get_joker_score_state() -> Dictionary:
 	var state: Dictionary = game.get_game_state()
@@ -42,6 +43,24 @@ func get_joker_score_state() -> Dictionary:
 	
 	return state
 
+func update_variable(joker, state = null, scoreval = null):
+	if (state == null):
+		state = get_joker_score_state()
+	
+	if (scoreval == null):
+		scoreval = JokerManager.get_score_val([], joker, state) # active_cards dont matter
+	
+	if (scoreval.has("eq_variable")):
+		joker.data["variable"] = scoreval.eq_variable
+	elif (scoreval.has("add_variable")):
+		joker.data["variable"] = scoreval.add_variable
+
+func update_variable_all_jokers():
+	var state = get_joker_score_state()
+	
+	for joker in jokers:
+		update_variable(joker, state)
+
 func add(joker):
 	jokers.append(joker)
 	add_child(joker)
@@ -49,6 +68,7 @@ func add(joker):
 	joker.card_buttons.z_index += 5
 	reorganise_jokers()
 	connect_jokers()
+	update_variable_all_jokers()
 
 func reorganise_jokers():
 	for i in range(jokers.size()):
