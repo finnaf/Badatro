@@ -1,10 +1,11 @@
 extends Node
 
 enum Benefit {
-	achips,
-	amult,
+	addchips,
+	addmult,
 	xmult,
-	achipsmult,
+	chipnum,
+	multnum,
 	creation,
 	retrigger,
 	copy,
@@ -205,8 +206,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.common,
 					"cost" : 2,
 					"description" : "+4 Mult",
-					"benefit" : Benefit.amult,
-					"benefit_val" : 4,
+					"benefit_0" : Benefit.addmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : 4,
 					"connective" : Connective.none
 				}
 			CommonJokers.GreedyJoker:
@@ -215,8 +217,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.common,
 					"cost" : 5,
 					"description" : "Played cards with Diamond suit give +3 Mult when scored",
-					"benefit" : Benefit.amult,
-					"benefit_val" : 3,
+					"benefit_0" : Benefit.addmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : 3,
 					"connective" : Connective.when_scored,
 					"condition_0" : Condition.diamonds
 				}
@@ -226,8 +229,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.common,
 					"cost" : 5,
 					"description" : "Played cards with Heart suit give +3 Mult when scored",
-					"benefit" : Benefit.amult,
-					"benefit_val" : 3,
+					"benefit_0" : Benefit.addmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : 3,
 					"connective" : Connective.when_scored,
 					"condition_0" : Condition.hearts,
 				}
@@ -237,8 +241,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.common,
 					"cost" : 5,
 					"description" : "Played cards with Spade suit give +3 Mult when scored",
-					"benefit" : Benefit.amult,
-					"benefit_val" : 3,
+					"benefit_0" : Benefit.addmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : 3,
 					"connective" : Connective.when_scored,
 					"condition_0" : Condition.spades,
 				}
@@ -248,8 +253,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.common,
 					"cost" : 5,
 					"description" : "Played cards with Club suit give +3 Mult when scored",
-					"benefit" : Benefit.amult,
-					"benefit_val" : 3,
+					"benefit_0" : Benefit.addmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : 3,
 					"connective" : Connective.when_scored,
 					"condition_0" : Condition.clubs,
 				}
@@ -259,8 +265,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.common,
 					"cost" : 3,
 					"description" :  "+8 Mult if played hand contains a Pair",
-					"benefit" : Benefit.amult,
-					"benefit_val" : 8,
+					"benefit_0" : Benefit.addmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : 8,
 					"connective" : Connective.contains,
 					"condition_0" : Condition.pair,
 				}
@@ -270,8 +277,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.common,
 					"cost" : 4,
 					"description" : "+12 Mult if played hand contains a Three of a Kind",
-					"benefit" : Benefit.amult,
-					"benefit_val" : 12,
+					"benefit_0" : Benefit.addmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : 12,
 					"connective" : Connective.contains,
 					"condition_0" : Condition.threeofakind,
 				}
@@ -281,8 +289,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.common,
 					"cost" : 4,
 					"description" :  "+10 Mult if played hand contains Two Pair",
-					"benefit" : Benefit.amult,
-					"benefit_val" : 10,
+					"benefit_0" : Benefit.addmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : 10,
 					"connective" : Connective.contains,
 					"condition_0" : Condition.twopair,
 					
@@ -293,8 +302,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.common,
 					"cost" : 4,
 					"description" : "+12 Mult if played hand contains Straight",
-					"benefit" : Benefit.amult,
-					"benefit_val" : 12,
+					"benefit_0" : Benefit.addmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : 12,
 					"connective" : Connective.contains,
 					"condition_0" : Condition.straight,
 				}
@@ -304,8 +314,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.common,
 					"cost" : 4,
 					"description" : "+10 Mult if played hand contains Flush",
-					"benefit" : Benefit.amult,
-					"benefit_val" : 10,
+					"benefit_0" : Benefit.addmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : 10,
 					"connective" : Connective.contains,
 					"condition_0" : Condition.flush,
 				}
@@ -315,8 +326,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.common,
 					"cost" : 3,
 					"description" : "+50 Chips if played hand contains a Pair",
-					"benefit" : Benefit.achips,
-					"benefit_val" : 50,
+					"benefit_0" : Benefit.addchips,
+					"benefit_1" : Benefit.chipnum,
+					"benefit_val_1" : 50,
 					"connective" : Connective.contains,
 					"condition_0" : Condition.pair,
 				}
@@ -326,8 +338,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.common,
 					"cost" : 4,
 					"description" : "+100 Chips if played hand contains a Three of a Kind",
-					"benefit" : Benefit.achips,
-					"benefit_val" : 100,
+					"benefit_0" : Benefit.addchips,
+					"benefit_1" : Benefit.chipnum,
+					"benefit_val_1" : 100,
 					"connective" : Connective.contains,
 					"condition_0" : Condition.threeofakind,
 				}
@@ -337,8 +350,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.common,
 					"cost" : 4,
 					"description" : "+80 Chips if played hand contains a Two Pair",
-					"benefit" : Benefit.achips,
-					"benefit_val" : 80,
+					"benefit_0" : Benefit.addchips,
+					"benefit_1" : Benefit.chipnum,
+					"benefit_val_1" : 80,
 					"connective" : Connective.contains,
 					"condition_0" : Condition.twopair,
 				}
@@ -348,8 +362,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.common,
 					"cost" : 4,
 					"description" : "+100 Chips if played hand contains a Straight",
-					"benefit" : Benefit.achips,
-					"benefit_val" : 100,
+					"benefit_0" : Benefit.addchips,
+					"benefit_1" : Benefit.chipnum,
+					"benefit_val_1" : 100,
 					"connective" : Connective.contains,
 					"condition_0" : Condition.straight,
 				}
@@ -359,8 +374,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.common,
 					"cost" : 4,
 					"description" : "+80 Chips if played hand contains a Flush",
-					"benefit" : Benefit.achips,
-					"benefit_val" : 80,
+					"benefit_0" : Benefit.addchips,
+					"benefit_1" : Benefit.chipnum,
+					"benefit_val_1" : 80,
 					"connective" : Connective.contains,
 					"condition_0" : Condition.flush,
 				}
@@ -370,8 +386,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.common,
 					"cost" : 5,
 					"description" : "+20 Mult if played hand contains 3 or fewer cards",
-					"benefit" : Benefit.amult,
-					"benefit_val" : 20,
+					"benefit_0" : Benefit.addchips,
+					"benefit_1" : Benefit.chipnum,
+					"benefit_val_1" : 20,
 					"connective" : Connective.contains,
 					"condition_0" : Condition.three,
 					"condition_1" : Condition.to,
@@ -384,8 +401,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.common,
 					"cost" : 5,
 					"description" : "+30 Chips for each remaining discard",
-					"benefit" : Benefit.achips,
-					"benefit_val" : 30,
+					"benefit_0" : Benefit.addchips,
+					"benefit_1" : Benefit.chipnum,
+					"benefit_val_1" : 30,
 					"connective" : Connective.contains,
 					"condition_0" : Condition.flush, # TODO
 				}
@@ -395,8 +413,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.common,
 					"cost" : 5,
 					"description" : "+15 Mult when 0 discards remaining",
-					"benefit" : Benefit.amult,
-					"benefit_val" : 15,
+					"benefit_0" : Benefit.addmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : 15,
 					"connective" : Connective.contains, # when -> 0D
 					"condition_0" : Condition.flush, # TODO
 				}
@@ -406,18 +425,20 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.common,
 					"cost" : 4,
 					"description" : "+0-23 Mult",
-					"benefit" : Benefit.amult,
-					"benefit_val" : 23,
+					"benefit_0" : Benefit.addmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : 0,
 					"connective" : Connective.none,
 				}
-			CommonJokers.RaisedFist:
+			CommonJokers.RaisedFist: # TODO
 				return {
 					"name" : "Raised Fist",
 					"rarity" : Rarity.common,
 					"cost" : 5,
 					"description" : "Adds double the rank of lowest ranked card held in hand to Mult",
-					"benefit" : Benefit.amult,
-					"benefit_val" : 0,
+					"benefit_0" : Benefit.addmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : 0,
 					"connective" : Connective.none,
 				}
 	if (rarity == Rarity.uncommon):
@@ -428,8 +449,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.uncommon,
 					"cost" : 8,
 					"description" : "X1 Mult for each empty Joker slot. Joker Stencil included",
-					"benefit" : Benefit.xmult,
-					"benefit_val" : 5, # TODO temp
+					"benefit_0" : Benefit.xmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : 5,
 					"connective" : Connective.none,
 					#"condition" : Condition.flush,
 				}
@@ -441,8 +463,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.rare,
 					"cost" : 8,
 					"description" : "X2 Mult if played hand contains a Pair",
-					"benefit" : Benefit.xmult,
-					"benefit_val" : 2,
+					"benefit_0" : Benefit.xmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : 2,
 					"connective" : Connective.contains,
 					"condition_0" : Condition.pair,
 				}
@@ -452,8 +475,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.rare,
 					"cost" : 8,
 					"description" : "X3 Mult if played hand contains a Three of a Kind",
-					"benefit" : Benefit.xmult,
-					"benefit_val" : 3,
+					"benefit_0" : Benefit.xmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : 3,
 					"connective" : Connective.contains,
 					"condition_0" : Condition.threeofakind,
 				}
@@ -463,8 +487,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.rare,
 					"cost" : 8,
 					"description" : "X4 Mult if played hand contains a Four of a Kind",
-					"benefit" : Benefit.xmult,
-					"benefit_val" : 4,
+					"benefit_0" : Benefit.xmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : 4,
 					"connective" : Connective.contains,
 					"condition_0" : Condition.fourofakind,
 				}
@@ -474,8 +499,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.rare,
 					"cost" : 8,
 					"description" : "X3 Mult if played hand contains a Straight",
-					"benefit" : Benefit.xmult,
-					"benefit_val" : 3,
+					"benefit_0" : Benefit.xmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : 3,
 					"connective" : Connective.contains,
 					"condition_0" : Condition.straight,
 				}
@@ -485,8 +511,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 					"rarity" : Rarity.rare,
 					"cost" : 8,
 					"description" : "X2 Mult if played hand contains a Flush",
-					"benefit" : Benefit.xmult,
-					"benefit_val" : 2,
+					"benefit_0" : Benefit.xmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : 2,
 					"connective" : Connective.contains,
 					"condition_0" : Condition.flush,
 				}
@@ -495,8 +522,9 @@ func get_joker(joker_id: int, rarity: Rarity) -> Dictionary:
 		"rarity" : Rarity.common,
 		"cost" : 2,
 		"description" : "+4 Mult",
-		"benefit" : Benefit.amult,
-		"benefit_val" : 4,
+		"benefit_0" : Benefit.addmult,
+		"benefit_1" : Benefit.multnum,
+		"benefit_val_1" : 4,
 		"connective" : Connective.none
 	}
 			

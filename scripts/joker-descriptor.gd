@@ -41,26 +41,16 @@ func generate_content(desc_data: Dictionary) -> float:
 	var sprites : Array = []
 	
 	# TOP ROW
-	match desc_data.benefit:
-		JokerManager.Benefit.achips:
-			top_x = _place_digit(10, top_x, top_y, sprites, Globals.BLUE)
-			for d in str(desc_data.benefit_val):
-				top_x = _place_digit(int(d), top_x, top_y, sprites, Globals.BLUE)
-		JokerManager.Benefit.amult:
-			top_x = _place_digit(10, top_x, top_y, sprites, Globals.RED)
-			for d in str(desc_data.benefit_val):
-				top_x = _place_digit(int(d), top_x, top_y, sprites, Globals.RED)
-		JokerManager.Benefit.achipsmult:
-			top_x = _place_digit(10, top_x, top_y, sprites, Globals.BLUE)
-			for d in str(desc_data.benefit_val):
-				top_x = _place_digit(int(d), top_x, top_y, sprites, Globals.BLUE)
-			top_x = _place_digit(10, top_x, top_y, sprites, Globals.RED)
-			for d in str(desc_data.benefit_val):
-				top_x = _place_digit(int(d), top_x, top_y, sprites, Globals.RED)
-		JokerManager.Benefit.xmult:
-			top_x = _place_digit(11, top_x, top_y, sprites, Globals.RED)
-			for d in str(desc_data.benefit_val):
-				top_x = _place_digit(int(d), top_x, top_y, sprites, Globals.RED)
+	var index = 0
+	while true:
+		var key = "benefit_%d" % index
+		if desc_data.has(key):
+			top_x = _do_benefit(desc_data, index, top_x, top_y, sprites)
+		else:
+			break
+		index += 1
+	
+	
 	
 	
 	# BOTTOM ROW
@@ -81,7 +71,7 @@ func generate_content(desc_data: Dictionary) -> float:
 				add_child(s)
 			return (top_x + 1)
 	
-	var index = 0
+	index = 0
 	while true:
 		var key = "condition_%d" % index
 		if desc_data.has(key):
@@ -98,6 +88,26 @@ func generate_content(desc_data: Dictionary) -> float:
 
 	return width
 
+func _do_benefit(data, i, top_x, top_y, sprites):
+	var benefit = "benefit_%d" % i
+	match data[benefit]:
+		JokerManager.Benefit.addchips:
+			top_x = _place_digit(10, top_x, top_y, sprites, Globals.BLUE)
+		JokerManager.Benefit.addmult:
+			top_x = _place_digit(10, top_x, top_y, sprites, Globals.RED)
+		JokerManager.Benefit.xmult:
+			top_x = _place_digit(11, top_x, top_y, sprites, Globals.RED)
+		JokerManager.Benefit.chipnum:
+			var ben_val = "benefit_val_%d" % i
+			for d in str(data[ben_val]):
+				top_x = _place_digit(int(d), top_x, top_y, sprites, Globals.BLUE)
+		JokerManager.Benefit.multnum:
+			var ben_val = "benefit_val_%d" % i
+			for d in str(data[ben_val]):
+				top_x = _place_digit(int(d), top_x, top_y, sprites, Globals.RED)
+	
+	return top_x
+		
 func _do_condition(cond, bot_x, bot_y, sprites):
 	match cond:		
 		JokerManager.Condition.spades:
