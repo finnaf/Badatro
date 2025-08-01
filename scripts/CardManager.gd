@@ -277,14 +277,17 @@ func pair_value(hand: Array):
 	return -1
 
 
+func is_facecard(rank: int) -> bool:
+	if (rank == 11 or rank == 12 or rank == 13):
+		return true
+	return false
+
 func convert_rank_to_chipvalue(rank: int) -> int:
-	if rank <= 10:
-		return rank
-	if rank <= 13:
+	if (is_facecard(rank)):
 		return 10
 	if rank == 14:
 		return 11
-	return -1
+	return rank
 
 # returns value of enhancement chips, mult, xmult, money
 func get_enhancement_val(card) -> Dictionary:
@@ -314,8 +317,7 @@ func get_edition_val(card):
 			return {"xmult": 1.5}
 		_:
 			return {}
-		
-
+	
 # kinda a stupid way of doing it, but need to calculate which of the cards
 # are the ones that fulfill the hand
 func get_active_cards(cards, hand):

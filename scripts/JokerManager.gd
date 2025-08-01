@@ -27,13 +27,14 @@ enum Connective {
 	blind_selected,
 	countdown,
 	final_hand,
-	probability
+	probability,
+	for_,
 }
 
 # duplication sucks but want a type matchup
 enum Condition {
 	none, to,
-	face,
+	face, joker,
 	cards, discards, hands,
 	spades, hearts, diamonds, clubs,
 	zero, one, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king, ace,
@@ -70,7 +71,23 @@ enum CommonJokers {
 	MysticSummit,
 	#8Ball,
 	Misprint,
-	RaisedFist,
+		RaisedFist,
+		ChaosTheClown,
+	ScaryFace,
+	AbstractJoker,
+	#DelayedGratification,
+	#GrosMichel
+	EvenSteven,
+	OddTodd,
+	Scholar,
+	#BusinessCard,
+	#Supernova
+	#RideTheBus
+	#Egg
+	#Runner
+	#IceCream
+	#Splash
+	#BlueJoker
 }
 
 enum UncommonJokers {
@@ -149,8 +166,9 @@ func get_edition(rate: int, no_neg: bool) -> CardManager.Edition:
 
 # gets the next joker in the pool with normal edition dist
 # NO NEGATIVES AS NOT IMPLEMENTED TODO
+# TODO filtering
 # 70 / 25 / 5
-func generate_joker_data() -> Dictionary:
+func generate_joker_data(exc) -> Dictionary:
 	var joker
 	var rarity: Rarity
 	var rarity_pick = rng_joker.randf()
@@ -179,6 +197,13 @@ func generate_joker_data() -> Dictionary:
 		data.rarity = Rarity.common
 	
 	return data
+	
+	if (rarity == Rarity.common):
+		var pool = CommonJokers
+		for common in CommonJokers:
+			
+			for exc in exclusions:
+				if (common == exc):
 
 # convert id to enum string name
 func get_joker_shortname(value: int, rarity: Rarity) -> String:
@@ -445,6 +470,38 @@ func get_joker(joker_id: int, rarity: Rarity, variable: float) -> Dictionary:
 					"benefit_val_1" : 0,
 					"connective" : Connective.none,
 				}
+			CommonJokers.ChaosTheClown: # TDOD
+				return {
+					"name" : "Chaos The Clown",
+					"rarity" : Rarity.common,
+					"cost" : 4,
+					"description" : "1 free Reroll per shop ",
+					"connective" : Connective.none,
+				}
+			CommonJokers.ScaryFace:
+				return {
+					"name" : "Scary Face",
+					"rarity" : Rarity.common,
+					"cost" : 4,
+					"description" : "Played face cards give +30 Chips when scored",
+					"benefit_0" : Benefit.addchips,
+					"benefit_1" : Benefit.chipnum,
+					"benefit_val_1" : 30,
+					"connective" : Connective.when_scored,
+					"condition_0" : Condition.face,
+				}
+			CommonJokers.AbstractJoker:
+				return {
+					"name" : "Abstract Joker",
+					"rarity" : Rarity.common,
+					"cost" : 4,
+					"description" : "+3 Mult for each Joker card",
+					"benefit_0" : Benefit.addmult,
+					"benefit_1" : Benefit.multnum,
+					"benefit_val_1" : variable,
+					"connective" : Connective.for_,
+					"condition_0" : Condition.joker,
+				}
 	if (rarity == Rarity.uncommon):
 		match joker_id:
 			UncommonJokers.JokerStencil:
@@ -456,7 +513,8 @@ func get_joker(joker_id: int, rarity: Rarity, variable: float) -> Dictionary:
 					"benefit_0" : Benefit.xmult,
 					"benefit_1" : Benefit.multnum,
 					"benefit_val_1" : variable,
-					"connective" : Connective.none,
+					"connective" : Connective.for_,
+					"condition_0" : Condition.joker,
 				}
 	elif (rarity == Rarity.rare):
 		match joker_id:
@@ -664,6 +722,7 @@ func score_raised_fist(hand) -> Dictionary:
 	
 	return {"mult": hand[0].rank}
 
+
 # uncommon jokers
 func score_stencil_joker(jokers, max_jokers) -> Dictionary: # needs joker size and joker count
 	# joker stencil
@@ -713,7 +772,8 @@ func get_trigger_val(card, joker) -> Dictionary:
 				return trigger_wrathful_joker(card.data)
 			CommonJokers.GluttonousJoker:
 				return trigger_gluttonous_joker(card.data)
-
+			CommonJokers.ScaryFace:
+				return trigger_scary_face(card.data)
 	return {}
 		
 	# score on suit
@@ -735,4 +795,8 @@ func trigger_wrathful_joker(card: Dictionary) -> Dictionary:
 func trigger_gluttonous_joker(card: Dictionary) -> Dictionary:
 	if (card.suit == CardManager.Suit.clubs):
 		return {"mult": 3}
+	return {}
+func trigger_scary_face(card: Dictionary) -> Dictionary:
+	if (CardManager.is_facecard(card.rank)):
+		return {"chips": 30}
 	return {}
