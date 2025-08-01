@@ -168,7 +168,7 @@ func get_edition(rate: int, no_neg: bool) -> CardManager.Edition:
 # NO NEGATIVES AS NOT IMPLEMENTED TODO
 # TODO filtering
 # 70 / 25 / 5
-func generate_joker_data(exc) -> Dictionary:
+func generate_joker_data() -> Dictionary:
 	var joker
 	var rarity: Rarity
 	var rarity_pick = rng_joker.randf()
@@ -191,19 +191,11 @@ func generate_joker_data(exc) -> Dictionary:
 		"edition": edition,
 	}
 	
-	
 	if (data.id == -1):
 		data.id = 1
 		data.rarity = Rarity.common
 	
 	return data
-	
-	if (rarity == Rarity.common):
-		var pool = CommonJokers
-		for common in CommonJokers:
-			
-			for exc in exclusions:
-				if (common == exc):
 
 # convert id to enum string name
 func get_joker_shortname(value: int, rarity: Rarity) -> String:
