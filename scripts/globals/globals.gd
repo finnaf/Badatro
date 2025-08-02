@@ -3,14 +3,38 @@ extends Node
 var digit_frames
 const symbol_frames = preload("res://resources/symbols.tres")
 
-const YELLOW = Color(1, 0.7, 0.1)
-const RED = Color(0.929, 0.11, 0.141)
-const BLUE = Color(0.0, 0.650, 0.91)
-const WHITE = Color(1.0,1.0,1.0)
-const BLACK = Color(0.0,0.0,0.0)
-const GREY = Color(0.498, 0.498, 0.498)
-const GREEN = Color(0.016, 0.478, 0.102)
-const DARKGREEN = Color(0.016, 0.376, 0.098)
+# OLD VALS
+# const YELLOW = Color(1, 0.7, 0.1)
+# const RED = Color(0.929, 0.11, 0.141)
+# const BLUE = Color(0.0, 0.650, 0.91)
+# const WHITE = Color(1.0,1.0,1.0)
+# const BLACK = Color(0.0,0.0,0.0)
+# const GREY = Color(0.498, 0.498, 0.498)
+# const GREEN = Color(0.016, 0.478, 0.102)
+# const DARKGREEN = Color(0.016, 0.376, 0.098)
+
+const WHITE = Color("ffffff")
+const GREY = Color("bfc7d5")
+const BLACK = Color("4f6367")
+const RED = Color("fd5f55")
+const BLUE = Color("009cfd")
+const YELLOW = Color("fda200")
+
+const LIGHTGREEN = Color("74cca8")
+const GREEN = Color("56a786")
+const DARKGREEN = Color("459373")
+
+const PINK = Color("ff9690")
+const DEEPRED = Color("c14139")
+
+const LIGHTBLUE = Color("3cb4ff")
+const DARKBLUE = Color("008be3")
+
+const DARKYELLOW = Color("ea9600")
+const MUSTARD = Color("c88000")
+
+const LIGHTBROWN = Color("b7a88a")
+const DARKBROWN = Color("847f66")
 
 enum ResourceType {
 	chips,

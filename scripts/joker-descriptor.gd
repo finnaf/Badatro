@@ -24,7 +24,7 @@ func _init(desc_data: Dictionary, joker_data: JokerCardData):
 		JokerManager.Rarity.common:
 			col = Globals.BLUE
 		JokerManager.Rarity.uncommon:
-			col = Globals.DARKGREEN
+			col = Globals.GREEN
 		JokerManager.Rarity.rare:
 			col = Globals.RED
 
