@@ -4,50 +4,68 @@ extends CardData
 var is_flipped: bool = false
 
 var rarity: JokerManager.Rarity
-var variable: int = -1
+var variable: int = 0
+
+var score_func: Callable
+var trigger_func: Callable
 
 func _init():	
 	var rng = JokerManager.get_rng()
 	generate_joker(rng)
 	roll_edition(1, true, rng)
+	
 
 func generate_joker(rng: RandomNumberGenerator):
 	var rarity_pick = rng.randf()
 	if (rarity_pick > 0.95):
-		rarity = JokerManager.Rarity.rare
-		id = rng.randi_range(0, JokerManager.RareJokers.size()-1)
+		generate_by_rarity(JokerManager.Rarity.rare, rng)
 	elif (rarity_pick > 0.7):
-		rarity = JokerManager.Rarity.uncommon
-		id = rng.randi_range(0, JokerManager.UncommonJokers.size()-1)
+		generate_by_rarity(JokerManager.Rarity.uncommon, rng)
 	else:
+		generate_by_rarity(JokerManager.Rarity.common, rng)
+
+func generate_by_rarity(rarity, rng: RandomNumberGenerator):
+	var pool = JokerManager.jokers_by_rarity[rarity]
+	if pool.is_empty():
 		rarity = JokerManager.Rarity.common
-		id = rng.randi_range(0, JokerManager.CommonJokers.size()-1)
+		id = JokerManager.Jokers.Joker
 
+	id = pool[rng.randi() % pool.size()]
+	var data = JokerManager.joker_info[id]
+	score_func = data.get("score_func", null)
 
-func update_variable(state = null, scoreval = null):
-	if (state == null):
-		state = JokerManager.get_joker_score_state()
+# gets the value of the joker when it is triggered
+func get_score_val(state: Dictionary, active_cards = []) -> Dictionary:
+	state.merge({"active_cards": active_cards})
 	
+	if score_func:
+		return score_func.call(self, state)
+	return {}
+
+# gets the value of the joker from a specific card being triggered
+func get_trigger_val(card, joker) -> Dictionary:
+	if trigger_func:
+		return trigger_func.call(self, card, joker)
+	return {}
+
+func update_variable(state, scoreval = null):	
 	if (scoreval == null):
-		scoreval = JokerManager.get_score_val([], self, state)
+		scoreval = get_score_val(state)
 	
 	if (scoreval.has("eq_variable")):
 		variable = scoreval.eq_variable
 	elif (scoreval.has("add_variable")):
 		variable += scoreval.add_variable
 
-func get_rarity_string(rarity: JokerManager.Rarity) -> String:
-	match rarity:
-		JokerManager.Rarity.common:
-			return "Common"
-		JokerManager.Rarity.uncommon:
-			return "Uncommon"
-		JokerManager.Rarity.rare:
-			return "Rare"
-		JokerManager.Rarity.legendary:
-			return "Legendary"
-		_:
-			return "Error"
+
+func get_cost(discount_percent: float) -> int:		
+	var cost = JokerManager.joker_info[id].cost
+	cost += get_edition_cost()
+			
+	cost = floor(cost * discount_percent)
+	if cost < 1:
+		return 1
+	return cost
 
 func is_joker() -> bool:
 	return true

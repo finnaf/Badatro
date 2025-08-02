@@ -89,7 +89,7 @@ func count_animation(active_cards):
 		
 		# remove from hand and adjust
 		var index = get_hand_position(card.get_id())
-		hand[index] = {}
+		hand[index] = null
 		
 		card.position.x = get_card_position(i, selected_cards.size())
 		card.position.y -= 4
@@ -114,11 +114,11 @@ func score_animation(active_cards):
 
 		
 		# ENHANCEMENTS
-		var enhancevals = card.get_enhancement_val()
+		var enhancevals = card.data.get_enhancement_val()
 		await game.add_resources(card, enhancevals)
 		
 		# EDITIONS
-		var editionvals = card.get_edition_val()
+		var editionvals = card.data.get_edition_val()
 		await game.add_resources(card, editionvals)
 		
 		# JOKER ON CARD

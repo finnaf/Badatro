@@ -38,6 +38,24 @@ func roll_edition(rate: int, no_neg: bool, rng: RandomNumberGenerator):
 	else:
 		edition = CardManager.Edition.none
 
+func get_cost(discount_percent: float) -> int:	
+	return -1
+
+func get_edition_cost() -> int:
+	if (edition == CardManager.Edition.foil):
+		return 2
+	elif (edition == CardManager.Edition.holographic):
+		return 3
+	elif (edition == CardManager.Edition.polychrome or
+		edition == CardManager.Edition.negative):
+			return 5
+	return 0
+
+func get_sell_price(discount_percent: float) -> int:
+	var price = floor(get_cost(discount_percent) / 2)
+	if price < 1:
+		return 1
+	return price
 
 func set_shop_card():
 	is_shop = true

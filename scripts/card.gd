@@ -28,7 +28,7 @@ var data: CardData
 func _ready():
 	connect("mouse_entered", Callable(self, "on_mouse_entered"))
 	connect("mouse_exited", Callable(self, "on_mouse_exited"))
-
+	
 func setup(new_data: CardData):
 	data = new_data
 	
@@ -42,10 +42,11 @@ func setup(new_data: CardData):
 		var d := data as BoosterCardData
 		set_booster_tex(d.booster_type, d.booster_size)
 	elif (data.is_voucher()):
+		var d := data as VoucherCardData
 		set_voucher_tex(data.id)
 	elif (data.is_consumable()):
-			var d := data as ConsumableCardData
-			set_consumable_tex(d.consumable_type, d.id)
+		var d := data as ConsumableCardData
+		set_consumable_tex(d.consumable_type, d.id)
 	
 func set_card_tex(rank: int, suit: int):
 	var suit_str = CardManager.get_suit_name(suit)
@@ -54,7 +55,6 @@ func set_card_tex(rank: int, suit: int):
 	if tex:
 		image.texture = tex
 func set_joker_tex(joker_id, rarity):	
-	var joker_data = JokerManager.get_joker(joker_id, rarity, get_variable_val())
 	var path = ("res://images/cards/jokers/%s/%s.png" % 
 				[JokerManager.get_rarity_string(rarity), 
 				JokerManager.get_joker_shortname(joker_id, rarity)])
@@ -135,7 +135,7 @@ func _on_drag_end():
 
 func on_clicked():
 	if (data.is_joker()):
-		var jok_data = JokerManager.get_joker_info(data.id, data.rarity, get_variable_val())
+		var jok_data = JokerManager.joker_info[get_id()]
 		print(
 			JokerManager.get_rarity_string(jok_data.rarity),
 			" ", 
@@ -166,7 +166,7 @@ func on_mouse_entered():
 	
 	if data.is_joker():
 		self.z_index += 1 # for descriptor to be able to fit between bg and card
-		var desc_data = JokerManager.get_joker(get_id(), get_rarity(), get_variable_val())
+		var desc_data = JokerManager.joker_info[get_id()]
 		desc_box = box.new(desc_data)
 		add_child(desc_box)
 
@@ -194,11 +194,8 @@ func reset_focus():
 		desc_box.queue_free()
 		desc_box = null
 
-			
-
-
 func display_cost():
-	var cost_val = CardManager.get_card_cost(data, 1)
+	var cost_val = data.get_cost(1)
 	card_buttons = preload("res://scenes/card-info-small.tscn").instantiate()
 	add_child(card_buttons)
 	card_buttons.set_value(cost_val, data)

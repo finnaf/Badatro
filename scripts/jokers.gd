@@ -19,15 +19,16 @@ func score_card(card) -> Array:
 		
 
 # score each joker and do animating
-func score_jokers(active_cards):
+func score_jokers(active_cards: Array):
 	# get all values needed for joker scoring
 	var state = get_joker_score_state()
+	state.merge({"active_cards": active_cards})
 	
 	for joker in jokers:		
 		var editionval = CardManager.get_edition_val(joker)
 		await game.add_resources(joker, editionval)
 		
-		var scoreval = JokerManager.get_score_val(active_cards, joker, state)
+		var scoreval = joker.get_score_val(state, active_cards)
 		await game.add_resources(joker, scoreval)
 		
 		joker.update_variable(state, scoreval)
@@ -48,7 +49,7 @@ func update_variable_all_jokers():
 	var state = get_joker_score_state()
 	
 	for joker in jokers:
-		joker.update_variable(state)
+		joker.data.update_variable(state)
 
 func add(joker):
 	jokers.append(joker)

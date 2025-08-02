@@ -107,6 +107,7 @@ func get_main_card(xoffset: int):
 	if type_thresh < W_JOK: # jok
 		
 		data = JokerCardData.new()
+		data.update_variable(jokers.get_joker_score_state())
 		
 	elif type_thresh < W_JOK + W_TAR: # tarot TODO
 		
@@ -116,15 +117,14 @@ func get_main_card(xoffset: int):
 		data = ConsumableCardData.new(CardManager.ConsumableType.planet)
 	
 	data.set_shop_card()
-	data.update_variable()
-	card.display_cost()
 	card.setup(data)
+	card.display_cost()
 	main.append(card)
 
 func get_booster(xoffset: int):
-	var booster = CARD.instantiate()
-	booster.setup(BoosterCardData.new())
+	var booster = await CARD.instantiate()
 	add_child(booster)
+	booster.setup(BoosterCardData.new())
 	booster.position.x = xoffset
 	booster.position.y = BOOSTER_OFFSET
 	booster.display_cost()
@@ -132,9 +132,9 @@ func get_booster(xoffset: int):
 
 func load_voucher():
 	var voucher = CARD.instantiate()
-	voucher.setup(VoucherCardData.new())
-	
 	add_child(voucher)
+	
+	voucher.setup(VoucherCardData.new())
 	voucher.position.x = VOUCHER_X_OFFSET
 	voucher.position.y = BOOSTER_OFFSET
 	voucher.display_cost()
@@ -194,7 +194,7 @@ func _buy_attempt(card):
 	if MouseManager.is_disabled:
 		return
 		
-	var cost = CardManager.get_card_cost(card.data, game.get_discount_percent())
+	var cost = card.data.get_cost(game.get_discount_percent())
 	if (card.data.is_joker()):
 		if (jokers.is_full() or not game.spend_money(cost)):
 			return
@@ -223,7 +223,7 @@ func _buy_attempt(card):
 	card.disconnect("card_clicked", Callable(self, "_on_card_clicked"))
 
 func _use_attempt(consumable):
-	var cost = CardManager.get_card_cost(consumable.data, game.get_discount_percent())
+	var cost = consumable.data.get_cost(game.get_discount_percent())
 	var can_use = ConsumableManager.can_use([], consumable)
 	if (can_use and game.spend_money(cost)):
 		consumables.use([], consumable)
@@ -328,20 +328,20 @@ func open_buffoon(size: CardManager.BoosterSize):
 		
 	for i in range(joker_count):
 		var joker = CARD.instantiate()
-		joker.setup(JokerCardData.new())
 		add_child(joker)
 		
+		joker.setup(JokerCardData.new())
 		booster_cards.append(joker)
 		
 		# create a card info, hide top cost
-		joker.set_shop_card()
+		joker.data.set_shop_card()
 		joker.position = Vector2((i*13), 5)		
 		joker.display_cost()
 		joker.card_buttons.switch_label(1)
 		joker.hide_cost_only()
 		joker.hide_use_only()
 		
-		jokers.update_variable(joker)
+		joker.data.update_variable(jokers.get_joker_score_state())
 
 
 func set_pack_background():

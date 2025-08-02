@@ -30,5 +30,14 @@ func get_enhancement_val() -> Dictionary:
 			return {"mult": 20, "money": 20}
 	return {}
 
+func get_cost(discount_percent: float) -> int:		
+	var cost = 1
+	cost += get_edition_cost()
+			
+	cost = floor(cost * discount_percent)
+	if cost < 1:
+		return 1
+	return cost
+
 func is_card() -> bool:
 	return true
