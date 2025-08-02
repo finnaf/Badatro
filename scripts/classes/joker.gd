@@ -6,8 +6,8 @@ var is_flipped: bool = false
 var rarity: JokerManager.Rarity
 var variable: int = 0
 
-var score_func: Callable
-var trigger_func: Callable
+var score_func: Callable = Callable()
+var trigger_func: Callable = Callable()
 
 func _init():	
 	var rng = JokerManager.get_rng()
@@ -32,7 +32,8 @@ func generate_by_rarity(rarity, rng: RandomNumberGenerator):
 
 	id = pool[rng.randi() % pool.size()]
 	var data = JokerManager.joker_info[id]
-	score_func = data.get("score_func", null)
+	score_func = data.get("score_func", Callable())
+	trigger_func = data.get("trigger_func", Callable())
 
 # gets the value of the joker when it is triggered
 func get_score_val(state: Dictionary, active_cards = []) -> Dictionary:
@@ -43,12 +44,12 @@ func get_score_val(state: Dictionary, active_cards = []) -> Dictionary:
 	return {}
 
 # gets the value of the joker from a specific card being triggered
-func get_trigger_val(card, joker) -> Dictionary:
+func get_trigger_val(card: PlayingCardData) -> Dictionary:
 	if trigger_func:
-		return trigger_func.call(self, card, joker)
+		return trigger_func.call(self, card)
 	return {}
 
-func update_variable(state, scoreval = null):	
+func update_variable(state: Dictionary, scoreval = null):	
 	if (scoreval == null):
 		scoreval = get_score_val(state)
 	

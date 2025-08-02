@@ -12,7 +12,7 @@ const BASE_MAX_JOKERS = 5
 func score_card(card) -> Array:
 	var joker_scores = []
 	for joker in jokers:
-		var vals = JokerManager.get_trigger_val(card, joker)
+		var vals = joker.data.get_trigger_val(card.data)
 		if (not vals.is_empty()):
 			joker_scores.append(vals)
 	return joker_scores
@@ -24,14 +24,14 @@ func score_jokers(active_cards: Array):
 	var state = get_joker_score_state()
 	state.merge({"active_cards": active_cards})
 	
-	for joker in jokers:		
-		var editionval = CardManager.get_edition_val(joker)
+	for joker in jokers:	
+		var editionval = joker.data.get_edition_val()
 		await game.add_resources(joker, editionval)
 		
-		var scoreval = joker.get_score_val(state, active_cards)
+		var scoreval = joker.data.get_score_val(state, active_cards)
 		await game.add_resources(joker, scoreval)
 		
-		joker.update_variable(state, scoreval)
+		joker.data.update_variable(state, scoreval)
 
 func get_joker_score_state() -> Dictionary:
 	var state: Dictionary = game.get_game_state()
@@ -89,7 +89,7 @@ func _on_clicked(card):
 		card.jok_select()
 
 func _on_sell(card):
-	game.add_money(CardManager.get_sell_price(card.data, 1))
+	game.add_money(card.data.get_sell_price(1))
 	_delete_joker(card)
 
 func _delete_joker(card):

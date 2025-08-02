@@ -13,8 +13,8 @@ var pos: Vector2i
 var size: Vector2i
 var col: Color
 
-func _init(desc_data: Dictionary):
-	var width = generate_content(desc_data)
+func _init(desc_data: Dictionary, joker_data: JokerCardData):
+	var width = generate_content(desc_data, joker_data)
 	
 	size = Vector2i(13+width, 15)
 	pos = Vector2i(-size.x+12, -1)
@@ -33,7 +33,7 @@ func _draw():
 	draw_rect(Rect2(Vector2(pos.x+1, pos.y+1), 
 				Vector2(size.x-2, size.y-2)), Globals.WHITE)
 
-func generate_content(desc_data: Dictionary) -> float:
+func generate_content(desc_data: Dictionary, joker_data: JokerCardData) -> float:
 	var top_y = 3.5
 	var bot_y = 9.5
 	var top_x = 0.0 # x axis
@@ -45,13 +45,10 @@ func generate_content(desc_data: Dictionary) -> float:
 	while true:
 		var key = "benefit_%d" % index
 		if desc_data.has(key):
-			top_x = _do_benefit(desc_data, index, top_x, top_y, sprites)
+			top_x = _do_benefit(desc_data, joker_data, index, top_x, top_y, sprites)
 		else:
 			break
-		index += 1
-	
-	
-	
+		index += 1	
 	
 	# BOTTOM ROW
 	match desc_data.connective:
@@ -88,7 +85,7 @@ func generate_content(desc_data: Dictionary) -> float:
 
 	return width
 
-func _do_benefit(data, i, top_x, top_y, sprites):
+func _do_benefit(data, joker_data: JokerCardData, i, top_x, top_y, sprites):
 	var benefit = "benefit_%d" % i
 	match data[benefit]:
 		JokerManager.Benefit.addchips:
@@ -99,14 +96,27 @@ func _do_benefit(data, i, top_x, top_y, sprites):
 			top_x = _place_digit(11, top_x, top_y, sprites, Globals.RED)
 		JokerManager.Benefit.chipnum:
 			var ben_val = "benefit_val_%d" % i
+			var num = data[ben_val]
+			
+			if (num == -1):
+				num = joker_data.variable
+				if (num == int(num)):
+					data[ben_val] = int(num)
+				else:
+					data[ben_val] = num
+			
 			for d in str(data[ben_val]):
 				top_x = _place_digit(int(d), top_x, top_y, sprites, Globals.BLUE)
 		JokerManager.Benefit.multnum:
 			var ben_val = "benefit_val_%d" % i
-			var variable = data[ben_val]
+			var num = data[ben_val]
 			
-			if (variable == int(variable)):
-				data[ben_val] = int(variable)
+			if (num == -1): # is a var
+				num = joker_data.variable
+				if (num == int(num)): # convert to int if is so
+					data[ben_val] = int(num)
+				else:
+					data[ben_val] = num
 			
 			for d in str(data[ben_val]):
 				top_x = _place_digit(int(d), top_x, top_y, sprites, Globals.RED)
@@ -114,9 +124,6 @@ func _do_benefit(data, i, top_x, top_y, sprites):
 			top_x = _place_symbol(28, SMALL_DIGIT_SIZE+1, top_x, top_y, sprites, Globals.BLACK)
 	
 	return top_x
-
-func is_float_int(val: float) -> bool:
-	return val == int(val)
 		
 func _do_condition(cond, bot_x, bot_y, sprites):
 	match cond:		

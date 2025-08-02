@@ -167,7 +167,7 @@ func on_mouse_entered():
 	if data.is_joker():
 		self.z_index += 1 # for descriptor to be able to fit between bg and card
 		var desc_data = JokerManager.joker_info[get_id()]
-		desc_box = box.new(desc_data)
+		desc_box = box.new(desc_data, data)
 		add_child(desc_box)
 
 func on_mouse_exited():
@@ -205,8 +205,8 @@ func display_cost():
 
 func setup_sell_price():
 	if (card_buttons):
-		var sell_val = CardManager.get_sell_price(data, 1)
-		card_buttons.set_value(sell_val, data.type)
+		var sell_val = data.get_sell_price(1)
+		card_buttons.set_value(sell_val, data)
 		card_buttons.switch_label(2)
 
 

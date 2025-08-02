@@ -12,3 +12,6 @@ func get_cost(discount_percent: float) -> int:
 	if cost < 1:
 		return 1
 	return cost
+
+func is_voucher() -> bool:
+	return true

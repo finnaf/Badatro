@@ -231,7 +231,9 @@ func add_mult(value: int):
 	sidebar.update_mult()
 
 func mult_mult(value: float):
+	print("pre mult", mult)
 	mult *= value
+	print("post most", mult)
 	sidebar.update_mult()
 
 func end_turn():
@@ -309,7 +311,7 @@ func add_resources(card, dict: Dictionary):
 		elif key == "xmult":
 			alert = Globals.do_score_alert(card, false, 
 				false, dict.xmult, GAMESPEED, offset)
-			await add_chips(dict.xmult)
+			await mult_mult(dict.xmult)
 		elif key == "money":
 			alert = Globals.do_score_alert(card, true, 
 				true, dict.money, GAMESPEED, offset)

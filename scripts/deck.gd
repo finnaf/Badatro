@@ -161,7 +161,7 @@ func _on_discard_button_pressed():
 		if card.has_method("is_raised") and card.has_method("get_data"):
 			if card.is_raised():
 				var index = get_hand_position(card.get_id())
-				hand[index] = {}
+				hand[index] = null
 				selected_cards.erase(card)
 				card.queue_free()
 	deal()

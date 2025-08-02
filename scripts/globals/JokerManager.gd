@@ -162,7 +162,7 @@ var joker_info = {
 	Jokers.GreedyJoker: {
 		"name" : "Greedy Joker",
 		"rarity" : Rarity.common,
-		"score_func" : trigger_greedy_joker,
+		"trigger_func" : trigger_greedy_joker,
 		"cost" : 5,
 		"description" : "Played cards with Diamond suit give +3 Mult when scored",
 		"benefit_0" : Benefit.addmult,
@@ -333,8 +333,8 @@ var joker_info = {
 			"score_func" : score_half_joker,
 			"cost" : 5,
 			"description" : "+20 Mult if played hand contains 3 or fewer cards",
-			"benefit_0" : Benefit.addchips,
-			"benefit_1" : Benefit.chipnum,
+			"benefit_0" : Benefit.addmult,
+			"benefit_1" : Benefit.multnum,
 			"benefit_val_1" : 20,
 			"connective" : Connective.contains,
 			"condition_0" : Condition.three,
@@ -417,7 +417,7 @@ var joker_info = {
 			"description" : "+3 Mult for each Joker card",
 			"benefit_0" : Benefit.addmult,
 			"benefit_1" : Benefit.multnum,
-			"benefit_val_1" : "variable",
+			"benefit_val_1" : -1, # is a variable
 			"connective" : Connective.for_,
 			"condition_0" : Condition.joker,
 	},
@@ -429,7 +429,7 @@ var joker_info = {
 			"description" : "X1 Mult for each empty Joker slot. Joker Stencil included",
 			"benefit_0" : Benefit.xmult,
 			"benefit_1" : Benefit.multnum,
-			"benefit_val_1" : "variable",
+			"benefit_val_1" : -1, # variable
 			"connective" : Connective.for_,
 			"condition_0" : Condition.joker,
 	},
@@ -589,46 +589,46 @@ func score_joker_stencil(joker, gamestate) -> Dictionary: # needs joker size and
 	return {}
 
 # rare jokers
-func score_the_duo(cards) -> Dictionary:
-	if (CardManager.is_pair(cards)):
+func score_the_duo(joker, gamestate) -> Dictionary:
+	if (CardManager.is_pair(gamestate.active_cards)):
 		return {"xmult": 2}
 	return {}
-func score_the_trio(cards) -> Dictionary:
-	if (CardManager.is_three_of_a_kind(cards)):
+func score_the_trio(joker, gamestate) -> Dictionary:
+	if (CardManager.is_three_of_a_kind(gamestate.active_cards)):
 		return {"xmult": 3}
 	return {}
-func score_the_family(cards) -> Dictionary:
-	if (CardManager.is_four_of_a_kind(cards)):
+func score_the_family(joker, gamestate) -> Dictionary:
+	if (CardManager.is_four_of_a_kind(gamestate.active_cards)):
 		return {"xmult": 4}
 	return {}
-func score_the_order(cards) -> Dictionary:
-	if (CardManager.is_straight(cards)):
+func score_the_order(joker, gamestate) -> Dictionary:
+	if (CardManager.is_straight(gamestate.active_cards)):
 		return {"xmult": 3}
 	return {}
-func score_the_tribe(cards) -> Dictionary:
-	if (CardManager.is_flush(cards)):
+func score_the_tribe(joker, gamestate) -> Dictionary:
+	if (CardManager.is_flush(gamestate.active_cards)):
 		return {"xmult": 2}
 	return {}
 	
 
 
-func trigger_greedy_joker(card: Dictionary) -> Dictionary:
+func trigger_greedy_joker(joker: JokerCardData, card: CardData) -> Dictionary:
 	if (card.suit == CardManager.Suit.diamonds):
 		return {"mult": 3}
 	return {}
-func trigger_lusty_joker(card: Dictionary) -> Dictionary:
+func trigger_lusty_joker(joker: JokerCardData, card: CardData) -> Dictionary:
 	if (card.suit == CardManager.Suit.hearts):
 		return {"mult": 3}
 	return {}
-func trigger_wrathful_joker(card: Dictionary) -> Dictionary:
+func trigger_wrathful_joker(joker: JokerCardData, card: CardData) -> Dictionary:
 	if (card.suit == CardManager.Suit.spades):
 		return {"mult": 3}
 	return {}
-func trigger_gluttonous_joker(card: Dictionary) -> Dictionary:
+func trigger_gluttonous_joker(joker: JokerCardData, card: CardData) -> Dictionary:
 	if (card.suit == CardManager.Suit.clubs):
 		return {"mult": 3}
 	return {}
-func trigger_scary_face(card: Dictionary) -> Dictionary:
+func trigger_scary_face(joker: JokerCardData, card: CardData) -> Dictionary:
 	if (CardManager.is_facecard(card.rank)):
 		return {"chips": 30}
 	return {}
