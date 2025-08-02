@@ -61,9 +61,9 @@ func lower():
 func load_cards():
 	var checkdeck = deck.get_checkdeck(is_full_deck)
 	checkdeck.sort_custom(func(a, b):
-		if  a["suit"] == b["suit"]:
-			return a["rank"] < b["rank"]
-		return a["suit"] < b["suit"]
+		if  a.suit == b.suit:
+			return a.rank < b.rank
+		return a.suit < b.suit
 	)
 	
 	var offset = Vector2(36, -31)
@@ -151,7 +151,7 @@ func place_digit_sprites(value, offset: Vector2):
 	shown_digits.append(ones)
 	shown_digits.append(tens)
 
-func create_card(data: Dictionary) -> Area2D:
+func create_card(data: CardData) -> Area2D:
 	const CARD = preload("res://scenes/card.tscn")
 	var card = CARD.instantiate()
 	add_child(card)

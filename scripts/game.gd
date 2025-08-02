@@ -161,18 +161,9 @@ func get_basic_deck() -> Array:
 	for suit_name in CardManager.Suit:
 		var suit_val = CardManager.Suit[suit_name]
 		for rank in ranks:
-			var card = {
-				"id": count,
-				"type": CardManager.CardType.card,
-				"suit": suit_val,
-				"rank": rank,
-				"raised": false,
-				"enhancement": CardManager.Enhancement.none,
-				"edition": CardManager.Edition.none,
-				"seal": CardManager.Seal.none
-			}
+			var data = PlayingCardData.new(count, rank, suit_val)
 			
-			deck.append(card)
+			deck.append(data)
 			count += 1
 	return deck
 
@@ -302,7 +293,7 @@ func next_round():
 func add_resources(card, dict: Dictionary):
 	# jokers have the value shown below, cards above
 	var offset = 0
-	if (card.data.type == CardManager.CardType.joker):
+	if (card.data.is_joker()):
 		offset = 24
 	
 	var alert = null

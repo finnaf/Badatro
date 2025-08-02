@@ -17,12 +17,12 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-CardManager="*res://scripts/CardManager.gd"
-BossManager="*res://scripts/BossManager.gd"
+CardManager="*res://scripts/globals/CardManager.gd"
+BossManager="*res://scripts/globals/BossManager.gd"
 Globals="*res://scripts/globals.gd"
-JokerManager="*res://scripts/JokerManager.gd"
-MouseManager="*res://scripts/MouseManager.gd"
-ConsumableManager="*res://scripts/ConsumableManager.gd"
+JokerManager="*res://scripts/globals/JokerManager.gd"
+MouseManager="*res://scripts/globals/MouseManager.gd"
+ConsumableManager="*res://scripts/globals/ConsumableManager.gd"
 
 [display]
 

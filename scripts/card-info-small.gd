@@ -53,7 +53,7 @@ func _on_use_pressed():
 func _on_pressed():
 	emit_signal("button_clicked", self)
 
-func set_value(cost: int, type: CardManager.CardType):
+func set_value(cost: int, data: CardData):
 	clear_score()
 	
 	card_cost = cost
@@ -72,7 +72,7 @@ func set_value(cost: int, type: CardManager.CardType):
 		return
 		
 	# as any pack is taller than a regular card
-	if (type == CardManager.CardType.booster):
+	if (data.is_booster()):
 		self.position.y -= 1
 		button.position.y += 2
 	

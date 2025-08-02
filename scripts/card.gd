@@ -12,8 +12,6 @@ signal dragged(card)
 @onready var box: Script = preload("res://scripts/joker-descriptor.gd")
 
 var is_focused: bool = false
-var is_shop: bool = false
-var flipped: bool = true
 
 var tex: Texture2D = null
 var card_buttons: Sprite2D = null
@@ -25,40 +23,29 @@ const SHIFT_DIST = Vector2(0.5, 0.5)
 const SELECT_DIST = 14
 const SHOP_SELECT_DIST = 5
 
-var data = {
-	"id": null, # unique for each joker / booster / voucher
-	"type": CardManager.CardType.none,
-	
-	# rank & suit & enhancement & seal & raised for card
-	# booster_type and booster_size for boosters
-	# edition for card & joker
-	# rarity, variable (optional) for joker
-	# consumable_type for consumables
-}
+var data: CardData
 
 func _ready():
 	connect("mouse_entered", Callable(self, "on_mouse_entered"))
 	connect("mouse_exited", Callable(self, "on_mouse_exited"))
 
-func setup(new_data: Dictionary):
+func setup(new_data: CardData):
 	data = new_data
 	
-	if not data.has("type"):
-		print("Invalid access to setup method.")
-		return
-	match data.type:
-		CardManager.CardType.card:
-			set_card_tex(data.rank, data.suit)
-		CardManager.CardType.joker:
-			set_joker_tex(data.id, data.rarity)
-		CardManager.CardType.booster:
-			set_booster_tex(data.id, data.booster_size)
-		CardManager.CardType.voucher:
-			set_voucher_tex(data.id)
-		CardManager.CardType.consumable:
-			set_consumable_tex(data.consumable_type, data.id)
-	if data.has("edition"):
-		draw_edition(data.edition)
+	if (data.is_card()):
+		var d := data as PlayingCardData
+		set_card_tex(d.rank, d.suit)
+	elif (data.is_joker()):
+		var d := data as JokerCardData
+		set_joker_tex(d.id, d.rarity)
+	elif (data.is_booster()):
+		var d := data as BoosterCardData
+		set_booster_tex(d.booster_type, d.booster_size)
+	elif (data.is_voucher()):
+		set_voucher_tex(data.id)
+	elif (data.is_consumable()):
+			var d := data as ConsumableCardData
+			set_consumable_tex(d.consumable_type, d.id)
 	
 func set_card_tex(rank: int, suit: int):
 	var suit_str = CardManager.get_suit_name(suit)
@@ -100,31 +87,30 @@ func draw_edition(edition: CardManager.Edition): # TODO
 	var animation
 
 func flip():
-	if (data.type != CardManager.CardType.card and
-		data.type != CardManager.CardType.joker):
+	if not (data.is_card() or data.is_joker()):
 		print("cant flip")
 		return
 	
-	if flipped:
+	if data.is_flipped:
 		anim.play("flip")
 	
-	flipped = !flipped
+	data.is_flipped = not data.is_flipped
 
 func select():
-	if is_shop:
+	if data.is_shop:
 		return
 
-	if (data.type == CardManager.CardType.card and not data.raised):
+	if (data.is_card() and not data.is_raised):
 		position.y -= SELECT_DIST
-		data.raised = true
+		data.is_raised = true
 
 func deselect():
-	if is_shop:
+	if data.is_shop:
 		return
 	
-	if (data.type == CardManager.CardType.card and data.raised):
+	if (data.is_card() and data.is_raised):
 		position.y += SELECT_DIST
-		data.raised = false
+		data.is_raised = false
 
 func delete_card_buttons():
 	if (card_buttons):
@@ -148,8 +134,8 @@ func _on_drag_end():
 	dragged.emit(self)
 
 func on_clicked():
-	if (data.type == CardManager.CardType.joker):
-		var jok_data = JokerManager.get_joker(get_id(), get_rarity(), get_variable_val())
+	if (data.is_joker()):
+		var jok_data = JokerManager.get_joker_info(data.id, data.rarity, get_variable_val())
 		print(
 			JokerManager.get_rarity_string(jok_data.rarity),
 			" ", 
@@ -166,10 +152,10 @@ func on_mouse_entered():
 	
 	if is_shop_card():
 		Globals.do_shake(self, 1.01)
-		if not is_joker():
+		if not data.is_joker():
 			return
 	else:
-		if is_joker():
+		if data.is_joker():
 			pass # removing joker focusing
 		else:
 			self.position -= SHIFT_DIST
@@ -178,7 +164,7 @@ func on_mouse_entered():
 		is_focused = true
 		self.z_index += 5
 	
-	if is_joker():
+	if data.is_joker():
 		self.z_index += 1 # for descriptor to be able to fit between bg and card
 		var desc_data = JokerManager.get_joker(get_id(), get_rarity(), get_variable_val())
 		desc_box = box.new(desc_data)
@@ -194,7 +180,7 @@ func reset_focus():
 	if is_focused:
 		if is_shop_card():
 			pass
-		elif is_joker():
+		elif data.is_joker():
 			pass
 		else:
 			position += SHIFT_DIST
@@ -209,18 +195,13 @@ func reset_focus():
 		desc_box = null
 
 			
-func set_shop_card():
-	is_shop = true
-func unset_shop_card():
-	is_shop = false
-func is_shop_card():
-	return is_shop
+
 
 func display_cost():
 	var cost_val = CardManager.get_card_cost(data, 1)
 	card_buttons = preload("res://scenes/card-info-small.tscn").instantiate()
 	add_child(card_buttons)
-	card_buttons.set_value(cost_val, data.type)
+	card_buttons.set_value(cost_val, data)
 	
 	card_buttons.connect("button_clicked", Callable(self, "_on_button_clicked_on_label"))
 	card_buttons.connect("use_clicked", Callable(self, "_on_use_clicked_on_label"))
@@ -246,14 +227,14 @@ func shop_select():
 	position.y -= SHOP_SELECT_DIST
 	card_buttons.display_button()
 	
-	if (is_consumable()):
+	if (data.is_consumable()):
 		card_buttons.display_use()
 func shop_deselect():
 	if card_buttons == null:
 		return
 	
 	card_buttons.hide_button()
-	if (is_consumable()):
+	if (data.is_consumable()):
 		card_buttons.hide_use()
 	position.y += SHOP_SELECT_DIST
 
@@ -292,43 +273,35 @@ func hide_use_only():
 func hide_buttons():
 	card_buttons.hide()
 
-func is_joker():
-	if (data.type == CardManager.CardType.joker):
-		return true
-	return false
-func is_card():
-	if (data.type == CardManager.CardType.card):
-		return true
-	return false
-func is_consumable():
-	if (data.type == CardManager.CardType.consumable):
-		return true
-func is_planet():
-	if (is_consumable() and 
-		data.consumable_type == CardManager.ConsumableType.planet):
-			return true
-	return false
-
-func get_variable_val():
-	if (data.has("variable")):
-		return data.variable
-	return 0
 
 func get_data():
 	return data
 func get_suit():
-	return data.suit
+	var d := data as PlayingCardData
+	return d.suit
 func get_rank():
-	return data.rank
+	var d := data as PlayingCardData
+	return d.rank
 func get_id():
 	return data.id
 func get_rarity():
-	if (data.type == CardManager.CardType.joker):
-		return data.rarity
-	return null
+	var d := data as JokerCardData
+	return d.rarity
+func get_variable_val():
+	var d := data as JokerCardData
+	return d.variable
 func is_raised():
-	if (data.type == CardManager.CardType.card):
-		return data.raised
-	print("Card type cannot be raised:", data)
+	var d := data as PlayingCardData
+	return d.is_raised
 func is_flipped():
-	return flipped
+	var d := data as PlayingCardData
+	return d.is_flipped
+
+func is_shop_card():
+	return data.is_shop
+func is_card():
+	return data.is_card()
+func is_joker():
+	return data.is_joker()
+func is_consumable():
+	return data.is_consumable()

@@ -122,80 +122,14 @@ enum LegendaryJokers {
 }
 
 var rng_joker = RandomNumberGenerator.new()
-var rng_edition = RandomNumberGenerator.new()
 var rng = RandomNumberGenerator.new()			# within jokers
 
 func new_game(seed: int):
 	rng_joker.seed = seed + 1
-	rng_edition.seed = seed + 2
 	rng.seed = seed + 3
 
-func get_rarity_string(rarity: Rarity) -> String:
-	match rarity:
-		Rarity.common:
-			return "Common"
-		Rarity.uncommon:
-			return "Uncommon"
-		Rarity.rare:
-			return "Rare"
-		Rarity.legendary:
-			return "Legendary"
-		_:
-			return "Error"
-
-func get_edition(rate: int, no_neg: bool) -> CardManager.Edition:
-	var poll = rng_edition.randf()
-	rate = 1
-	
-	# rate 1 = normal prob
-	# rate 25 = guaranteed
-	# rate 2 = hone
-	# rate 4 = glow up
-	
-	# doesnt perfectly match, but pretty close
-	if (poll > 1 - (0.003 * rate) and not no_neg):
-		return CardManager.Edition.negative
-	elif (poll > 1 - 0.006 * rate):
-		return CardManager.Edition.polychrome
-	elif (poll > 1 - 0.02 * rate):
-		return CardManager.Edition.holographic
-	elif (poll > 1 - 0.04 * rate):
-		return CardManager.Edition.foil
-	else:
-		return CardManager.Edition.none
-
-# gets the next joker in the pool with normal edition dist
-# NO NEGATIVES AS NOT IMPLEMENTED TODO
-# TODO filtering
-# 70 / 25 / 5
-func generate_joker_data() -> Dictionary:
-	var joker
-	var rarity: Rarity
-	var rarity_pick = rng_joker.randf()
-	if (rarity_pick > 0.95):
-		rarity = Rarity.rare
-		joker = rng_joker.randi_range(0, RareJokers.size()-1)
-	elif (rarity_pick > 0.7):
-		rarity = Rarity.uncommon
-		joker = rng_joker.randi_range(0, UncommonJokers.size()-1)
-	else:
-		rarity = Rarity.common
-		joker = rng_joker.randi_range(0, CommonJokers.size()-1)
-
-	var edition = get_edition(1, true)
-	
-	var data = {
-		"id": joker,
-		"rarity": rarity,
-		"type": CardManager.CardType.joker,
-		"edition": edition,
-	}
-	
-	if (data.id == -1):
-		data.id = 1
-		data.rarity = Rarity.common
-	
-	return data
+func get_rng() -> RandomNumberGenerator:
+	return rng_joker
 
 # convert id to enum string name
 func get_joker_shortname(value: int, rarity: Rarity) -> String:
@@ -215,7 +149,7 @@ func get_joker_shortname(value: int, rarity: Rarity) -> String:
 	return "none"
 
 # get additional information about joker (mostly for descriptor, not scoring)
-func get_joker(joker_id: int, rarity: Rarity, variable: float) -> Dictionary:
+func get_joker_info(joker_id: int, rarity: Rarity, variable: float) -> Dictionary:
 	if (rarity == Rarity.common):
 		match joker_id:
 			CommonJokers.Joker:
@@ -583,9 +517,9 @@ func get_joker(joker_id: int, rarity: Rarity, variable: float) -> Dictionary:
 			
 # gets the value of the joker when its triggered
 # [chips, mult, xmult, money]
-func get_score_val(active_cards: Array, joker: Node, state: Dictionary) -> Dictionary:
-	if (joker.get_rarity() == Rarity.common):
-		match joker.data.id:
+func get_score_val(active_cards: Array, data: CardData, state: Dictionary) -> Dictionary:
+	if (data.rarity == Rarity.common):
+		match data.id:
 			CommonJokers.Joker:
 				return {"mult": 4}
 			CommonJokers.JollyJoker:
@@ -619,13 +553,13 @@ func get_score_val(active_cards: Array, joker: Node, state: Dictionary) -> Dicti
 			CommonJokers.RaisedFist:
 				return score_raised_fist(state.held_cards)
 	
-	elif (joker.get_rarity() == Rarity.uncommon):
-		match joker.data.id:
+	elif (data.rarity == Rarity.uncommon):
+		match data.id:
 			UncommonJokers.JokerStencil:
 				return score_stencil_joker(state.jokers, state.max_jokers)
 	
-	elif (joker.get_rarity() == Rarity.rare):
-		match joker.data.id:
+	elif (data.rarity == Rarity.rare):
+		match data.id:
 			RareJokers.TheDuo:
 				return score_the_duo(active_cards)
 			RareJokers.TheTrio:

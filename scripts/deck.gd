@@ -38,8 +38,9 @@ func deal():
 		var data = deck.pop_back()
 		var card = preload("res://scenes/card.tscn").instantiate()
 		
+				
 		for i in range(hand_size):
-			if hand[i] == {}:
+			if hand[i] == null:
 				hand[i] = data
 				cards_remaining -= 1
 				break
@@ -113,11 +114,11 @@ func score_animation(active_cards):
 
 		
 		# ENHANCEMENTS
-		var enhancevals = CardManager.get_enhancement_val(card)
+		var enhancevals = card.get_enhancement_val()
 		await game.add_resources(card, enhancevals)
 		
 		# EDITIONS
-		var editionvals = await CardManager.get_edition_val(card)
+		var editionvals = card.get_edition_val()
 		await game.add_resources(card, editionvals)
 		
 		# JOKER ON CARD
@@ -210,11 +211,11 @@ func get_index_from_node(node: Node2D) -> int:
 
 func create_hand():
 	for i in range(hand_size):
-		hand.append({})
+		hand.append(null)
 
 func clear_hand():
 	for i in range(hand_size):
-		hand[i] = {}
+		hand[i] = null
 
 func delete_hand():
 	for card in get_children():
@@ -227,7 +228,7 @@ func shuffle():
 
 func get_hand_position(card_id):
 	for i in range(hand_size):
-		if hand[i] == {}:
+		if hand[i] == null:
 			continue
 		if hand[i].id == card_id:
 			return i
@@ -277,28 +278,28 @@ func sort_hand():
 
 func sort_rank():	
 	hand.sort_custom(func(a, b):
-		if a.is_empty() and not b.is_empty():
+		if a == null and b != null:
 			return false
-		elif b.is_empty() and not a.is_empty():
+		elif b == null and a != null:
 			return true
-		elif a.is_empty() and b.is_empty():
+		elif a == null and b == null:
 			return false
 		
-		return a["rank"] < b["rank"]
+		return a.rank < b.rank
 	)
 	
 	return_hand()
 
 func sort_suit():	
 	hand.sort_custom(func(a, b):
-		if a.is_empty() and not b.is_empty():
+		if a == null and b != null:
 			return false
-		elif b.is_empty() and not a.is_empty():
+		elif b == null and a != null:
 			return true
-		elif a.is_empty() and b.is_empty():
+		elif a == null and b == null:
 			return false
 		
-		return a["suit"] > b["suit"]
+		return a.suit > b.suit
 	)
 	
 	return_hand()
@@ -309,7 +310,7 @@ func return_hand(reconfig_z = true):
 		if card.has_method("get_id"):
 			
 			for i in range(hand_size):
-				if hand[i] == {}:
+				if hand[i] == null:
 					continue
 				if card.get_id() == hand[i].id:
 					card.position.x = get_card_position(i, count_cards_in_hand())
@@ -339,7 +340,7 @@ func get_card_position(i, num_cards):
 func count_cards_in_hand():
 	var i = 0
 	for card in hand:
-		if card != {}:
+		if card != null:
 			i += 1
 	return i
 

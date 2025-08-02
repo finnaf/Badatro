@@ -35,15 +35,6 @@ enum Edition {
 	negative
 }
 
-enum CardType {
-	none,
-	card,
-	joker,
-	booster,
-	voucher,
-	consumable
-}
-
 enum VoucherType {
 	voucher,
 }
@@ -288,35 +279,6 @@ func convert_rank_to_chipvalue(rank: int) -> int:
 	if rank == 14:
 		return 11
 	return rank
-
-# returns value of enhancement chips, mult, xmult, money
-func get_enhancement_val(card) -> Dictionary:
-	match card.data.enhancement:
-		Enhancement.bonus:
-			return {"chips": 30}
-		Enhancement.mult:
-			return {"mult": 4}
-		Enhancement.glass:
-			return {"xmult": 2}
-		Enhancement.stone:
-			return {"chips": 50}
-		Enhancement.lucky:
-			# TODO chance
-			# and things like trigger lucky cat
-			return {"mult": 20, "money": 20}
-		_:
-			return {}
-
-func get_edition_val(card):
-	match card.data.edition:
-		Edition.foil:
-			return {"chips": 50}
-		Edition.holographic:
-			return {"mult": 10}
-		Edition.polychrome:
-			return {"xmult": 1.5}
-		_:
-			return {}
 	
 # kinda a stupid way of doing it, but need to calculate which of the cards
 # are the ones that fulfill the hand
@@ -359,54 +321,53 @@ func get_active_cards(cards, hand):
 	
 	return active_cards
 
-func get_card_cost(data: Dictionary, discount_percent: float) -> int:	
+func get_card_cost(data: CardData, discount_percent: float) -> int:	
 	var cost = 0
-	match data.type:
-		CardType.joker:
-			cost = JokerManager.get_joker(data.id, data.rarity, 0).cost
+	
+	if (data.is_joker()):
+		cost = JokerManager.get_joker(data.id, data.rarity, 0).cost
 		
-		CardType.booster:
-			if (data.booster_size == BoosterSize.normal):
-				cost += 4
-			elif (data.booster_size == BoosterSize.jumbo):
-				cost += 6
-			else: # mega
-				cost += 8
-		
-		CardType.voucher:
-			cost += 10
-		
-		CardType.consumable:
-			if (data.consumable_type == CardManager.ConsumableType.spectral):
-				cost += 4
-			else:
-				cost += 3
-		
-		CardType.card:
-			cost += 1
-		
-	if (data.has("edition")):
-		if (data.edition == Edition.foil):
-			cost += 2
-		elif (data.edition == Edition.holographic):
+	elif (data.is_booster()):
+		if (data.booster_size == BoosterSize.normal):
+			cost += 4
+		elif (data.booster_size == BoosterSize.jumbo):
+			cost += 6
+		else: # mega
+			cost += 8
+	
+	elif (data.is_voucher()):
+		cost += 10
+	
+	elif (data.is_consumable()):
+		if (data.consumable_type == CardManager.ConsumableType.spectral):
+			cost += 4
+		else:
 			cost += 3
-		elif (data.edition == Edition.polychrome or
-			data.edition == Edition.negative):
-			cost += 5
+	
+	elif (data.is_card()):
+		cost += 1
+		
+	if (data.edition == Edition.foil):
+		cost += 2
+	elif (data.edition == Edition.holographic):
+		cost += 3
+	elif (data.edition == Edition.polychrome or
+		data.edition == Edition.negative):
+		cost += 5
 			
 	cost = floor(cost * discount_percent)
 	if cost < 1:
 		return 1
 	return cost
 
-func get_sell_price(data: Dictionary, discount_percent: float) -> int:
+func get_sell_price(data: CardData, discount_percent: float) -> int:
 	var price = floor(get_card_cost(data, discount_percent) / 2)
 	if price < 1:
 		return 1
 	return price
 
 func get_suit_name(value: int) -> String:
-	for name in Suit:
-		if Suit[name] == value:
-			return name
+	for suit in Suit:
+		if Suit[suit] == value:
+			return suit
 	return "none"

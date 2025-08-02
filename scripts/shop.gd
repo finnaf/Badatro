@@ -32,7 +32,6 @@ const VOUCHER_X_OFFSET = -20
 @onready var deck_info = $"../Mat/DeckInfo"
 @onready var game = $".."
 
-
 @onready var RerollCostOnes = $ShopBackground/RerollButton/RerollCostOnes
 @onready var RerollCostTens = $ShopBackground/RerollButton/RerollCostTens
 @onready var RerollCostHundreds = $ShopBackground/RerollButton/RerollCostHundreds
@@ -42,8 +41,8 @@ func _ready():
 	RerollCostTens.modulate = Globals.YELLOW
 	RerollCostHundreds.modulate = Globals.YELLOW
 
-func set_seed(seed: int):
-	rng.seed = seed + 2
+func set_seed(s: int):
+	rng.seed = s + 2
 
 func prep_values():
 	cards_remaining = MAIN_MAX
@@ -91,6 +90,7 @@ func load_main():
 
 func get_main_card(xoffset: int):
 	var card = CARD.instantiate()
+	var data: CardData
 	
 	add_child(card)
 	card.position.x = xoffset
@@ -105,61 +105,40 @@ func get_main_card(xoffset: int):
 	var type_thresh = rng.randi_range(0, W_JOK + W_TAR + W_TAR)
 	
 	if type_thresh < W_JOK: # jok
-		var data = JokerManager.generate_joker_data()
-		card.setup({
-			#"id": data.id,
-			"id": JokerManager.UncommonJokers.JokerStencil,
-			"rarity": data.rarity,
-			"type": CardManager.CardType.joker,
-			"consumable_type": CardManager.ConsumableType.planet,
-			"edition": data.edition,
-		})
+		
+		data = JokerCardData.new()
+		
 	elif type_thresh < W_JOK + W_TAR: # tarot TODO
-		card.setup({
-			"id": 0,
-			"type": CardManager.CardType.consumable,
-			"consumable_type": CardManager.ConsumableType.planet,
-		})
+		
+		data = ConsumableCardData.new(CardManager.ConsumableType.planet)
 	else: # planet
-		card.setup({
-			"id": 1,
-			"type": CardManager.CardType.consumable,
-			"consumable_type": CardManager.ConsumableType.planet,
-		})
+		
+		data = ConsumableCardData.new(CardManager.ConsumableType.planet)
 	
+	data.set_shop_card()
+	data.update_variable()
 	card.display_cost()
-	card.set_shop_card()
-	jokers.update_variable(card)
+	card.setup(data)
 	main.append(card)
 
 func get_booster(xoffset: int):
 	var booster = CARD.instantiate()
-	
+	booster.setup(BoosterCardData.new())
 	add_child(booster)
 	booster.position.x = xoffset
 	booster.position.y = BOOSTER_OFFSET
-	booster.setup({
-				"id": CardManager.BoosterType.buffoon,
-				"type": CardManager.CardType.booster,
-				"booster_size": CardManager.BoosterSize.normal,
-				"booster_type": CardManager.BoosterType.buffoon
-			})
 	booster.display_cost()
-	booster.set_shop_card()
 	boosters.append(booster)
 
 func load_voucher():
 	var voucher = CARD.instantiate()
+	voucher.setup(VoucherCardData.new())
+	
 	add_child(voucher)
 	voucher.position.x = VOUCHER_X_OFFSET
 	voucher.position.y = BOOSTER_OFFSET
-	voucher.setup({
-				"id": CardManager.VoucherType.voucher,
-				"type": CardManager.CardType.voucher,
-			})
 	voucher.display_cost()
 	voucher.hide_cost_only()
-	voucher.set_shop_card()
 	vouchers.append(voucher)
 
 # returns offset, and starting offset
@@ -180,7 +159,7 @@ func get_card_x_offsets(total: int):
 func setup_connections():
 	update_buy_labels()
 	for card in get_children():
-		if card.has_method("is_flipped"): # is a card
+		if card.has_method("setup"): # is a card
 			card.connect("card_clicked", Callable(self, "_on_card_clicked"))
 			card.connect("button_click_forwarded", Callable(self, "_buy_attempt"))
 			card.connect("use_click_forwarded", Callable(self, "_use_attempt"))
@@ -192,7 +171,7 @@ func setup_booster_connections():
 
 # only one main section or booster card selected at a time
 func _on_card_clicked(card):
-	if (card.data.type == CardManager.CardType.booster):
+	if (card.data.is_booster()):
 		if (card == booster_select):
 			booster_select = null
 			card.shop_deselect()
@@ -216,23 +195,23 @@ func _buy_attempt(card):
 		return
 		
 	var cost = CardManager.get_card_cost(card.data, game.get_discount_percent())
-	if (card.data.type == CardManager.CardType.joker):
+	if (card.data.is_joker()):
 		if (jokers.is_full() or not game.spend_money(cost)):
 			return
 		buy_joker(card)
 	
-	elif (card.data.type == CardManager.CardType.consumable):
+	elif (card.data.is_consumable()):
 		if (consumables.is_full() or not game.spend_money(cost)):
 			return
 		buy_consumable(card)
 	
-	elif (card.data.type == CardManager.CardType.booster):
+	elif (card.data.is_booster()):
 		if (not game.spend_money(cost)):
 			return
 		open_booster(card)
 		
 	
-	elif (card.data.type == CardManager.CardType.voucher):
+	elif (card.data.is_voucher()):
 		if (game.spend_money(cost)):
 			buy_voucher(card)
 			game.voucher_count -= 1
@@ -262,7 +241,7 @@ func _get_clicked(card):
 	in_booster_select = null
 	in_booster_count -= 1
 	
-	if (card.data.type == CardManager.CardType.joker):
+	if (card.data.is_joker()):
 		buy_joker(card)
 	else:
 		print("invalid type got")
@@ -291,7 +270,7 @@ func _in_booster_card_clicked(card):
 func buy_joker(joker):
 	joker.shop_deselect()
 	joker.hide_buttons()
-	joker.unset_shop_card()
+	joker.data.unset_shop_card()
 	
 	remove_child(joker)
 	main.erase(joker)
@@ -302,7 +281,7 @@ func buy_joker(joker):
 func buy_consumable(consumable):
 	consumable.shop_deselect()
 	consumable.hide_buttons()
-	consumable.unset_shop_card()
+	consumable.data.unset_shop_card()
 	
 	remove_child(consumable)
 	main.erase(consumable)
@@ -349,16 +328,14 @@ func open_buffoon(size: CardManager.BoosterSize):
 		
 	for i in range(joker_count):
 		var joker = CARD.instantiate()
+		joker.setup(JokerCardData.new())
 		add_child(joker)
+		
 		booster_cards.append(joker)
 		
 		# create a card info, hide top cost
 		joker.set_shop_card()
-		
-		joker.position = Vector2((i*13), 5)
-		
-		var data = JokerManager.generate_joker_data()
-		joker.setup(data)
+		joker.position = Vector2((i*13), 5)		
 		joker.display_cost()
 		joker.card_buttons.switch_label(1)
 		joker.hide_cost_only()
@@ -392,7 +369,7 @@ func update_buy_labels():
 	for card in main:
 		if (card.card_buttons):
 			if (card.card_buttons.card_cost > game.money or 
-				(card.data.type == CardManager.CardType.joker and 
+				(card.data.is_joker() and 
 				jokers.is_full())):
 				card.card_buttons.disable()
 			else:
