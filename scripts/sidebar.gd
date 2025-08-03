@@ -48,22 +48,14 @@ func _ready():
 	game.updateMoneyUI.connect(_update_money)
 
 	# colouring
-	#roundones.modulate = Color(0, 0, 0)
-	#roundtens.modulate = Color(0, 0, 0)
-	#ante.modulate = Color(0, 0, 0)
-	#scoreones.modulate = Color(0, 0, 0)
-	#scoretens.modulate = Color(0, 0, 0)
-	#scorehundreds.modulate = Color(0, 0, 0)
-	#scorethousands.modulate = Color(0, 0, 0)
-	#scoretenthousands.modulate = Color(0, 0, 0)
-	#scorehundredthousands.modulate = Color(0, 0, 0)
-	#scoremillions.modulate = Color(0, 0, 0)
-	#scoretenmillions.modulate = Color(0, 0, 0)
+	roundones.modulate = Globals.MUSTARD
+	roundtens.modulate = Globals.MUSTARD
+	ante.modulate = Globals.BLACK
 	
+	_color_score_goal_black()
 	
 	moneytens.modulate = Globals.YELLOW
 	moneyones.modulate = Globals.YELLOW
-	#moneyones.modulate = Color(0.5, 0.5, 0.5) # grey
 	
 	discards.modulate = Globals.RED
 	hands.modulate = Globals.BLUE
@@ -73,6 +65,25 @@ func _ready():
 	
 	multthousands.frame = 1
 	multthousands.modulate = Globals.RED
+
+func _color_score_goal_black():
+	scoreones.modulate = Globals.BLACK
+	scoretens.modulate = Globals.BLACK
+	scorehundreds.modulate = Globals.BLACK
+	scorethousands.modulate = Globals.BLACK
+	scoretenthousands.modulate = Globals.BLACK
+	scorehundredthousands.modulate = Globals.BLACK
+	scoremillions.modulate = Globals.BLACK
+	scoretenmillions.modulate = Globals.BLACK
+	
+	goalones.modulate = Globals.BLACK
+	goaltens.modulate = Globals.BLACK
+	goalhundreds.modulate = Globals.BLACK
+	goalthousands.modulate = Globals.BLACK
+	goaltenthousands.modulate = Globals.BLACK
+	goalhundredthousands.modulate = Globals.BLACK
+	goalmillions.modulate = Globals.BLACK
+	goaltenmillions.modulate = Globals.BLACK
 
 func _on_play_button_pressed():
 	discardbutton.disabled = true
@@ -131,10 +142,10 @@ func update_chips():
 	
 	if digits[0] == 0:
 		chipthousands.frame = 1
-		chipthousands.modulate = Color(0.0, 0.650, 0.91)
+		chipthousands.modulate = Globals.BLUE
 	else:
 		chipthousands.frame = digits[0]
-		chipthousands.modulate = Color(1.0, 1.0, 1.0)
+		chipthousands.modulate = Globals.WHITE
 
 func update_mult():
 	var digits = Globals.convert_to_digits(game.mult, 4, 1999)
@@ -144,10 +155,10 @@ func update_mult():
 	
 	if digits[0] == 0:
 		multthousands.frame = 1
-		multthousands.modulate = Color(0.929, 0.11, 0.141)
+		multthousands.modulate = Globals.RED
 	else:
 		multthousands.frame = digits[0]
-		multthousands.modulate = Color(1.0, 1.0, 1.0)
+		multthousands.modulate = Globals.BLUE
 		
 func update_score():
 	var digits = Globals.convert_to_digits(game.score, 8, 99999999)

@@ -13,28 +13,20 @@ const symbol_frames = preload("res://resources/symbols.tres")
 # const GREEN = Color(0.016, 0.478, 0.102)
 # const DARKGREEN = Color(0.016, 0.376, 0.098)
 
+# ENDESCA 32
+
 const WHITE = Color("ffffff")
-const GREY = Color("bfc7d5")
-const BLACK = Color("4f6367")
-const RED = Color("fd5f55")
-const BLUE = Color("009cfd")
-const YELLOW = Color("fda200")
+const GREY = Color("c0cbdc")
+const BLACK = Color("181425")
+const RED = Color("ff0044")
+const BLUE = Color("0099db")
+const YELLOW = Color("feae34") # money col
 
-const LIGHTGREEN = Color("74cca8")
-const GREEN = Color("56a786")
-const DARKGREEN = Color("459373")
+const GREEN = Color("3e8948") # mat/reroll col
+const DARKGREEN = Color("265c42") # joker/consum area
 
-const PINK = Color("ff9690")
-const DEEPRED = Color("c14139")
+const MUSTARD = Color("f77622") # for low importance text
 
-const LIGHTBLUE = Color("3cb4ff")
-const DARKBLUE = Color("008be3")
-
-const DARKYELLOW = Color("ea9600")
-const MUSTARD = Color("c88000")
-
-const LIGHTBROWN = Color("b7a88a")
-const DARKBROWN = Color("847f66")
 
 enum ResourceType {
 	chips,
