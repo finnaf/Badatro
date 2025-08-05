@@ -3,18 +3,8 @@ extends Node
 var digit_frames
 const symbol_frames = preload("res://resources/symbols.tres")
 
-# OLD VALS
-# const YELLOW = Color(1, 0.7, 0.1)
-# const RED = Color(0.929, 0.11, 0.141)
-# const BLUE = Color(0.0, 0.650, 0.91)
-# const WHITE = Color(1.0,1.0,1.0)
-# const BLACK = Color(0.0,0.0,0.0)
-# const GREY = Color(0.498, 0.498, 0.498)
-# const GREEN = Color(0.016, 0.478, 0.102)
-# const DARKGREEN = Color(0.016, 0.376, 0.098)
 
 # ENDESCA 32
-
 const WHITE = Color("ffffff")
 const GREY = Color("c0cbdc")
 const BLACK = Color("181425")
@@ -25,7 +15,7 @@ const YELLOW = Color("feae34") # money col
 const GREEN = Color("3e8948") # mat/reroll col
 const DARKGREEN = Color("265c42") # joker/consum area
 
-const MUSTARD = Color("f77622") # for low importance text
+const MUSTARD = Color("f77622") # diamonds, low importance text
 
 
 enum ResourceType {

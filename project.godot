@@ -23,6 +23,7 @@ Globals="*res://scripts/globals/globals.gd"
 JokerManager="*res://scripts/globals/JokerManager.gd"
 MouseManager="*res://scripts/globals/MouseManager.gd"
 ConsumableManager="*res://scripts/globals/ConsumableManager.gd"
+VoucherManager="*res://scripts/globals/VoucherManager.gd"
 
 [display]
 

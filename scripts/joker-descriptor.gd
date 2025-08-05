@@ -24,7 +24,7 @@ func _init(desc_data: Dictionary, joker_data: JokerCardData):
 		JokerManager.Rarity.common:
 			col = Globals.BLUE
 		JokerManager.Rarity.uncommon:
-			col = Globals.GREEN
+			col = Globals.DARKGREEN
 		JokerManager.Rarity.rare:
 			col = Globals.RED
 
@@ -135,6 +135,9 @@ func _do_condition(cond, bot_x, bot_y, sprites):
 			bot_x = _place_symbol(14, DIGIT_SIZE, bot_x, bot_y, sprites)
 		JokerManager.Condition.clubs:
 			bot_x = _place_symbol(15, DIGIT_SIZE, bot_x, bot_y, sprites)
+		
+		JokerManager.Condition.face: # TODO
+			pass
 	
 		JokerManager.Condition.highcard:
 			bot_x = _place_symbol(16, HAND_SYM_SIZE, bot_x, bot_y, sprites)

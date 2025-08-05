@@ -1,9 +1,21 @@
 class_name VoucherCardData
 extends CardData
 
-func _init():
-	id = 0
+func _init(pool: Array, rng: RandomNumberGenerator, force_id: int):
+	if (force_id != -1):
+		id = force_id
+		set_shop_card()
+		return
+	
+	if (pool.size() == 0):
+		id = VoucherManager.Voucher.Blank
+	
+	var index = rng.randi() % pool.size()
+	var id = pool[index]
 	set_shop_card()
+
+func use():
+	pass
 
 func get_cost(discount_percent: float) -> int:	
 	var cost = 10

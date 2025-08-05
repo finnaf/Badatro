@@ -129,7 +129,7 @@ func _ready():
 		jokers_by_rarity[rarity].append(id)
 
 
-func new_game(seed: int):
+func set_seeds(seed: int):
 	rng_joker.seed = seed + 1
 	rng.seed = seed + 3
 
@@ -363,8 +363,9 @@ var joker_info = {
 			"benefit_0" : Benefit.addmult,
 			"benefit_1" : Benefit.multnum,
 			"benefit_val_1" : 15,
-			"connective" : Connective.contains, # when -> 0D
-			"condition_0" : Condition.flush, # TODO
+			"connective" : Connective.contains, # when -> 0D TODO ADD "W"
+			"condition_0" : Condition.zero,
+			"condition_1" : Condition.discards, # TODO
 	},
 	Jokers.Misprint: {
 			"name" : "Misprint",
@@ -401,6 +402,7 @@ var joker_info = {
 	Jokers.ScaryFace: {
 			"name" : "Scary Face",
 			"rarity" : Rarity.common,
+			"trigger_func" : trigger_scary_face,
 			"cost" : 4,
 			"description" : "Played face cards give +30 Chips when scored",
 			"benefit_0" : Benefit.addchips,
@@ -412,7 +414,7 @@ var joker_info = {
 	Jokers.AbstractJoker: {
 			"name" : "Abstract Joker",
 			"rarity" : Rarity.common,
-			#"score_func" : score_abstract_joker,
+			"score_func" : score_abstract_joker,
 			"cost" : 4,
 			"description" : "+3 Mult for each Joker card",
 			"benefit_0" : Benefit.addmult,
@@ -421,6 +423,8 @@ var joker_info = {
 			"connective" : Connective.for_,
 			"condition_0" : Condition.joker,
 	},
+	
+	# UNCOMMON JOKERS
 	Jokers.JokerStencil: {
 			"name" : "Joker Stencil",
 			"rarity" : Rarity.uncommon,
@@ -433,6 +437,8 @@ var joker_info = {
 			"connective" : Connective.for_,
 			"condition_0" : Condition.joker,
 	},
+	
+	# RARE JOKERS
 	Jokers.TheDuo: {
 			"name" : "The Duo",
 			"rarity" : Rarity.rare,
@@ -557,7 +563,7 @@ func score_misprint(joker, gamestate) -> Dictionary:
 	if (val == 0):
 		return {}
 	return {"mult": val}
-func score_raised_fist(jokerv, gamestate) -> Dictionary:
+func score_raised_fist(joker, gamestate) -> Dictionary:
 	var hand = gamestate.hand
 	if (hand.size() == 0):
 		return {}
@@ -574,7 +580,10 @@ func score_raised_fist(jokerv, gamestate) -> Dictionary:
 	)
 	
 	return {"mult": hand[0].rank}
-
+func score_abstract_joker(joker, gamestate) -> Dictionary:
+	if (gamestate.jokers.size() > 0):
+		return {"mult": gamestate.jokers.size() * 3}
+	return {}
 
 # uncommon jokers
 func score_joker_stencil(joker, gamestate) -> Dictionary: # needs joker size and joker count

@@ -22,7 +22,9 @@ var ante = 1
 var round = 1
 var blind = 0 # 0, 1 or 2
 
+# vouchers
 var voucher_count = 1
+var discount_percent = 1
 
 const BASE_REROLL_COST = 5
 var reroll_cost = 5
@@ -82,6 +84,27 @@ var hands_played = {
 	"high card": 0
 }
 
+# pool of vouchers (grows/shrinks to none)
+var pool = [
+	VoucherManager.Voucher.Overstock,
+	VoucherManager.Voucher.ClearanceSale,
+	VoucherManager.Voucher.Hone,
+	VoucherManager.Voucher.RerollSurplus,
+	VoucherManager.Voucher.CrystalBall,
+	VoucherManager.Voucher.Telescope,
+	VoucherManager.Voucher.Observatory,
+	VoucherManager.Voucher.Grabber,
+	VoucherManager.Voucher.Wasteful,
+	VoucherManager.Voucher.TarotMechant,
+	VoucherManager.Voucher.PlanetMerchant,
+	VoucherManager.Voucher.SeedMoney,
+	VoucherManager.Voucher.Blank,
+	VoucherManager.Voucher.MagicTrick,
+	VoucherManager.Voucher.Hieroglyph,
+	VoucherManager.Voucher.DirectorsCut,
+	VoucherManager.Voucher.PaintBrush
+]
+
 signal updateMoneyUI
 signal updateScoreUI
 signal updateGoalUI
@@ -94,8 +117,8 @@ func _ready():
 func setup(game_seed: int):
 	seed = game_seed
 	seed(seed) 							# for shuffling cards
-	shop.set_seed(game_seed) 			# for what type will appear
-	JokerManager.new_game(game_seed)	# for drawing jokers and in card rng
+	shop.set_seed(game_seed) 			# for main type, & vouchers
+	JokerManager.set_seeds(game_seed)	# for drawing jokers and in card rng
 	
 	gamespeed = GAMESPEED
 	
@@ -129,10 +152,19 @@ func get_hand_size():
 	var hand_size = BASEHANDSIZE
 	return hand_size
 
+
+func is_voucher():
+	if voucher_count > 0:
+		return true
+	return false
+
+func get_voucher_pool() -> Array:
+	return pool
+
 func get_discount_percent():
 	# clearance sale = 0.75
 	# liquidation = 0.5
-	return 1
+	return discount_percent
 
 func get_money_gained():
 	if blind == 0:
@@ -203,10 +235,6 @@ func play(cards: Array):
 func process_reroll():
 	reroll_cost += 1
 
-func is_voucher():
-	if voucher_count > 0:
-		return true
-	return false
 
 # returns false if doesn't succeed
 func spend_money(cost: int) -> bool:

@@ -2,7 +2,7 @@ extends Node2D
 
 const CARD = preload("res://scenes/card.tscn")
 
-var MAIN_MAX = 2 # dont go above 5
+const MAIN_STANDARD_SIZE = 2
 var cards_remaining
 var packs_remaining
 var vouchers_remaining
@@ -45,7 +45,7 @@ func set_seed(s: int):
 	rng.seed = s + 2
 
 func prep_values():
-	cards_remaining = MAIN_MAX
+	cards_remaining = MAIN_STANDARD_SIZE
 	packs_remaining = 2
 	vouchers_remaining = 1
 	self.visible = true
@@ -65,7 +65,7 @@ func close():
 	for pack in boosters:
 		pack.queue_free()
 	for voucher in vouchers:
-		voucher.queue_free()
+		voucher.hide()
 	self.visible = false
 	main.clear()
 	boosters.clear()
@@ -80,7 +80,7 @@ func load_cards():
 		get_booster(offsets[1] + (i*offsets[0]))
 	
 	if game.is_voucher():
-		load_voucher()
+		load_voucher(game.get_ante_voucher())
 
 # load the main section of the shop
 func load_main():
@@ -130,11 +130,16 @@ func get_booster(xoffset: int):
 	booster.display_cost()
 	boosters.append(booster)
 
-func load_voucher():
+func load_voucher(force_voucher_id: int):
 	var voucher = CARD.instantiate()
 	add_child(voucher)
 	
-	voucher.setup(VoucherCardData.new())
+	# pass in rng (voucher affects shop pool)
+	voucher.setup(VoucherCardData.new(
+		game.get_voucher_pool(),
+		rng,
+		force_voucher_id
+	))
 	voucher.position.x = VOUCHER_X_OFFSET
 	voucher.position.y = BOOSTER_OFFSET
 	voucher.display_cost()
@@ -289,7 +294,8 @@ func buy_consumable(consumable):
 	
 	consumables.add(consumable)
 
-func buy_voucher(voucher):
+func buy_voucher(voucher: Area2D):
+	voucher.data.use()
 	vouchers.erase(voucher)
 	voucher.queue_free()
 
