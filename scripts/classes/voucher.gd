@@ -1,12 +1,7 @@
 class_name VoucherCardData
 extends CardData
 
-func _init(pool: Array, rng: RandomNumberGenerator, force_id: int):
-	if (force_id != -1):
-		id = force_id
-		set_shop_card()
-		return
-	
+func _init(pool: Array, rng: RandomNumberGenerator):
 	if (pool.size() == 0):
 		id = VoucherManager.Voucher.Blank
 	

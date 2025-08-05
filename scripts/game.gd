@@ -23,6 +23,7 @@ var round = 1
 var blind = 0 # 0, 1 or 2
 
 # vouchers
+var shop_ante_reset = false
 var voucher_count = 1
 var discount_percent = 1
 
@@ -302,9 +303,19 @@ func cashout():
 	shop.open()
 	state = states.SHOPPING
 
+
+# if the shop has been reset for the ante (vouchers)
+func has_shop_ante_reset() -> bool:
+	if (not shop_ante_reset):
+		shop_ante_reset = true
+		return false
+	
+	return true
+
 func update_blind():
 	blind += 1
 	if blind > 2:
+		shop_ante_reset = false
 		voucher_count = 1
 		blind = 0
 		ante += 1

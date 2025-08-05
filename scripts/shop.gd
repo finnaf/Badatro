@@ -16,6 +16,7 @@ var booster_cards: Array = []
 
 var main_select = null
 var booster_select = null
+var voucher_select = null
 
 var in_booster_select = null
 var in_booster: bool = false
@@ -64,12 +65,15 @@ func close():
 		card.queue_free()
 	for pack in boosters:
 		pack.queue_free()
-	for voucher in vouchers:
+	for voucher in vouchers: # only delete at the start of next ante
+		if (voucher == voucher_select):
+			voucher_select = null
+			voucher.shop_deselect()
 		voucher.hide()
+	
 	self.visible = false
 	main.clear()
 	boosters.clear()
-	vouchers.clear()
 	deck_info.exit_shop()
 
 func load_cards():
@@ -80,7 +84,7 @@ func load_cards():
 		get_booster(offsets[1] + (i*offsets[0]))
 	
 	if game.is_voucher():
-		load_voucher(game.get_ante_voucher())
+		load_voucher()
 
 # load the main section of the shop
 func load_main():
@@ -130,15 +134,26 @@ func get_booster(xoffset: int):
 	booster.display_cost()
 	boosters.append(booster)
 
-func load_voucher(force_voucher_id: int):
+func load_voucher():
+	# logic only handles one voucher rn
+	if (not vouchers.is_empty()):
+		if game.has_shop_ante_reset():
+			for voucher in vouchers:
+				voucher.queue_free()
+			vouchers.clear()
+		else:
+			for voucher in vouchers:
+				voucher.show()
+			return
+	
+	
 	var voucher = CARD.instantiate()
 	add_child(voucher)
 	
 	# pass in rng (voucher affects shop pool)
 	voucher.setup(VoucherCardData.new(
 		game.get_voucher_pool(),
-		rng,
-		force_voucher_id
+		rng
 	))
 	voucher.position.x = VOUCHER_X_OFFSET
 	voucher.position.y = BOOSTER_OFFSET
@@ -185,7 +200,16 @@ func _on_card_clicked(card):
 				booster_select.shop_deselect()
 			booster_select = card
 			card.shop_select()
-	else:
+	elif (card.data.is_voucher()):
+		if (card == voucher_select):
+			voucher_select = null
+			card.shop_deselect()
+		else:
+			if voucher_select != null:
+				voucher_select.shop_deselect()
+			voucher_select = card
+			card.shop_select()
+	else: # must be a main section card
 		if (card == main_select):
 			main_select = null
 			card.shop_deselect()
