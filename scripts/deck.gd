@@ -64,6 +64,7 @@ func _on_play_button_pressed():
 	await count_animation(active_cards)
 	await score_animation(active_cards)
 	await jokers.score_jokers(active_cards)
+	# SCORE HELD IN HAND CARDS
 	
 	# free
 	for card in selected_cards:

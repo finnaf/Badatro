@@ -38,7 +38,7 @@ func setup(new_data: CardData):
 	if (data.is_card()):
 		var d := data as PlayingCardData
 		set_card_tex(d.rank, d.suit)
-		set_enhance_tex(CardManager.Enhancement.mult)
+		set_enhance_tex(d.enhancement)
 	elif (data.is_joker()):
 		var d := data as JokerCardData
 		set_joker_tex(d.id, d.rarity)
@@ -57,10 +57,11 @@ func set_card_tex(rank: int, suit: int):
 	var tex := AtlasTexture.new()
 	tex.atlas = card_atlas
 	tex.region = Rect2(
-		Vector2((rank-1) * SIZE.x, suit * SIZE.y),
+		Vector2((rank-2) * SIZE.x, suit * SIZE.y),
 		SIZE
 	)
 	image.texture = tex
+	image.show()
 
 func set_enhance_tex(enhance: CardManager.Enhancement):	
 	const SIZE = Vector2(11, 13)
@@ -71,6 +72,10 @@ func set_enhance_tex(enhance: CardManager.Enhancement):
 		SIZE
 	)
 	enhancement.texture = tex
+	
+	# stone cards dont have a visible rank/suit
+	if (enhance == CardManager.Enhancement.stone):
+		image.hide()
 
 func set_joker_tex(joker_id, rarity):	
 	var path = ("res://images/cards/jokers/%s/%s.png" % 
@@ -153,6 +158,9 @@ func _on_drag_end():
 	dragged.emit(self)
 
 func on_clicked():
+	print("enhancement:", data.enhancement)
+	print("rank:", data.rank, "suit", data.suit)
+	
 	if (data.is_joker()):
 		var jok_data = JokerManager.joker_info[get_id()]
 		print(
@@ -164,7 +172,7 @@ func on_clicked():
 		)
 			
 	emit_signal("card_clicked", self)
-
+	
 func on_mouse_entered():
 	if (MouseManager.is_dragging or MouseManager.card_disabled(self)):
 		return

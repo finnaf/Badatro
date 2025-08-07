@@ -13,6 +13,8 @@ func _init(i: int, r: int, s: CardManager.Suit):
 	id = i
 	rank = r
 	suit = s
+	
+	enhancement = randi_range(0,8)
 
 # returns value of enhancement chips, mult, xmult, money
 func get_enhancement_val() -> Dictionary:
