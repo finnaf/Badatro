@@ -5,16 +5,18 @@ signal button_click_forwarded(card)
 signal use_click_forwarded(card)
 signal dragged(card)
 
+
 const card_atlas = preload("res://images/cards/cards/cards.png")
+const enhance_atlas = preload("res://images/cards/enhancements/enhancements.png")
 @export var symbols: SpriteFrames
 
 @onready var image: Sprite2D = $Image
+@onready var enhancement: Sprite2D = $Background
 @onready var anim: AnimationPlayer = $AnimationPlayer
 @onready var box: Script = preload("res://scripts/joker-descriptor.gd")
 
 var is_focused: bool = false
 
-var tex: Texture2D = null
 var card_buttons: Sprite2D = null
 var desc_box: Node2D = null
 
@@ -36,6 +38,7 @@ func setup(new_data: CardData):
 	if (data.is_card()):
 		var d := data as PlayingCardData
 		set_card_tex(d.rank, d.suit)
+		set_enhance_tex(CardManager.Enhancement.mult)
 	elif (data.is_joker()):
 		var d := data as JokerCardData
 		set_joker_tex(d.id, d.rarity)
@@ -49,38 +52,51 @@ func setup(new_data: CardData):
 		var d := data as ConsumableCardData
 		set_consumable_tex(d.consumable_type, d.id)
 	
-func set_card_tex(rank: int, suit: int):
-	var suit_str = CardManager.get_suit_name(suit)
-	var path = "res://images/cards/%s/%s%s.png" % [suit_str, str(rank), suit_str]
-	tex = CardManager.get_card_texture(path)
-	if tex:
-		image.texture = tex
-	
+func set_card_tex(rank: int, suit: int):	
+	const SIZE = Vector2(11, 13)
+	var tex := AtlasTexture.new()
+	tex.atlas = card_atlas
+	tex.region = Rect2(
+		Vector2((rank-1) * SIZE.x, suit * SIZE.y),
+		SIZE
+	)
+	image.texture = tex
+
+func set_enhance_tex(enhance: CardManager.Enhancement):	
+	const SIZE = Vector2(11, 13)
+	var tex := AtlasTexture.new()
+	tex.atlas = enhance_atlas
+	tex.region = Rect2(
+		Vector2(((enhance) * SIZE.x) + enhance, 0),
+		SIZE
+	)
+	enhancement.texture = tex
+
 func set_joker_tex(joker_id, rarity):	
 	var path = ("res://images/cards/jokers/%s/%s.png" % 
 				[JokerManager.get_rarity_string(rarity), 
 				JokerManager.get_joker_shortname(joker_id, rarity)])
 	
-	tex = CardManager.get_card_texture(path)
+	var tex = CardManager.get_card_texture(path)
 	if tex:
 		image.texture = tex
 func set_booster_tex(booster: CardManager.BoosterType, size: CardManager.BoosterSize):	
 	var path = ("res://images/cards/boosters/%s-%s.png" % 
 				[str(booster), str(size)])
-	tex = CardManager.get_card_texture(path)
+	var tex = CardManager.get_card_texture(path)
 	if tex:
 		image.texture = tex
 func set_voucher_tex(voucher: VoucherManager.Voucher):
 	var path = ("res://images/cards/vouchers/%s.png" % 
 				[VoucherManager.get_voucher_name(voucher)])
-	tex = CardManager.get_card_texture(path)
+	var tex = CardManager.get_card_texture(path)
 	if tex:
 		image.texture = tex
 func set_consumable_tex(consumable: ConsumableManager.ConsumableType, id):
 	match consumable:
 		ConsumableManager.ConsumableType.planet:
 			var path = ("res://images/cards/planets/planet_bg.png")
-			tex = CardManager.get_card_texture(path)
+			var tex = CardManager.get_card_texture(path)
 			if tex:
 				image.texture = tex
 			
