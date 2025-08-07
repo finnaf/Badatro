@@ -41,7 +41,7 @@ func deal():
 				
 		for i in range(hand_size):
 			if hand[i] == null:
-				hand[i] = data
+				hand[i] = card
 				cards_remaining -= 1
 				break
 
@@ -64,7 +64,7 @@ func _on_play_button_pressed():
 	await count_animation(active_cards)
 	await score_animation(active_cards)
 	await jokers.score_jokers(active_cards)
-	# SCORE HELD IN HAND CARDS
+	await hand_animation()
 	
 	# free
 	for card in selected_cards:
@@ -109,14 +109,16 @@ func score_animation(active_cards):
 		
 		var card = active_cards[active_cards.size()-i]
 		
-		# CHIPS
-		var cardval = CardManager.convert_rank_to_chipvalue(card.get_rank())
-		await game.add_resources(card, {"chips" : cardval})
-
-		
-		# ENHANCEMENTS
-		var enhancevals = card.data.get_enhancement_val()
-		await game.add_resources(card, enhancevals)
+		# CHIPS & ENHANCEMENTS
+		var vals : Dictionary = card.data.get_enhancement_score_val()
+		var chips = 0
+		if (not card.data.is_stone_card()):
+			chips = CardManager.convert_rank_to_chipvalue(card.get_rank())
+			if (vals.has("chips")):
+				vals.chips += chips
+			else: # add a chips key
+				vals["chips"] = chips
+		await game.add_resources(card, vals)
 		
 		# EDITIONS
 		var editionvals = card.data.get_edition_val()
@@ -128,6 +130,13 @@ func score_animation(active_cards):
 			await game.add_resources(card, cardvals)
 	
 	await get_tree().create_timer(game.get_speed()).timeout
+
+func hand_animation():
+	for i in range(hand.size()):
+		var card = hand[hand.size()-1-i]
+		if (card):
+			await game.add_resources(card, 
+				card.data.get_enhancement_held_val())
 
 func sort_by_position(array) -> Array:
 	array.sort_custom(func(a, b):
@@ -191,21 +200,21 @@ func _on_card_dragged(dragged_card):
 				furthest_card = card
 	
 	if (furthest_card != null):
-		hand.erase(dragged_card.data)
+		hand.erase(dragged_card)
 		
 		var index = get_index_from_node(furthest_card)
-		hand.insert(index, dragged_card.data)
+		hand.insert(index, dragged_card)
 		return_hand(false)
 	
 	# dragged to the leftmost position
 	else:
-		hand.erase(dragged_card.data)
-		hand.append(dragged_card.data)
+		hand.erase(dragged_card)
+		hand.append(dragged_card)
 		return_hand(false)		
 
 func get_index_from_node(node: Node2D) -> int:
 	for i in range(hand.size()):
-		if (hand[i].id == node.get_id()):
+		if (hand[i].data.id == node.get_id()):
 			return i
 	return -1
 
@@ -231,7 +240,7 @@ func get_hand_position(card_id):
 	for i in range(hand_size):
 		if hand[i] == null:
 			continue
-		if hand[i].id == card_id:
+		if hand[i].data.id == card_id:
 			return i
 	return -1
 
@@ -279,30 +288,29 @@ func sort_hand():
 
 func sort_rank():	
 	hand.sort_custom(func(a, b):
-		if a == null and b != null:
+		if a.data == null and b.data != null:
 			return false
-		elif b == null and a != null:
+		elif b.data == null and a.data != null:
 			return true
-		elif a == null and b == null:
+		elif a.data == null and b.data == null:
 			return false
 		
-		return a.rank < b.rank
+		return a.data.rank < b.data.rank
 	)
 	
 	return_hand()
 
 func sort_suit():	
 	hand.sort_custom(func(a, b):
-		if a == null and b != null:
+		if a.data == null and b.data != null:
 			return false
-		elif b == null and a != null:
+		elif b.data == null and a.data != null:
 			return true
-		elif a == null and b == null:
+		elif a.data == null and b.data == null:
 			return false
 		
-		return a.suit > b.suit
+		return a.data.suit > b.data.suit
 	)
-	
 	return_hand()
 
 # place cards into hand order
@@ -313,7 +321,7 @@ func return_hand(reconfig_z = true):
 			for i in range(hand_size):
 				if hand[i] == null:
 					continue
-				if card.get_id() == hand[i].id:
+				if card.get_id() == hand[i].data.id:
 					card.position.x = get_card_position(i, count_cards_in_hand())
 					
 					if card in selected_cards:

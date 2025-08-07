@@ -14,10 +14,11 @@ func _init(i: int, r: int, s: CardManager.Suit):
 	rank = r
 	suit = s
 	
-	enhancement = randi_range(0,8)
+	#enhancement = randi_range(0,8)
+	enhancement = CardManager.Enhancement.gold
 
 # returns value of enhancement chips, mult, xmult, money
-func get_enhancement_val() -> Dictionary:
+func get_enhancement_score_val() -> Dictionary:
 	match enhancement:
 		CardManager.Enhancement.bonus:
 			return {"chips": 30}
@@ -31,6 +32,19 @@ func get_enhancement_val() -> Dictionary:
 			# TODO: Lucky enhancement effects
 			return {"mult": 20, "money": 20}
 	return {}
+
+func get_enhancement_held_val() -> Dictionary:
+	match enhancement:
+		CardManager.Enhancement.steel:
+			return {"xmult": 1.5}
+		CardManager.Enhancement.gold:
+			return {"money": 3}
+	return {}
+
+func is_stone_card():
+	if enhancement == CardManager.Enhancement.stone:
+		return true
+	return false
 
 func get_cost(discount_percent: float) -> int:		
 	var cost = 1

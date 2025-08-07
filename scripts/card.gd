@@ -157,10 +157,7 @@ func _on_drag_motion(event):
 func _on_drag_end():
 	dragged.emit(self)
 
-func on_clicked():
-	print("enhancement:", data.enhancement)
-	print("rank:", data.rank, "suit", data.suit)
-	
+func on_clicked():	
 	if (data.is_joker()):
 		var jok_data = JokerManager.joker_info[get_id()]
 		print(
