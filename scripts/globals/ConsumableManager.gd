@@ -1,5 +1,12 @@
 extends Node
 
+enum ConsumableType {
+	none,
+	planet,
+	arcana,
+	spectral,
+}
+
 var planet_values = {
 	"flush five": [50, 3],
 	"flush house": [40, 4],
@@ -19,10 +26,10 @@ var planet_values = {
 # pass in card select state
 func can_use(selected_cards: Array, consumable: Node) -> bool:
 	
-	if (consumable.is_planet()):
+	if (consumable.data.is_planet()):
 		return true
 	
-	return true
+	return false
 
 
 func get_planet_name(value: int) -> String:

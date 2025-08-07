@@ -35,10 +35,6 @@ enum Edition {
 	negative
 }
 
-enum VoucherType {
-	voucher,
-}
-
 enum BoosterType {
 	buffoon,
 	arcana,
@@ -51,13 +47,6 @@ enum BoosterSize {
 	normal,
 	jumbo,
 	mega
-}
-
-enum ConsumableType {
-	none,
-	planet,
-	arcana,
-	spectral,
 }
 
 var base_values = {

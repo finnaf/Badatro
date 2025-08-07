@@ -5,6 +5,7 @@ signal button_click_forwarded(card)
 signal use_click_forwarded(card)
 signal dragged(card)
 
+const card_atlas = preload("res://images/cards/cards/cards.png")
 @export var symbols: SpriteFrames
 
 @onready var image: Sprite2D = $Image
@@ -54,6 +55,7 @@ func set_card_tex(rank: int, suit: int):
 	tex = CardManager.get_card_texture(path)
 	if tex:
 		image.texture = tex
+	
 func set_joker_tex(joker_id, rarity):	
 	var path = ("res://images/cards/jokers/%s/%s.png" % 
 				[JokerManager.get_rarity_string(rarity), 
@@ -68,14 +70,15 @@ func set_booster_tex(booster: CardManager.BoosterType, size: CardManager.Booster
 	tex = CardManager.get_card_texture(path)
 	if tex:
 		image.texture = tex
-func set_voucher_tex(voucher: CardManager.VoucherType):
-	var path = ("res://images/cards/vouchers/voucher.png")
+func set_voucher_tex(voucher: VoucherManager.Voucher):
+	var path = ("res://images/cards/vouchers/%s.png" % 
+				[VoucherManager.get_voucher_name(voucher)])
 	tex = CardManager.get_card_texture(path)
 	if tex:
 		image.texture = tex
-func set_consumable_tex(consumable: CardManager.ConsumableType, id):
+func set_consumable_tex(consumable: ConsumableManager.ConsumableType, id):
 	match consumable:
-		CardManager.ConsumableType.planet:
+		ConsumableManager.ConsumableType.planet:
 			var path = ("res://images/cards/planets/planet_bg.png")
 			tex = CardManager.get_card_texture(path)
 			if tex:

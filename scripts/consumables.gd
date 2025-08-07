@@ -1,5 +1,7 @@
 extends Sprite2D
 
+# TODO fix
+
 @onready var game = $"../.."
 
 var consum_select = null
@@ -19,7 +21,7 @@ func add(consum):
 
 func use(selected_cards: Array, consumable: Node):
 	
-	if (consumable.is_planet()):
+	if (consumable.data.is_planet()):
 		var hand = ConsumableManager.get_planet_name(consumable.data.id)
 		print(hand, " ", consumable.data.id)
 		await game.upgrade_hand(hand)
@@ -46,7 +48,8 @@ func _delete_consumable(card):
 	card.queue_free()
 
 func _on_sell(card):
-	game.add_money(CardManager.get_sell_price(card.data, 1))
+	var cost = card.data.get_cost(game.get_discount_percent())
+	game.add_money(cost)
 	_delete_consumable(card)
 # 
 func use_attempt(card):

@@ -16,13 +16,17 @@ extends VBoxContainer
 @onready var moneyhands = $MoneyHands/MoneyHands
 @onready var moneyhandsgained = $MoneyHands/MoneyHandsGainedOnes
 
+@onready var moneyinterest = $MoneyInterest
+@onready var moneyinterestgained = $MoneyInterest/MoneyInterestGainedOnes
+
 func _ready():
 	game.updateCashoutUI.connect(_update_cashout)
 	
 	moneygoalgained.modulate = Globals.YELLOW
 	moneyhandsgained.modulate = Globals.YELLOW
+	moneyinterestgained.modulate = Globals.YELLOW
 	
-	moneyhands.modulate = Color(0.0, 0.650, 0.91)
+	moneyhands.modulate = Globals.BLUE
 
 func _update_cashout(req: int):
 	var digits = convert_to_digits(req, 8, 99999999)
@@ -39,6 +43,9 @@ func _update_cashout(req: int):
 	
 	moneyhands.frame = game.hands
 	moneyhandsgained.frame = game.hands * 2
+	
+	# make sure its money before update
+	moneyinterestgained.frame = min(floori(game.money / 5), 5)
 
 func convert_to_digits(number, length: int, max) -> Array:
 	if number > max:

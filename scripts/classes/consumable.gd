@@ -1,16 +1,16 @@
 class_name ConsumableCardData
 extends CardData
 
-var consumable_type: CardManager.ConsumableType
+var consumable_type: ConsumableManager.ConsumableType
 
-func _init(type: CardManager.ConsumableType):
+func _init(type: ConsumableManager.ConsumableType):
 	consumable_type = type
 	id = 0
 
 func get_cost(discount_percent: float) -> int:	
 	var cost = 0
 	
-	if (consumable_type == CardManager.ConsumableType.spectral):
+	if (consumable_type == ConsumableManager.ConsumableType.spectral):
 		cost += 4
 	else:
 		cost += 3
@@ -22,3 +22,7 @@ func get_cost(discount_percent: float) -> int:
 
 func is_consumable() -> bool:
 	return true
+func is_planet() -> bool:
+	if (consumable_type == ConsumableManager.ConsumableType.planet):
+		return true
+	return false

@@ -37,6 +37,27 @@ enum Voucher {
 	Palette # +1 hand size
 }
 
+func get_voucher_name(id: Voucher) -> String:
+	match id:
+		Voucher.Overstock:
+			return "Overstock"
+		Voucher.OverstockPlus:
+			return "OverstockPlus"
+		Voucher.ClearanceSale:
+			return "ClearanceSale"
+		Voucher.Liquidation:
+			return "Liquidation"
+		_:
+			return "Blank"
+
+# TODO figure out how global nodes can talk to an instance
+# (eventually wil instantiate a game)
+
+func use_overstock():
+	pass
+func use_overstock_plus():
+	pass
+
 func use_clearance_sale():
 	game.discount_percent = 0.75
 func use_liquidation():

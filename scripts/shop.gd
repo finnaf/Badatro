@@ -115,10 +115,10 @@ func get_main_card(xoffset: int):
 		
 	elif type_thresh < W_JOK + W_TAR: # tarot TODO
 		
-		data = ConsumableCardData.new(CardManager.ConsumableType.planet)
+		data = ConsumableCardData.new(ConsumableManager.ConsumableType.planet)
 	else: # planet
 		
-		data = ConsumableCardData.new(CardManager.ConsumableType.planet)
+		data = ConsumableCardData.new(ConsumableManager.ConsumableType.planet)
 	
 	data.set_shop_card()
 	card.setup(data)

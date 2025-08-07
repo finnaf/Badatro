@@ -9,6 +9,7 @@ extends Sprite2D
 @onready var fade = $"../FadedBackground"
 
 const WIDTH = 51 # 62-11 for size of guaranteed card
+const CARD_START_POS = Vector2(36, -31)
 
 var shown_digits = []
 var shown_cards = []
@@ -66,7 +67,7 @@ func load_cards():
 		return a.suit < b.suit
 	)
 	
-	var offset = Vector2(36, -31)
+	var offset = CARD_START_POS
 	var prev
 	
 	if (checkdeck.size() > 0):
@@ -79,8 +80,7 @@ func load_cards():
 		# offset changes
 		if prev.suit != checkdeck[i].suit:
 			offset.y += 14
-			offset.x = 36
-			offset.x = 36 - get_rank_offset(checkdeck[i].suit)
+			offset.x = CARD_START_POS.x - get_rank_offset(checkdeck[i].suit)
 		
 		card.position = offset
 		offset.x -= get_rank_spacing(checkdeck[i].suit)

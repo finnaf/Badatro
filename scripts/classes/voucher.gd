@@ -10,7 +10,16 @@ func _init(pool: Array, rng: RandomNumberGenerator):
 	set_shop_card()
 
 func use():
-	pass
+	match id:
+		VoucherManager.Voucher.Overstock:
+			VoucherManager.use_overstock()
+		VoucherManager.Voucher.OverstockPlus:
+			VoucherManager.use_overstock_plus()
+		VoucherManager.Voucher.ClearanceSale:
+			VoucherManager.use_clearance_sale()
+		VoucherManager.Voucher.Liquidation:
+			VoucherManager.use_liquidation()
+		
 
 func get_cost(discount_percent: float) -> int:	
 	var cost = 10

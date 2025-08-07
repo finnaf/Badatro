@@ -30,7 +30,7 @@ var discount_percent = 1
 const BASE_REROLL_COST = 5
 var reroll_cost = 5
 
-var money = 9999
+var money = 999
 
 const BASEHANDS = 4
 const BASEDISCARDS = 3
@@ -293,7 +293,10 @@ func reset_score():
 	updateScoreUI.emit()
 
 func cashout():
-	add_money(get_money_gained() + (hands * 2))
+	add_money(
+		get_money_gained() + 
+		(hands * 2) +
+		min(floori(money / 5), 5))
 	
 	WinUI.visible = false
 	reset_score()

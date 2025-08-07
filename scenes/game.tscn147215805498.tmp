@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://cijoautimuua5"]
+[gd_scene load_steps=57 format=3 uid="uid://cijoautimuua5"]
 
 [ext_resource type="Script" uid="uid://c7vv5i4f5v710" path="res://scripts/game.gd" id="1_ca42v"]
 [ext_resource type="Texture2D" uid="uid://cv0tqpisxhrod" path="res://images/board/mat/mat.png" id="2_qnb83"]
@@ -36,7 +36,6 @@
 [ext_resource type="Texture2D" uid="uid://d2rs274hkxifa" path="res://images/board/deck-info/faded-bg.png" id="23_8ool0"]
 [ext_resource type="Texture2D" uid="uid://cgi8e3uotbq1c" path="res://images/board/deck-info/deck-info-background.png" id="23_gxtfn"]
 [ext_resource type="Script" uid="uid://dtgwjbansr3jo" path="res://scripts/cover_mat.gd" id="24_02fa5"]
-[ext_resource type="Texture2D" uid="uid://myc21tloye0t" path="res://images/board/cash-out/cash-out-interest.png" id="24_oaba0"]
 [ext_resource type="SpriteFrames" uid="uid://drbu1qd2ihqa8" path="res://resources/number-sprite-frames.tres" id="25_nepv3"]
 [ext_resource type="Texture2D" uid="uid://73qht4q8w40v" path="res://images/board/shop/shop-background.png" id="25_v2yb1"]
 [ext_resource type="Texture2D" uid="uid://ccco8uqsgll5d" path="res://images/board/deck-info/back.png" id="26_7025r"]
@@ -412,15 +411,6 @@ offset = Vector2(0.5, 0.5)
 [node name="MoneyHandsGainedOnes" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyHands"]
 position = Vector2(58.6015, 4.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
-
-[node name="MoneyInterest" type="TextureRect" parent="Mat/MoneyCountUI"]
-layout_mode = 2
-texture = ExtResource("24_oaba0")
-
-[node name="MoneyInterestGainedOnes" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyInterest"]
-position = Vector2(58, 4)
-sprite_frames = SubResource("SpriteFrames_f1jbl")
-offset = Vector2(0.5, 0.5)
 
 [node name="DeckInfo" type="TextureButton" parent="Mat"]
 z_index = 9
