@@ -3,7 +3,7 @@ extends Node
 enum ConsumableType {
 	none,
 	planet,
-	arcana,
+	tarot,
 	spectral,
 }
 

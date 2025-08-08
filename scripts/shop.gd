@@ -128,7 +128,7 @@ func get_main_card(xoffset: int):
 func get_booster(xoffset: int):
 	var booster = await CARD.instantiate()
 	add_child(booster)
-	booster.setup(BoosterCardData.new())
+	booster.setup(BoosterCardData.new(rng))
 	booster.position.x = xoffset
 	booster.position.y = BOOSTER_OFFSET
 	booster.display_cost()
@@ -331,10 +331,21 @@ func open_booster(booster):
 	set_pack_background()
 	
 	match booster.data.booster_type:
-		CardManager.BoosterType.buffoon:
-			open_buffoon(booster.data.booster_size)
 		CardManager.BoosterType.arcana:
-			open_arcana(booster.data.booster_size)
+			open_pack(booster.data.booster_size, 3, 5, 
+				ConsumableCardData.new(ConsumableManager.ConsumableType.tarot)
+			)
+		CardManager.BoosterType.celestial:
+			open_pack(booster.data.booster_size, 3, 5, 
+				ConsumableCardData.new(ConsumableManager.ConsumableType.planet)
+			)
+		CardManager.BoosterType.buffoon:
+			open_pack(booster.data.booster_size, 2, 4, JokerCardData.new())
+		CardManager.BoosterType.spectral:
+			open_pack(booster.data.booster_size, 2, 4, 
+				ConsumableCardData.new(ConsumableManager.ConsumableType.spectral)
+			)
+		
 	
 	
 	setup_booster_connections()	
@@ -348,60 +359,35 @@ func close_booster():
 			card.queue_free()
 		booster_cards.clear()
 
-func open_buffoon(size: CardManager.BoosterSize):
-	var joker_count = 2
+func open_pack(size: CardManager.BoosterSize,
+					min_size: int, max_size: int,
+					data: CardData):
+	var count = min_size
 	in_booster_count = 1
 	
 	if (size == CardManager.BoosterSize.jumbo):
-		joker_count = 4
+		count = max_size
 	elif (size == CardManager.BoosterSize.mega):
-		joker_count = 4
+		count = max_size
 		in_booster_count = 2
 		
-	for i in range(joker_count):
-		var joker = CARD.instantiate()
-		add_child(joker)
+	for i in range(count):
+		var card = CARD.instantiate()
+		add_child(card)
 		
-		joker.setup(JokerCardData.new())
-		booster_cards.append(joker)
+		card.setup(data)
+		booster_cards.append(card)
 		
 		# create a card info, hide top cost
-		joker.data.set_shop_card()
-		joker.position = Vector2((i*13), 5)		
-		joker.display_cost()
-		joker.card_buttons.switch_label(1)
-		joker.hide_cost_only()
-		joker.hide_use_only()
+		card.data.set_shop_card()
+		card.position = Vector2((i*13), 5)		
+		card.display_cost()
+		card.card_buttons.switch_label(1)
+		card.hide_cost_only()
+		card.hide_use_only()
 		
-		joker.data.update_variable(jokers.get_joker_score_state())
+		card.data.update_variable(jokers.get_joker_score_state())
 
-func open_arcana(size: CardManager.BoosterSize):
-	var tarot_count = 3
-	in_booster_count = 1
-
-	if (size == CardManager.BoosterSize.jumbo):
-		tarot_count = 5
-	elif (size == CardManager.BoosterSize.mega):
-		tarot_count = 5
-		in_booster_count = 2
-	
-	for i in range(tarot_count):
-		var tarot = CARD.instantiate()
-		add_child(tarot)
-		
-		tarot.setup(
-			ConsumableCardData.new(ConsumableManager.ConsumableType.arcana)
-		)
-		booster_cards.append(tarot)
-		
-		tarot.data.set_shop_card()
-		tarot.position = Vector2((i*13), 5)		
-		tarot.display_cost()
-		tarot.card_buttons.switch_label(1)
-		tarot.hide_cost_only()
-		tarot.hide_use_only()
-		
-		tarot.data.update_variable(jokers.get_joker_score_state())
 
 func set_pack_background():
 	skip_button.visible = in_booster
