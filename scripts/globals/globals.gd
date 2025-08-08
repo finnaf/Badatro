@@ -41,13 +41,14 @@ func convert_to_digits(number, length, max) -> Array:
 		digits.append(int(c))
 	return digits
 
-func do_score_alert(card, is_plus: bool, is_chips: bool,
+# type: 0 chips, 1 mult, 2 money
+func do_score_alert(card, is_plus: bool, type: int,
 					value, speed, offset: int):
 	const SCORE_ALERT = preload("res://scenes/score_alert.tscn")
 	var score_alert = SCORE_ALERT.instantiate()
-	score_alert.set_value(is_plus, is_chips, value)
-	score_alert.position.y += (offset - 0.5)
 	card.add_child(score_alert)
+	score_alert.set_value(is_plus, type, value)
+	score_alert.position.y += (offset - 0.5)
 	return score_alert
 
 func create_digit_sprite(value: int, offset: Vector2) -> AnimatedSprite2D:

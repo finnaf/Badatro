@@ -344,19 +344,19 @@ func add_resources(card, dict: Dictionary):
 	for key in dict:
 		if key == "chips":
 			alert = Globals.do_score_alert(card, true, 
-				true, dict.chips, GAMESPEED, offset)
+				0, dict.chips, GAMESPEED, offset)
 			await add_chips(dict.chips)
 		elif key == "mult":
 			alert = Globals.do_score_alert(card, true, 
-				false, dict.mult, GAMESPEED, offset)
+				1, dict.mult, GAMESPEED, offset)
 			await add_mult(dict.mult)
 		elif key == "xmult":
 			alert = Globals.do_score_alert(card, false, 
-				false, dict.xmult, GAMESPEED, offset)
+				1, dict.xmult, GAMESPEED, offset)
 			await mult_mult(dict.xmult)
 		elif key == "money":
 			alert = Globals.do_score_alert(card, true, 
-				true, dict.money, GAMESPEED, offset)
+				2, dict.money, GAMESPEED, offset)
 			await add_money(dict.money)
 		else:
 			continue

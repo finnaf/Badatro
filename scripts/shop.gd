@@ -333,6 +333,8 @@ func open_booster(booster):
 	match booster.data.booster_type:
 		CardManager.BoosterType.buffoon:
 			open_buffoon(booster.data.booster_size)
+		CardManager.BoosterType.arcana:
+			open_arcana(booster.data.booster_size)
 	
 	
 	setup_booster_connections()	
@@ -353,7 +355,7 @@ func open_buffoon(size: CardManager.BoosterSize):
 	if (size == CardManager.BoosterSize.jumbo):
 		joker_count = 4
 	elif (size == CardManager.BoosterSize.mega):
-		joker_count = 6
+		joker_count = 4
 		in_booster_count = 2
 		
 	for i in range(joker_count):
@@ -373,6 +375,33 @@ func open_buffoon(size: CardManager.BoosterSize):
 		
 		joker.data.update_variable(jokers.get_joker_score_state())
 
+func open_arcana(size: CardManager.BoosterSize):
+	var tarot_count = 3
+	in_booster_count = 1
+
+	if (size == CardManager.BoosterSize.jumbo):
+		tarot_count = 5
+	elif (size == CardManager.BoosterSize.mega):
+		tarot_count = 5
+		in_booster_count = 2
+	
+	for i in range(tarot_count):
+		var tarot = CARD.instantiate()
+		add_child(tarot)
+		
+		tarot.setup(
+			ConsumableCardData.new(ConsumableManager.ConsumableType.arcana)
+		)
+		booster_cards.append(tarot)
+		
+		tarot.data.set_shop_card()
+		tarot.position = Vector2((i*13), 5)		
+		tarot.display_cost()
+		tarot.card_buttons.switch_label(1)
+		tarot.hide_cost_only()
+		tarot.hide_use_only()
+		
+		tarot.data.update_variable(jokers.get_joker_score_state())
 
 func set_pack_background():
 	skip_button.visible = in_booster

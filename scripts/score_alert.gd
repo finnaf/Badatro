@@ -1,15 +1,15 @@
 extends Node2D
 
 var digit_size = Vector2(3, 5)
-@export var background_frames: SpriteFrames
+@onready var background: Sprite2D = $Background
 @export var digit_frames: SpriteFrames
 
-func set_value(is_plus, is_chips, score: int):
+func set_value(is_plus: bool, type: int, score: int):
 	clear_score()
 	
 	var digits = str(score).split("")
 	var offset = Vector2(1.5, -5)
-	do_background(is_chips, digits)
+	do_background(type, digits)
 	
 	if (digits.size() == 1):
 		offset.x += 2
@@ -40,19 +40,17 @@ func set_value(is_plus, is_chips, score: int):
 		add_child(sprite)
 		offset.x += digit_size.x + 1
 
+func do_background(type: int, digits):
+	var len = digits.size()
+
+	match type:
+		0: background.modulate = Globals.BLUE
+		1: background.modulate = Globals.RED
+		2: background.modulate = Globals.YELLOW
+
+	background.position += Vector2(6 + len, -5)
+
 func clear_score():
 	for digit in get_children():
-		digit.queue_free()
-
-func do_background(is_chips: bool, digits):
-	var len = digits.size()
-	var background = AnimatedSprite2D.new()
-	background.frames = background_frames
-	if (is_chips):
-		background.frame = 0
-	else:
-		background.frame = 1
-	
-	
-	background.position += Vector2(6+(len), -5)
-	add_child(background)
+		if digit != background:
+			digit.queue_free()

@@ -1,11 +1,13 @@
 [gd_scene load_steps=4 format=3 uid="uid://m5bpjsut7jf3"]
 
 [ext_resource type="Script" uid="uid://5ck4pae4m2o4" path="res://scripts/score_alert.gd" id="1_b3j3j"]
-[ext_resource type="SpriteFrames" uid="uid://f7hb0w7k7pwg" path="res://resources/score-alert-background.tres" id="2_b3j3j"]
 [ext_resource type="SpriteFrames" uid="uid://drbu1qd2ihqa8" path="res://resources/number-sprite-frames.tres" id="2_xp58f"]
+[ext_resource type="Texture2D" uid="uid://eesgw0y1iwdd" path="res://images/board/score-alert/score-bg.png" id="3_b3j3j"]
 
 [node name="ScoreAlert" type="Node2D"]
 texture_filter = 1
 script = ExtResource("1_b3j3j")
-background_frames = ExtResource("2_b3j3j")
 digit_frames = ExtResource("2_xp58f")
+
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("3_b3j3j")

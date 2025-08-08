@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://tblj6whyvyot"
-path="res://.godot/imported/blue-score-bg.png-665a897030d1449226b36a7de9f29413.ctex"
+uid="uid://eesgw0y1iwdd"
+path="res://.godot/imported/score-bg.png-38bf882ef956b0830f9ba64be7c654f1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/board/score-alert/blue-score-bg.png"
-dest_files=["res://.godot/imported/blue-score-bg.png-665a897030d1449226b36a7de9f29413.ctex"]
+source_file="res://images/board/score-alert/score-bg.png"
+dest_files=["res://.godot/imported/score-bg.png-38bf882ef956b0830f9ba64be7c654f1.ctex"]
 
 [params]
 
