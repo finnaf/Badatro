@@ -7,6 +7,7 @@ signal dragged(card)
 
 
 const card_atlas = preload("res://images/cards/cards/cards.png")
+const tarot_atlas = preload("res://images/cards/cards/tarot_cards.png")
 const enhance_atlas = preload("res://images/cards/enhancements/enhancements.png")
 @export var symbols: SpriteFrames
 
@@ -100,7 +101,6 @@ func set_voucher_tex(voucher: VoucherManager.Voucher):
 func set_consumable_tex(consumable: ConsumableManager.ConsumableType, id):
 	match consumable:
 		ConsumableManager.ConsumableType.planet:
-			print("PLANET")
 			var path = ("res://images/cards/planets/planet_bg.png")
 			var tex = CardManager.get_card_texture(path)
 			if tex:
@@ -108,13 +108,16 @@ func set_consumable_tex(consumable: ConsumableManager.ConsumableType, id):
 			
 			add_child(Globals.create_symbol_sprite(id, "planets", Vector2(5.5, 8.5)))
 		ConsumableManager.ConsumableType.tarot:
-			print("TAROT")
-			var path = ("res://images/cards/planets/planet_bg.png")
-			var tex = CardManager.get_card_texture(path)
-			if tex:
-				image.texture = tex
+			const SIZE = Vector2(11, 13)
+			var tex := AtlasTexture.new()
+			tex.atlas = tarot_atlas
+			tex.region = Rect2(
+				Vector2((id) * (SIZE.x + 1), 0),
+				SIZE
+			)
+			image.texture = tex
+			image.show()
 		ConsumableManager.ConsumableType.spectral:
-			print("SPECTRAL")
 			var path = ("res://images/cards/planets/planet_bg.png")
 			var tex = CardManager.get_card_texture(path)
 			if tex:

@@ -15,7 +15,7 @@ func _init(i: int, r: int, s: CardManager.Suit):
 	suit = s
 	
 	#enhancement = randi_range(0,8)
-	enhancement = CardManager.Enhancement.steel
+	enhancement = CardManager.Enhancement.mult
 
 # returns value of enhancement chips, mult, xmult, money
 func get_enhancement_score_val() -> Dictionary:

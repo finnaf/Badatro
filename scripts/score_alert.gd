@@ -13,9 +13,7 @@ func set_value(is_plus: bool, type: int, score: float):
 		digits = str(int(score)).split("")
 	else:
 		digits = str(score).split("")
-	
-	print(digits)
-	
+			
 	var offset = Vector2(1.5, -5)
 	do_background(type, digits)
 	
@@ -40,7 +38,8 @@ func set_value(is_plus: bool, type: int, score: float):
 		if digit == "":
 			continue
 		if digit == ".":
-			var sprite = Globals.create_symbol_sprite(10, "default", offset)
+			offset.x -= 1
+			var sprite = Globals.create_symbol_sprite(29, "default", offset)
 			add_child(sprite)
 			offset.x += 3
 			continue

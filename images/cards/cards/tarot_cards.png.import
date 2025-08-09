@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cooti8rd4uaio"
-path="res://.godot/imported/cards.png-ef236b052c11f26f21d1c98de5ad0001.ctex"
+uid="uid://dmstdl05fcwwt"
+path="res://.godot/imported/tarot_cards.png-a746ee5623898cef13a9fc6945953eb2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/cards/cards/cards.png"
-dest_files=["res://.godot/imported/cards.png-ef236b052c11f26f21d1c98de5ad0001.ctex"]
+source_file="res://images/cards/cards/tarot_cards.png"
+dest_files=["res://.godot/imported/tarot_cards.png-a746ee5623898cef13a9fc6945953eb2.ctex"]
 
 [params]
 

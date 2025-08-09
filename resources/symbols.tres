@@ -1,9 +1,10 @@
-[gd_resource type="SpriteFrames" load_steps=34 format=3 uid="uid://b2130b6r8xv1b"]
+[gd_resource type="SpriteFrames" load_steps=35 format=3 uid="uid://b2130b6r8xv1b"]
 
 [ext_resource type="Texture2D" uid="uid://bhd8nnmphkhky" path="res://images/board/symbols/connectives.png" id="1_mcbd0"]
 [ext_resource type="Texture2D" uid="uid://bkj75jqjh17w0" path="res://images/board/symbols/joins.png" id="2_pnrph"]
 [ext_resource type="Texture2D" uid="uid://crjb4k40n36ng" path="res://images/board/symbols/suits.png" id="3_lufyh"]
 [ext_resource type="Texture2D" uid="uid://dvm11nwa5mu56" path="res://images/board/symbols/handtypes.png" id="4_rfs3s"]
+[ext_resource type="Texture2D" uid="uid://chgqhndjyxdce" path="res://images/board/symbols/dot.png" id="5_pnrph"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jrxyn"]
 atlas = ExtResource("1_mcbd0")
@@ -210,6 +211,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_8bup3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_pnrph")
 }],
 "loop": true,
 "name": &"default",

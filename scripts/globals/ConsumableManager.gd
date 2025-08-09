@@ -7,6 +7,31 @@ enum ConsumableType {
 	spectral,
 }
 
+enum Tarot {
+	Fool,
+	Magician,
+	HighPriestess,
+	Empress,
+	Emperor,
+	Hierophant,
+	Lovers,
+	Chariot,
+	Justice,
+	Hermit,
+	WheelOfFortune,
+	Strength,
+	HangedMan,
+	Death,
+	Temperance,
+	Devil,
+	Tower,
+	Star,
+	Moon,
+	Sun,
+	Judgement,
+	World
+}
+
 var planet_values = {
 	"flush five": [50, 3],
 	"flush house": [40, 4],

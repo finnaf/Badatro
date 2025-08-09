@@ -113,11 +113,9 @@ func get_main_card(xoffset: int):
 		data = JokerCardData.new()
 		data.update_variable(jokers.get_joker_score_state())
 		
-	elif type_thresh < W_JOK + W_TAR: # tarot TODO
-		
-		data = ConsumableCardData.new(ConsumableManager.ConsumableType.planet)
+	elif type_thresh < W_JOK + W_TAR:
+		data = ConsumableCardData.new(ConsumableManager.ConsumableType.tarot)
 	else: # planet
-		
 		data = ConsumableCardData.new(ConsumableManager.ConsumableType.planet)
 	
 	data.set_shop_card()

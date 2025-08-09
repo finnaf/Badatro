@@ -5,7 +5,7 @@ var consumable_type: ConsumableManager.ConsumableType
 
 func _init(type: ConsumableManager.ConsumableType):
 	consumable_type = type
-	id = 0
+	id = randi_range(0, 21)
 
 func get_cost(discount_percent: float) -> int:	
 	var cost = 0
