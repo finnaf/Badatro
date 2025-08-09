@@ -6,7 +6,7 @@ extends Node2D
 @onready var shop = $"Shop"
 @onready var deck = $Deck
 
-var seed = 3
+var seed = 100
 
 const GAMESPEED = 0.2
 const INCRSPEED = GAMESPEED / 7
@@ -113,13 +113,14 @@ signal updateCashoutUI
 
 func _ready():
 	updateGoalUI.emit()
-	setup(2)
+	setup(seed)
 
 func setup(game_seed: int):
 	seed = game_seed
+	
 	seed(seed) 							# for shuffling cards
-	shop.set_seed(game_seed) 			# for main type, & boosters & vouchers 
-	JokerManager.set_seeds(game_seed)	# for drawing jokers and in card rng
+	shop.set_seed(seed+1) 			# for main type, & boosters & vouchers 
+	JokerManager.set_seeds(seed+2)	# for drawing jokers and in card rng
 	
 	gamespeed = GAMESPEED
 	
@@ -260,9 +261,7 @@ func add_mult(value: int):
 	sidebar.update_mult()
 
 func mult_mult(value: float):
-	print("pre mult", mult)
 	mult *= value
-	print("post most", mult)
 	sidebar.update_mult()
 
 func end_turn():
@@ -341,30 +340,35 @@ func add_resources(card, dict: Dictionary):
 		offset = 24
 	
 	var alert = null
-	for key in dict:
-		if key == "chips":
-			alert = Globals.do_score_alert(card, true, 
-				0, dict.chips, GAMESPEED, offset)
-			await add_chips(dict.chips)
-		elif key == "mult":
-			alert = Globals.do_score_alert(card, true, 
-				1, dict.mult, GAMESPEED, offset)
-			await add_mult(dict.mult)
-		elif key == "xmult":
-			alert = Globals.do_score_alert(card, false, 
-				1, dict.xmult, GAMESPEED, offset)
-			await mult_mult(dict.xmult)
-		elif key == "money":
-			alert = Globals.do_score_alert(card, true, 
-				2, dict.money, GAMESPEED, offset)
-			await add_money(dict.money)
-		else:
-			continue
-		
-		# display
-		await get_tree().create_timer(get_speed()).timeout
-		
-		# delete
-		if (alert):
-			alert.queue_free()
-			await get_tree().create_timer(abs(get_speed() - 0.1) / 3).timeout	
+	if (dict.has("chips")):
+		alert = Globals.do_score_alert(card, true, 0, dict.chips, 
+										GAMESPEED, offset)
+		await add_chips(dict.chips)
+		await clear_notification(alert)
+	
+	if (dict.has("mult")):
+		alert = Globals.do_score_alert(card, true, 1, dict.mult, 
+										GAMESPEED, offset)
+		await add_mult(dict.mult)
+		await clear_notification(alert)
+	
+	if (dict.has("xmult")):
+		alert = Globals.do_score_alert(card, false, 1, dict.xmult, 
+										GAMESPEED, offset)
+		await mult_mult(dict.xmult)
+		await clear_notification(alert)
+	
+	if (dict.has("money")):
+		alert = Globals.do_score_alert(card, true, 2, dict.money, 
+										GAMESPEED, offset)
+		await add_money(dict.money)
+		await clear_notification(alert)
+	
+func clear_notification(alert):
+	# display
+	await get_tree().create_timer(get_speed()).timeout
+	
+	# delete
+	if (alert):
+		alert.queue_free()
+		await get_tree().create_timer(abs(get_speed() - 0.1) / 3).timeout	

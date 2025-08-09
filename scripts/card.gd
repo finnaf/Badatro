@@ -100,12 +100,25 @@ func set_voucher_tex(voucher: VoucherManager.Voucher):
 func set_consumable_tex(consumable: ConsumableManager.ConsumableType, id):
 	match consumable:
 		ConsumableManager.ConsumableType.planet:
+			print("PLANET")
 			var path = ("res://images/cards/planets/planet_bg.png")
 			var tex = CardManager.get_card_texture(path)
 			if tex:
 				image.texture = tex
 			
 			add_child(Globals.create_symbol_sprite(id, "planets", Vector2(5.5, 8.5)))
+		ConsumableManager.ConsumableType.tarot:
+			print("TAROT")
+			var path = ("res://images/cards/planets/planet_bg.png")
+			var tex = CardManager.get_card_texture(path)
+			if tex:
+				image.texture = tex
+		ConsumableManager.ConsumableType.spectral:
+			print("SPECTRAL")
+			var path = ("res://images/cards/planets/planet_bg.png")
+			var tex = CardManager.get_card_texture(path)
+			if tex:
+				image.texture = tex
 
 func draw_edition(edition: CardManager.Edition): # TODO
 	var animation
@@ -144,7 +157,6 @@ func _on_button_clicked_on_label(card):
 	emit_signal("button_click_forwarded", self)
 func _on_use_clicked_on_label(card):
 	emit_signal("use_click_forwarded", self)
-
 func _input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:

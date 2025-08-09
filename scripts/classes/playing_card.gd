@@ -15,7 +15,7 @@ func _init(i: int, r: int, s: CardManager.Suit):
 	suit = s
 	
 	#enhancement = randi_range(0,8)
-	enhancement = CardManager.Enhancement.gold
+	enhancement = CardManager.Enhancement.steel
 
 # returns value of enhancement chips, mult, xmult, money
 func get_enhancement_score_val() -> Dictionary:
@@ -29,8 +29,14 @@ func get_enhancement_score_val() -> Dictionary:
 		CardManager.Enhancement.stone:
 			return {"chips": 50}
 		CardManager.Enhancement.lucky:
-			# TODO: Lucky enhancement effects
-			return {"mult": 20, "money": 20}
+			var out = {}
+			
+			if (JokerManager.get_rnd_float() > 0.75):
+				out["mult"] = 20
+			if (JokerManager.get_rnd_float() > 0.95):
+				out["money"] = 20
+			
+			return out
 	return {}
 
 func get_enhancement_held_val() -> Dictionary:
@@ -43,6 +49,11 @@ func get_enhancement_held_val() -> Dictionary:
 
 func is_stone_card():
 	if enhancement == CardManager.Enhancement.stone:
+		return true
+	return false
+	
+func is_wild_card():
+	if enhancement == CardManager.Enhancement.wild:
 		return true
 	return false
 

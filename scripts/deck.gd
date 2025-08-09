@@ -68,6 +68,7 @@ func _on_play_button_pressed():
 	
 	# free
 	for card in selected_cards:
+		card.deselect() # cards get messed up next round w/o this
 		card.queue_free()
 	selected_cards.clear()
 	
@@ -173,6 +174,7 @@ func _on_discard_button_pressed():
 				var index = get_hand_position(card.get_id())
 				hand[index] = null
 				selected_cards.erase(card)
+				card.deselect()
 				card.queue_free()
 	deal()
 	sort_hand()

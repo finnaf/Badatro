@@ -4,8 +4,13 @@ extends CardData
 var booster_type: CardManager.BoosterType
 var booster_size: CardManager.BoosterSize
 
-# uses shop rng
-func _init(rng: RandomNumberGenerator):
+# uses shop rng (first round must be two buffoons)
+func _init(rng: RandomNumberGenerator, round: int = -1):
+	if (round == 1):
+		booster_type = CardManager.BoosterType.buffoon
+		booster_size = CardManager.BoosterSize.normal
+		set_shop_card()
+		return
 	
 	const BOOSTER_WEIGHTS = [
 		{ "type": "spectral", "size": 0, "weight": 0.6 },
@@ -42,14 +47,7 @@ func _init(rng: RandomNumberGenerator):
 		"celestial":
 			booster_type = CardManager.BoosterType.standard
 	
-	match chosen.size:
-		0:
-			booster_size = CardManager.BoosterSize.normal
-		1:
-			booster_size = CardManager.BoosterSize.jumbo
-		2:
-			booster_size = CardManager.BoosterSize.mega
-	
+	booster_size = chosen.size
 	set_shop_card()
 
 # AIed code to iterate through weights

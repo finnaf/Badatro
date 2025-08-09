@@ -4,10 +4,18 @@ var digit_size = Vector2(3, 5)
 @onready var background: Sprite2D = $Background
 @export var digit_frames: SpriteFrames
 
-func set_value(is_plus: bool, type: int, score: int):
+func set_value(is_plus: bool, type: int, score: float):
 	clear_score()
+	var digits
 	
-	var digits = str(score).split("")
+	# set int values to ints
+	if (score == int(score)):
+		digits = str(int(score)).split("")
+	else:
+		digits = str(score).split("")
+	
+	print(digits)
+	
 	var offset = Vector2(1.5, -5)
 	do_background(type, digits)
 	
@@ -30,6 +38,11 @@ func set_value(is_plus: bool, type: int, score: int):
 	for i in range(digits.size()):
 		var digit = digits[i]
 		if digit == "":
+			continue
+		if digit == ".":
+			var sprite = Globals.create_symbol_sprite(10, "default", offset)
+			add_child(sprite)
+			offset.x += 3
 			continue
 		
 		if digits.size() > i+1:

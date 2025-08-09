@@ -130,11 +130,13 @@ func _ready():
 
 
 func set_seeds(seed: int):
-	rng_joker.seed = seed + 1
-	rng.seed = seed + 3
+	rng_joker.seed = seed
+	rng.seed = seed + 1
 
-func get_rng() -> RandomNumberGenerator:
+func get_joker_rng() -> RandomNumberGenerator:
 	return rng_joker
+func get_rnd_float() -> float:
+	return rng.randf()
 
 # convert id to enum string name
 func get_joker_shortname(value: int, rarity: Rarity) -> String:
@@ -564,22 +566,19 @@ func score_misprint(joker, gamestate) -> Dictionary:
 		return {}
 	return {"mult": val}
 func score_raised_fist(joker, gamestate) -> Dictionary:
-	var hand = gamestate.hand
+	var hand = gamestate.held_cards
 	if (hand.size() == 0):
 		return {}
 	
-	hand.sort_custom(func(a, b):
-		if a.is_empty() and not b.is_empty():
-			return false
-		elif b.is_empty() and not a.is_empty():
-			return true
-		elif a.is_empty() and b.is_empty():
-			return false
+	var min_rank = INF
+	for i in range(hand.size()):
+		if hand[i] == null:
+			continue
 		
-		return a.rank > b.rank
-	)
+		if hand[i].get_rank() < min_rank:
+			min_rank = hand[i].get_rank()
 	
-	return {"mult": hand[0].rank}
+	return {"mult": 2 * min_rank}
 func score_abstract_joker(joker, gamestate) -> Dictionary:
 	if (gamestate.jokers.size() > 0):
 		return {"mult": gamestate.jokers.size() * 3}
@@ -622,19 +621,23 @@ func score_the_tribe(joker, gamestate) -> Dictionary:
 
 
 func trigger_greedy_joker(joker: JokerCardData, card: CardData) -> Dictionary:
-	if (card.suit == CardManager.Suit.diamonds):
+	if (card.suit == CardManager.Suit.diamonds
+	or card.is_wild_card()):
 		return {"mult": 3}
 	return {}
 func trigger_lusty_joker(joker: JokerCardData, card: CardData) -> Dictionary:
-	if (card.suit == CardManager.Suit.hearts):
+	if (card.suit == CardManager.Suit.hearts
+	or card.is_wild_card()):
 		return {"mult": 3}
 	return {}
 func trigger_wrathful_joker(joker: JokerCardData, card: CardData) -> Dictionary:
-	if (card.suit == CardManager.Suit.spades):
+	if (card.suit == CardManager.Suit.spades
+	or card.is_wild_card()):
 		return {"mult": 3}
 	return {}
 func trigger_gluttonous_joker(joker: JokerCardData, card: CardData) -> Dictionary:
-	if (card.suit == CardManager.Suit.clubs):
+	if (card.suit == CardManager.Suit.clubs
+	or card.is_wild_card()):
 		return {"mult": 3}
 	return {}
 func trigger_scary_face(joker: JokerCardData, card: CardData) -> Dictionary:

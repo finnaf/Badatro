@@ -43,7 +43,7 @@ func _ready():
 	RerollCostHundreds.modulate = Globals.YELLOW
 
 func set_seed(s: int):
-	rng.seed = s + 2
+	rng.seed = s
 
 func prep_values():
 	cards_remaining = MAIN_STANDARD_SIZE
@@ -128,7 +128,7 @@ func get_main_card(xoffset: int):
 func get_booster(xoffset: int):
 	var booster = await CARD.instantiate()
 	add_child(booster)
-	booster.setup(BoosterCardData.new(rng))
+	booster.setup(BoosterCardData.new(rng, game.round))
 	booster.position.x = xoffset
 	booster.position.y = BOOSTER_OFFSET
 	booster.display_cost()
@@ -333,17 +333,17 @@ func open_booster(booster):
 	match booster.data.booster_type:
 		CardManager.BoosterType.arcana:
 			open_pack(booster.data.booster_size, 3, 5, 
-				ConsumableCardData.new(ConsumableManager.ConsumableType.tarot)
+				ConsumableCardData, ConsumableManager.ConsumableType.tarot
 			)
 		CardManager.BoosterType.celestial:
 			open_pack(booster.data.booster_size, 3, 5, 
-				ConsumableCardData.new(ConsumableManager.ConsumableType.planet)
+				ConsumableCardData, ConsumableManager.ConsumableType.planet
 			)
 		CardManager.BoosterType.buffoon:
-			open_pack(booster.data.booster_size, 2, 4, JokerCardData.new())
+			open_pack(booster.data.booster_size, 2, 4, JokerCardData)
 		CardManager.BoosterType.spectral:
 			open_pack(booster.data.booster_size, 2, 4, 
-				ConsumableCardData.new(ConsumableManager.ConsumableType.spectral)
+				ConsumableCardData, ConsumableManager.ConsumableType.spectral
 			)
 		
 	
@@ -361,7 +361,9 @@ func close_booster():
 
 func open_pack(size: CardManager.BoosterSize,
 					min_size: int, max_size: int,
-					data: CardData):
+					data_class: Variant,
+					extra_para = null):
+	
 	var count = min_size
 	in_booster_count = 1
 	
@@ -370,12 +372,17 @@ func open_pack(size: CardManager.BoosterSize,
 	elif (size == CardManager.BoosterSize.mega):
 		count = max_size
 		in_booster_count = 2
-		
+	
+	print("opening pack")
 	for i in range(count):
+		print("creating card")
 		var card = CARD.instantiate()
 		add_child(card)
 		
-		card.setup(data)
+		if (extra_para):
+			card.setup(data_class.new(extra_para))
+		else:
+			card.setup(data_class.new())
 		booster_cards.append(card)
 		
 		# create a card info, hide top cost

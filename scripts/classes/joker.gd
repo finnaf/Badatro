@@ -10,7 +10,7 @@ var score_func: Callable = Callable()
 var trigger_func: Callable = Callable()
 
 func _init():	
-	var rng = JokerManager.get_rng()
+	var rng = JokerManager.get_joker_rng()
 	generate_joker(rng)
 	roll_edition(1, true, rng)
 	

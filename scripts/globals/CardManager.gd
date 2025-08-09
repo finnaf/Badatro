@@ -76,6 +76,8 @@ func get_card_texture(path: String) -> Texture2D:
 func calculate_hand(hand: Array):
 	if hand.is_empty():
 		return "none"
+
+	hand = remove_stone_cards(hand)
 	if is_flush(hand) and is_five_of_a_kind(hand):
 		return "flush five"
 	if is_full_house(hand) and is_flush(hand):
@@ -101,6 +103,13 @@ func calculate_hand(hand: Array):
 	if is_pair(hand):
 		return "pair"
 	return "high card"
+
+func remove_stone_cards(hand: Array) -> Array:
+	var out = []
+	for card in hand:
+		if (not card.data.is_stone_card()):
+			out.append(card)
+	return out
 
 func is_five_of_a_kind(hand: Array):
 	if hand.size() != 5:
@@ -146,7 +155,8 @@ func is_flush(hand: Array):
 	var suit = hand[0].get_suit()
 	for card in hand:
 		if card.get_suit() != suit:
-			return false
+			if not card.data.is_wild_card():
+				return false
 	return true
 
 func is_straight(hand: Array):	
@@ -307,6 +317,11 @@ func get_active_cards(cards, hand):
 			return a["data"]["rank"] < b["data"]["rank"]
 		)
 		active_cards.append(cards[cards.size()-1])
+	
+	for card in cards:
+		if (card.data.is_stone_card() and card not in active_cards):
+			active_cards.append(card)
+			
 	
 	return active_cards
 
