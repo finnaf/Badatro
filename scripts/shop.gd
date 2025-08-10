@@ -256,7 +256,7 @@ func _buy_attempt(card):
 
 func _use_attempt(consumable):
 	var cost = consumable.data.get_cost(game.get_discount_percent())
-	var can_use = ConsumableManager.can_use([], consumable)
+	var can_use = ConsumableCardData.can_use([], consumable)
 	if (can_use and game.spend_money(cost)):
 		consumables.use([], consumable)
 	
@@ -382,6 +382,8 @@ func open_pack(size: CardManager.BoosterSize,
 	var x_offset = -20
 	if (count == 2):
 		x_offset = 0
+	elif (count == 3):
+		x_offset = -10
 	elif (count == 4):
 		x_offset = -15
 	

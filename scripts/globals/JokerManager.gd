@@ -113,9 +113,6 @@ enum Jokers {
 	#BurntJoker
 }
 
-var rng_joker = RandomNumberGenerator.new()		# deciding jokers
-var rng = RandomNumberGenerator.new()			# within jokers
-
 var jokers_by_rarity := {
 	Rarity.common: [],
 	Rarity.uncommon: [],
@@ -127,14 +124,6 @@ func _ready():
 	for id in joker_info.keys():
 		var rarity = joker_info[id].rarity
 		jokers_by_rarity[rarity].append(id)
-
-
-func set_seeds(seed: int):
-	rng_joker.seed = seed
-	rng.seed = seed + 1
-
-func get_joker_rng() -> RandomNumberGenerator:
-	return rng_joker
 
 # convert id to enum string name
 func get_joker_shortname(value: int, rarity: Rarity) -> String:
@@ -559,7 +548,7 @@ func score_mystic_summit(joker, gamestate) -> Dictionary:
 		return {"mult": 15}
 	return {}
 func score_misprint(joker, gamestate) -> Dictionary:
-	var val = rng.randi_range(0, 23)
+	var val = CardData.get_rnd_int(0, 23)
 	if (val == 0):
 		return {}
 	return {"mult": val}

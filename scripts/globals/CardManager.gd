@@ -49,7 +49,7 @@ enum BoosterSize {
 	mega
 }
 
-var base_values = {
+const base_values = {
 	"flush five": [160, 16],
 	"flush house": [140, 14],
 	"five of a kind": [120, 12],
@@ -64,15 +64,6 @@ var base_values = {
 	"high card": [5, 1],
 	"none": [0, 0]
 }
-
-var rng = RandomNumberGenerator.new()	# within cards
-
-func set_seed(s: int):
-	rng.seed = s
-func get_rnd_float() -> float:
-	return rng.randf()
-func get_rnd_int(min: int, max: int) -> float:
-	return rng.randi_range(min, max)
 
 func get_card_texture(path: String) -> Texture2D:
 	if ResourceLoader.exists(path):

@@ -68,6 +68,11 @@ func _on_play_button_pressed():
 	
 	# free
 	for card in selected_cards:
+		# GLASS
+		if card.data.check_break():
+			remove_card(card.data)
+			print("glass broken")
+		
 		card.deselect() # cards get messed up next round w/o this
 		card.queue_free()
 	selected_cards.clear()
@@ -336,6 +341,8 @@ func return_hand(reconfig_z = true):
 
 func add_card(card: PlayingCardData):
 	fulldeck.append(card)
+func remove_card(card: PlayingCardData):
+	fulldeck.erase(card)
 
 func _on_sort_suit_button_pressed():
 	is_rank_sort = false

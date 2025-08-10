@@ -2,9 +2,20 @@
 class_name CardData
 extends RefCounted
 
+static var rng = RandomNumberGenerator.new()
+
 var id: int = -1
 var edition: CardManager.Edition = CardManager.Edition.none
 var is_shop: bool = false
+
+# randomness inside cards
+static func set_seed(s: int):
+	rng.seed = s
+static func get_rnd_float() -> float:
+	return rng.randf()
+static func get_rnd_int(min: int, max: int) -> float:
+	return rng.randi_range(min, max)
+
 
 func get_edition_val():
 	match edition:

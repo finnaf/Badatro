@@ -7,7 +7,7 @@ var booster_size: CardManager.BoosterSize
 # uses shop rng (first round must be two buffoons)
 func _init(rng: RandomNumberGenerator, round: int = -1):
 	if (round == 1):
-		booster_type = CardManager.BoosterType.buffoon
+		booster_type = CardManager.BoosterType.arcana
 		booster_size = CardManager.BoosterSize.normal
 		set_shop_card()
 		return

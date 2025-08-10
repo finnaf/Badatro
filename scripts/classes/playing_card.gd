@@ -9,14 +9,16 @@ var seal: CardManager.Seal
 var is_raised: bool = false
 var is_flipped: bool = false
 
+var chance_glass_break = 0.25
+
 func _init(i: int = -1, r: int = -1, s: CardManager.Suit = -1):
 	if (i == -1 or r == -1 or s == -1):
 		# generate data here
 		# playing card id doesnt matter at all
 		id = 1
-		rank = CardManager.get_rnd_int(2, 13)
-		suit = CardManager.Suit.values()[CardManager.get_rnd_int(0, 3)]
-		enhancement = CardManager.Enhancement.values()[CardManager.get_rnd_int(0, 8)]
+		rank = get_rnd_int(2, 13)
+		suit = CardManager.Suit.values()[get_rnd_int(0, 3)]
+		enhancement = CardManager.Enhancement.values()[get_rnd_int(0, 8)]
 		return
 	
 	id = i
@@ -24,7 +26,7 @@ func _init(i: int = -1, r: int = -1, s: CardManager.Suit = -1):
 	suit = s
 	
 	#enhancement = randi_range(0,8)
-	enhancement = CardManager.Enhancement.wild
+	enhancement = CardManager.Enhancement.glass
 
 # returns value of enhancement chips, mult, xmult, money
 func get_enhancement_score_val() -> Dictionary:
@@ -40,9 +42,9 @@ func get_enhancement_score_val() -> Dictionary:
 		CardManager.Enhancement.lucky:
 			var out = {}
 			
-			if (CardManager.get_rnd_float() > 0.80):
+			if (get_rnd_float() > 0.80):
 				out["mult"] = 20
-			if (CardManager.get_rnd_float() > 0.93333): # 0.93 333...
+			if (get_rnd_float() > 0.93333): # 0.93 333...
 				out["money"] = 20
 			
 			return out
@@ -56,6 +58,15 @@ func get_enhancement_held_val() -> Dictionary:
 			return {"money": 3}
 	return {}
 
+# glass cards
+func check_break() -> bool:
+	if (not is_glass_card()):
+		return false
+	
+	if (get_rnd_float() < chance_glass_break):
+		return true
+	return false
+
 func is_stone_card():
 	if enhancement == CardManager.Enhancement.stone:
 		return true
@@ -66,6 +77,10 @@ func is_wild_card():
 		return true
 	return false
 
+func is_glass_card():
+	if enhancement == CardManager.Enhancement.glass:
+		return true
+	return false
 func get_cost(discount_percent: float) -> int:		
 	var cost = 1
 	cost += get_edition_cost()

@@ -53,7 +53,7 @@ func _on_sell(card):
 	_delete_consumable(card)
 # 
 func use_attempt(card):
-	if (ConsumableManager.can_use([], card)):
+	if (ConsumableCardData.can_use([], card)):
 		use([], card)
 		_delete_consumable(card)
 

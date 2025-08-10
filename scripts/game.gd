@@ -85,27 +85,6 @@ var hands_played = {
 	"high card": 0
 }
 
-# pool of vouchers (grows/shrinks to none)
-var pool = [
-	VoucherManager.Voucher.Overstock,
-	VoucherManager.Voucher.ClearanceSale,
-	VoucherManager.Voucher.Hone,
-	VoucherManager.Voucher.RerollSurplus,
-	VoucherManager.Voucher.CrystalBall,
-	VoucherManager.Voucher.Telescope,
-	VoucherManager.Voucher.Observatory,
-	VoucherManager.Voucher.Grabber,
-	VoucherManager.Voucher.Wasteful,
-	VoucherManager.Voucher.TarotMechant,
-	VoucherManager.Voucher.PlanetMerchant,
-	VoucherManager.Voucher.SeedMoney,
-	VoucherManager.Voucher.Blank,
-	VoucherManager.Voucher.MagicTrick,
-	VoucherManager.Voucher.Hieroglyph,
-	VoucherManager.Voucher.DirectorsCut,
-	VoucherManager.Voucher.PaintBrush
-]
-
 signal updateMoneyUI
 signal updateScoreUI
 signal updateGoalUI
@@ -120,8 +99,8 @@ func setup(game_seed: int):
 	
 	seed(seed) 						# for shuffling cards
 	shop.set_seed(seed+1) 			# for main type, & boosters & vouchers 
-	JokerManager.set_seeds(seed+2)	# for any playing card rng
-	JokerManager.set_seeds(seed+3)	# for drawing jokers and in card rng
+	CardData.set_seed(seed+2)		# for any in-card rng
+	JokerCardData.set_seed(seed+3)	# for drawing jokers
 	
 	gamespeed = GAMESPEED
 	
@@ -216,8 +195,8 @@ func upgrade_hand(hand: String):
 
 func set_hand(new_hand: String):
 	hand = new_hand
-	chips = CardManager.base_values[hand][0] + (levels[hand] * ConsumableManager.planet_values[hand][0])
-	mult = CardManager.base_values[hand][1] + (levels[hand] * ConsumableManager.planet_values[hand][1])
+	chips = CardManager.base_values[hand][0] + (levels[hand] * ConsumableCardData.planet_values[hand][0])
+	mult = CardManager.base_values[hand][1] + (levels[hand] * ConsumableCardData.planet_values[hand][1])
 	
 	sidebar.update_chips()
 	sidebar.update_mult()
