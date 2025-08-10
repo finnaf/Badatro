@@ -89,7 +89,7 @@ func _on_clicked(card):
 		card.jok_select()
 
 func _on_sell(card):
-	game.add_money(card.data.get_sell_price(1))
+	game.add_money(card.data.get_sell_price())
 	_delete_joker(card)
 
 func _delete_joker(card):

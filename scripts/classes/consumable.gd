@@ -57,15 +57,15 @@ func _init(type: ConsumableType):
 	consumable_type = type
 	id = randi_range(0, 21)
 
-func get_cost(discount_percent: float) -> int:	
+func get_cost() -> int:	
 	var cost = 0
 	
-	if (consumable_type == ConsumableManager.ConsumableType.spectral):
+	if (consumable_type == ConsumableType.spectral):
 		cost += 4
 	else:
 		cost += 3
 				
-	cost = floor(cost * discount_percent)
+	cost = floor(cost * VoucherCardData.discount_rate)
 	if cost < 1:
 		return 1
 	return cost

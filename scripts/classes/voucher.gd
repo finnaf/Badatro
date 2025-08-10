@@ -56,39 +56,37 @@ static var pool = [
 	Voucher.PaintBrush
 ]
 
-func _init(pool: Array, rng: RandomNumberGenerator):
+static var discount_rate
+static var extra_shop_slots
+
+static func _static_init():
+	discount_rate 		= 1
+	extra_shop_slots		= 0
+
+func _init(shop_rng: RandomNumberGenerator):
 	if (pool.size() == 0):
 		id = Voucher.Blank
 	
-	var index = rng.randi() % pool.size()
+	var index = shop_rng.randi() % pool.size()
 	var id = pool[index]
 	set_shop_card()
 
 func use():
 	match id:
-		VoucherManager.Voucher.Overstock:
-			VoucherManager.use_overstock()
-		VoucherManager.Voucher.OverstockPlus:
-			VoucherManager.use_overstock_plus()
-		VoucherManager.Voucher.ClearanceSale:
-			VoucherManager.use_clearance_sale()
-		VoucherManager.Voucher.Liquidation:
-			VoucherManager.use_liquidation()
+		Voucher.Overstock:
+			extra_shop_slots = 1
+		Voucher.OverstockPlus:
+			extra_shop_slots = 2
+		Voucher.ClearanceSale:
+			discount_rate = 0.75
+		Voucher.Liquidation:
+			discount_rate = 0.5
 
-func use_overstock():
-	pass
-func use_overstock_plus():
-	pass
 
-func use_clearance_sale():
-	game.discount_percent = 0.75
-func use_liquidation():
-	game.discount_percent = 0.5
-
-func get_cost(discount_percent: float) -> int:	
+func get_cost() -> int:	
 	var cost = 10
 		
-	cost = floor(cost * discount_percent)
+	cost = floor(cost * VoucherCardData.discount_rate)
 	if cost < 1:
 		return 1
 	return cost
@@ -96,7 +94,7 @@ func get_cost(discount_percent: float) -> int:
 func is_voucher() -> bool:
 	return true
 
-func get_voucher_name(id: Voucher) -> String:
+static func get_voucher_name(id: Voucher) -> String:
 	match id:
 		Voucher.Overstock:
 			return "Overstock"

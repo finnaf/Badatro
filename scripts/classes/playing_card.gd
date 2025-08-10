@@ -81,11 +81,11 @@ func is_glass_card():
 	if enhancement == CardManager.Enhancement.glass:
 		return true
 	return false
-func get_cost(discount_percent: float) -> int:		
+func get_cost() -> int:		
 	var cost = 1
 	cost += get_edition_cost()
 			
-	cost = floor(cost * discount_percent)
+	cost = floor(cost * VoucherCardData.discount_rate)
 	if cost < 1:
 		return 1
 	return cost

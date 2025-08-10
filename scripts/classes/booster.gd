@@ -66,7 +66,7 @@ func pick_weighted(rng: RandomNumberGenerator, options: Array) -> Dictionary:
 	
 	return options[-1]
 
-func get_cost(discount_percent: float) -> int:	
+func get_cost() -> int:	
 	var cost = 0
 	
 	if (booster_size == CardManager.BoosterSize.normal):
@@ -78,7 +78,7 @@ func get_cost(discount_percent: float) -> int:
 		
 	cost += get_edition_cost()
 			
-	cost = floor(cost * discount_percent)
+	cost = floor(cost * VoucherCardData.discount_rate)
 	if cost < 1:
 		return 1
 	return cost

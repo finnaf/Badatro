@@ -22,7 +22,7 @@ func add(consum):
 func use(selected_cards: Array, consumable: Node):
 	
 	if (consumable.data.is_planet()):
-		var hand = ConsumableManager.get_planet_name(consumable.data.id)
+		var hand = ConsumableCardData.get_planet_name(consumable.data.id)
 		print(hand, " ", consumable.data.id)
 		await game.upgrade_hand(hand)
 		
@@ -48,7 +48,7 @@ func _delete_consumable(card):
 	card.queue_free()
 
 func _on_sell(card):
-	var cost = card.data.get_cost(game.get_discount_percent())
+	var cost = card.data.get_cost()
 	game.add_money(cost)
 	_delete_consumable(card)
 # 

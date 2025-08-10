@@ -115,9 +115,9 @@ func get_main_card(xoffset: int):
 		data.update_variable(jokers.get_joker_score_state())
 		
 	elif type_thresh < W_JOK + W_TAR:
-		data = ConsumableCardData.new(ConsumableManager.ConsumableType.tarot)
+		data = ConsumableCardData.new(ConsumableCardData.ConsumableType.tarot)
 	else: # planet
-		data = ConsumableCardData.new(ConsumableManager.ConsumableType.planet)
+		data = ConsumableCardData.new(ConsumableCardData.ConsumableType.planet)
 	
 	data.set_shop_card()
 	card.setup(data)
@@ -150,10 +150,7 @@ func load_voucher():
 	add_child(voucher)
 	
 	# pass in rng (voucher affects shop pool)
-	voucher.setup(VoucherCardData.new(
-		game.get_voucher_pool(),
-		rng
-	))
+	voucher.setup(VoucherCardData.new(rng))
 	voucher.position.x = VOUCHER_X_OFFSET
 	voucher.position.y = BOOSTER_OFFSET
 	voucher.display_cost()
@@ -222,7 +219,7 @@ func _buy_attempt(card):
 	if MouseManager.is_disabled:
 		return
 		
-	var cost = card.data.get_cost(game.get_discount_percent())
+	var cost = card.data.get_cost()
 	if (card.data.is_joker()):
 		if (jokers.is_full() or not game.spend_money(cost)):
 			return
@@ -255,7 +252,7 @@ func _buy_attempt(card):
 	card.disconnect("card_clicked", Callable(self, "_on_card_clicked"))
 
 func _use_attempt(consumable):
-	var cost = consumable.data.get_cost(game.get_discount_percent())
+	var cost = consumable.data.get_cost()
 	var can_use = ConsumableCardData.can_use([], consumable)
 	if (can_use and game.spend_money(cost)):
 		consumables.use([], consumable)
@@ -335,17 +332,17 @@ func open_booster(booster):
 	match booster.data.booster_type:
 		CardManager.BoosterType.arcana:
 			open_pack(booster.data.booster_size, 3, 5, 
-				ConsumableCardData, ConsumableManager.ConsumableType.tarot
+				ConsumableCardData, ConsumableCardData.ConsumableType.tarot
 			)
 		CardManager.BoosterType.celestial:
 			open_pack(booster.data.booster_size, 3, 5, 
-				ConsumableCardData, ConsumableManager.ConsumableType.planet
+				ConsumableCardData, ConsumableCardData.ConsumableType.planet
 			)
 		CardManager.BoosterType.buffoon:
 			open_pack(booster.data.booster_size, 2, 4, JokerCardData)
 		CardManager.BoosterType.spectral:
 			open_pack(booster.data.booster_size, 2, 4, 
-				ConsumableCardData, ConsumableManager.ConsumableType.spectral
+				ConsumableCardData, ConsumableCardData.ConsumableType.spectral
 			)
 		CardManager.BoosterType.standard:
 			open_pack(booster.data.booster_size, 2, 4, 

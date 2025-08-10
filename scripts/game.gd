@@ -140,14 +140,6 @@ func is_voucher():
 		return true
 	return false
 
-func get_voucher_pool() -> Array:
-	return pool
-
-func get_discount_percent():
-	# clearance sale = 0.75
-	# liquidation = 0.5
-	return discount_percent
-
 func get_money_gained():
 	if blind == 0:
 		return 3

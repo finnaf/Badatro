@@ -95,22 +95,22 @@ func set_booster_tex(booster: CardManager.BoosterType, size: CardManager.Booster
 		SIZE
 	)
 	image.texture = tex
-func set_voucher_tex(voucher: VoucherManager.Voucher):
+func set_voucher_tex(voucher: VoucherCardData.Voucher):
 	var path = ("res://images/cards/vouchers/%s.png" % 
-				[VoucherManager.get_voucher_name(voucher)])
+				[VoucherCardData.get_voucher_name(voucher)])
 	var tex = CardManager.get_card_texture(path)
 	if tex:
 		image.texture = tex
-func set_consumable_tex(consumable: ConsumableManager.ConsumableType, id):
+func set_consumable_tex(consumable: ConsumableCardData.ConsumableType, id):
 	match consumable:
-		ConsumableManager.ConsumableType.planet:
+		ConsumableCardData.ConsumableType.planet:
 			var path = ("res://images/cards/cards/planet_bg.png")
 			var tex = CardManager.get_card_texture(path)
 			if tex:
 				image.texture = tex
 			
 			add_child(Globals.create_symbol_sprite(id, "planets", Vector2(5.5, 8.5)))
-		ConsumableManager.ConsumableType.tarot:
+		ConsumableCardData.ConsumableType.tarot:
 			const SIZE = Vector2(11, 13)
 			var tex := AtlasTexture.new()
 			tex.atlas = tarot_atlas
@@ -120,7 +120,7 @@ func set_consumable_tex(consumable: ConsumableManager.ConsumableType, id):
 			)
 			image.texture = tex
 			image.show()
-		ConsumableManager.ConsumableType.spectral:
+		ConsumableCardData.ConsumableType.spectral:
 			var path = ("res://images/cards/planets/planet_bg.png")
 			var tex = CardManager.get_card_texture(path)
 			if tex:
@@ -237,7 +237,7 @@ func reset_focus():
 		desc_box = null
 
 func display_cost():
-	var cost_val = data.get_cost(1)
+	var cost_val = data.get_cost()
 	card_buttons = preload("res://scenes/card-info-small.tscn").instantiate()
 	add_child(card_buttons)
 	card_buttons.set_value(cost_val, data)
@@ -247,7 +247,7 @@ func display_cost():
 
 func setup_sell_price():
 	if (card_buttons):
-		var sell_val = data.get_sell_price(1)
+		var sell_val = data.get_sell_price()
 		card_buttons.set_value(sell_val, data)
 		card_buttons.switch_label(2)
 
