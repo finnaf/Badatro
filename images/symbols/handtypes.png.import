@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://crjb4k40n36ng"
-path="res://.godot/imported/suits.png-244abd4c73f15fb68d257bd67808b367.ctex"
+uid="uid://dvm11nwa5mu56"
+path="res://.godot/imported/handtypes.png-dcb11eb1510a0442ff21f0a3c649a420.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/board/symbols/suits.png"
-dest_files=["res://.godot/imported/suits.png-244abd4c73f15fb68d257bd67808b367.ctex"]
+source_file="res://images/symbols/handtypes.png"
+dest_files=["res://.godot/imported/handtypes.png-dcb11eb1510a0442ff21f0a3c649a420.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bsembqx4tn0eg"
-path="res://.godot/imported/numbers.png-6c9e8b3840958b90b19465ff93d87de2.ctex"
+uid="uid://4oy1gbx4e03t"
+path="res://.godot/imported/planet_bg.png-c90460ef313a35031223846e249b4f15.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/board/numbers.png"
-dest_files=["res://.godot/imported/numbers.png-6c9e8b3840958b90b19465ff93d87de2.ctex"]
+source_file="res://images/cards/cards/planet_bg.png"
+dest_files=["res://.godot/imported/planet_bg.png-c90460ef313a35031223846e249b4f15.ctex"]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
-compress/channel_pack=1
+compress/channel_pack=0
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

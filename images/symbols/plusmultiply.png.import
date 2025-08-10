@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bhd8nnmphkhky"
-path="res://.godot/imported/connectives.png-eab09ea1c570c0676c2846af2df55171.ctex"
+uid="uid://dp7ur4ldk2yr1"
+path="res://.godot/imported/plusmultiply.png-97f616fc72ffe8c1fe92dd51f7baec50.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/board/symbols/connectives.png"
-dest_files=["res://.godot/imported/connectives.png-eab09ea1c570c0676c2846af2df55171.ctex"]
+source_file="res://images/symbols/plusmultiply.png"
+dest_files=["res://.godot/imported/plusmultiply.png-97f616fc72ffe8c1fe92dd51f7baec50.ctex"]
 
 [params]
 

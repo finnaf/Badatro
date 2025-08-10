@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://k3qx6ymbhvca"
-path="res://.godot/imported/numbers-padded.png-70cddfc296f585fd787c2d1b06894b1e.ctex"
+uid="uid://chgqhndjyxdce"
+path="res://.godot/imported/dot.png-3b269c923649853df4ce6233d786fefd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/board/numbers-padded.png"
-dest_files=["res://.godot/imported/numbers-padded.png-70cddfc296f585fd787c2d1b06894b1e.ctex"]
+source_file="res://images/symbols/dot.png"
+dest_files=["res://.godot/imported/dot.png-3b269c923649853df4ce6233d786fefd.ctex"]
 
 [params]
 

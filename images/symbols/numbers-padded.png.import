@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dvm11nwa5mu56"
-path="res://.godot/imported/handtypes.png-d0928fbdcd721ef7a7e12f3f60e361f4.ctex"
+uid="uid://k3qx6ymbhvca"
+path="res://.godot/imported/numbers-padded.png-821c820d6f53aeed594ac7166c31dab5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/board/symbols/handtypes.png"
-dest_files=["res://.godot/imported/handtypes.png-d0928fbdcd721ef7a7e12f3f60e361f4.ctex"]
+source_file="res://images/symbols/numbers-padded.png"
+dest_files=["res://.godot/imported/numbers-padded.png-821c820d6f53aeed594ac7166c31dab5.ctex"]
 
 [params]
 

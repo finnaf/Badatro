@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://chgqhndjyxdce"
-path="res://.godot/imported/dot.png-4d1046754b24221d0ef396b8b8359c9b.ctex"
+uid="uid://bkj75jqjh17w0"
+path="res://.godot/imported/joins.png-af5b1ce49ad1650aa8214d7e17160ad9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/board/symbols/dot.png"
-dest_files=["res://.godot/imported/dot.png-4d1046754b24221d0ef396b8b8359c9b.ctex"]
+source_file="res://images/symbols/joins.png"
+dest_files=["res://.godot/imported/joins.png-af5b1ce49ad1650aa8214d7e17160ad9.ctex"]
 
 [params]
 

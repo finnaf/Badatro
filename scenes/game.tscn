@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://dhlmhi6enlpbo" path="res://images/board/bottom-buttons/play.png" id="7_37s47"]
 [ext_resource type="Texture2D" uid="uid://bvayywyipweyk" path="res://images/board/bottom-buttons/play-grey.png" id="8_bt5mj"]
 [ext_resource type="Texture2D" uid="uid://k0jxldpehadk" path="res://images/board/sidebar/sidebar.png" id="9_e1j6l"]
-[ext_resource type="Texture2D" uid="uid://bsembqx4tn0eg" path="res://images/board/numbers.png" id="11_dinhu"]
+[ext_resource type="Texture2D" uid="uid://bsembqx4tn0eg" path="res://images/symbols/numbers.png" id="11_dinhu"]
 [ext_resource type="Texture2D" uid="uid://btyjj6alhpcsu" path="res://images/board/sidebar/buttons/info.png" id="12_0sl42"]
 [ext_resource type="Texture2D" uid="uid://e0j8ab05p427" path="res://images/board/mat/joker-area.png" id="12_sww3w"]
 [ext_resource type="Texture2D" uid="uid://bdw3okq5fdjf2" path="res://images/board/sidebar/shop-sidebar-1.png" id="13_e1j6l"]

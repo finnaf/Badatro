@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c6sr0k6l7updg"
-path="res://.godot/imported/0-1.png-09167c8526a371ddb4d1d693146a7806.ctex"
+uid="uid://crjb4k40n36ng"
+path="res://.godot/imported/suits.png-e8d2ad4da35b66bd23e0d3477007ca6a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/cards/boosters/0-1.png"
-dest_files=["res://.godot/imported/0-1.png-09167c8526a371ddb4d1d693146a7806.ctex"]
+source_file="res://images/symbols/suits.png"
+dest_files=["res://.godot/imported/suits.png-e8d2ad4da35b66bd23e0d3477007ca6a.ctex"]
 
 [params]
 
