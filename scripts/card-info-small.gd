@@ -71,7 +71,7 @@ func set_value(cost: int, data: CardData):
 		print("Invalid cost length.")
 		return
 		
-	# as any pack is taller than a regular card
+	# as any booster pack is taller than a regular card
 	if (data.is_booster()):
 		self.position.y -= 1
 		button.position.y += 2

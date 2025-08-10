@@ -39,7 +39,7 @@ func roll_edition(rate: int, no_neg: bool, rng: RandomNumberGenerator):
 		edition = CardManager.Edition.none
 
 func get_cost(discount_percent: float) -> int:	
-	return -1
+	return -1 # cant have cost of default cardtype
 
 func get_edition_cost() -> int:
 	if (edition == CardManager.Edition.foil):
@@ -52,7 +52,8 @@ func get_edition_cost() -> int:
 	return 0
 
 func get_sell_price(discount_percent: float) -> int:
-	var price = floor(get_cost(discount_percent) / 2)
+	var price = floori(get_cost(discount_percent) / 2)
+	print(price)
 	if price < 1:
 		return 1
 	return price

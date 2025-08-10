@@ -371,9 +371,7 @@ func open_pack(size: CardManager.BoosterSize,
 		count = max_size
 		in_booster_count = 2
 	
-	print("opening pack")
 	for i in range(count):
-		print("creating card")
 		var card = CARD.instantiate()
 		add_child(card)
 		

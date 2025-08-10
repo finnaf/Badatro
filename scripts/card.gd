@@ -5,9 +5,9 @@ signal button_click_forwarded(card)
 signal use_click_forwarded(card)
 signal dragged(card)
 
-
 const card_atlas = preload("res://images/cards/cards/cards.png")
 const tarot_atlas = preload("res://images/cards/cards/tarot_cards.png")
+const booster_atlas = preload("res://images/cards/cards/boosters.png")
 const enhance_atlas = preload("res://images/cards/enhancements/enhancements.png")
 @export var symbols: SpriteFrames
 
@@ -87,11 +87,14 @@ func set_joker_tex(joker_id, rarity):
 	if tex:
 		image.texture = tex
 func set_booster_tex(booster: CardManager.BoosterType, size: CardManager.BoosterSize):	
-	var path = ("res://images/cards/boosters/%s-%s.png" % 
-				[str(booster), str(size)])
-	var tex = CardManager.get_card_texture(path)
-	if tex:
-		image.texture = tex
+	const SIZE = Vector2(13, 15)
+	var tex := AtlasTexture.new()
+	tex.atlas = booster_atlas
+	tex.region = Rect2(
+		Vector2((booster) * (SIZE.x + 1), size * (SIZE.y + 1)),
+		SIZE
+	)
+	image.texture = tex
 func set_voucher_tex(voucher: VoucherManager.Voucher):
 	var path = ("res://images/cards/vouchers/%s.png" % 
 				[VoucherManager.get_voucher_name(voucher)])
