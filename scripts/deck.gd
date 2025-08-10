@@ -333,7 +333,9 @@ func return_hand(reconfig_z = true):
 					
 					if reconfig_z:
 						card.z_index = i
-	
+
+func add_card(card: PlayingCardData):
+	fulldeck.append(card)
 
 func _on_sort_suit_button_pressed():
 	is_rank_sort = false

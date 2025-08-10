@@ -36,7 +36,7 @@ func _ready():
 func setup(new_data: CardData):
 	data = new_data
 	
-	if (data.is_card()):
+	if (data.is_playing_card()):
 		var d := data as PlayingCardData
 		set_card_tex(d.rank, d.suit)
 		set_enhance_tex(d.enhancement)
@@ -104,7 +104,7 @@ func set_voucher_tex(voucher: VoucherManager.Voucher):
 func set_consumable_tex(consumable: ConsumableManager.ConsumableType, id):
 	match consumable:
 		ConsumableManager.ConsumableType.planet:
-			var path = ("res://images/cards/planets/planet_bg.png")
+			var path = ("res://images/cards/cards/planet_bg.png")
 			var tex = CardManager.get_card_texture(path)
 			if tex:
 				image.texture = tex
@@ -130,7 +130,7 @@ func draw_edition(edition: CardManager.Edition): # TODO
 	var animation
 
 func flip():
-	if not (data.is_card() or data.is_joker()):
+	if not (data.is_playing_card() or data.is_joker()):
 		print("cant flip")
 		return
 	
@@ -143,7 +143,7 @@ func select():
 	if data.is_shop:
 		return
 
-	if (data.is_card() and not data.is_raised):
+	if (data.is_playing_card() and not data.is_raised):
 		position.y -= SELECT_DIST
 		data.is_raised = true
 
@@ -151,7 +151,7 @@ func deselect():
 	if data.is_shop:
 		return
 	
-	if (data.is_card() and data.is_raised):
+	if (data.is_playing_card() and data.is_raised):
 		position.y += SELECT_DIST
 		data.is_raised = false
 
@@ -338,8 +338,8 @@ func is_flipped():
 
 func is_shop_card():
 	return data.is_shop
-func is_card():
-	return data.is_card()
+func is_playing_card():
+	return data.is_playing_card()
 func is_joker():
 	return data.is_joker()
 func is_consumable():

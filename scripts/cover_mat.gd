@@ -66,8 +66,6 @@ func load_cards():
 			return a.rank < b.rank
 		return a.suit < b.suit
 	)
-	for card in checkdeck:
-		print(card.rank)
 	
 	var offset = CARD_START_POS
 	var prev

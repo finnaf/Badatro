@@ -65,7 +65,7 @@ func unset_shop_card():
 
 func is_joker() -> bool:
 	return false
-func is_card() -> bool:
+func is_playing_card() -> bool:
 	return false
 func is_booster() -> bool:
 	return false

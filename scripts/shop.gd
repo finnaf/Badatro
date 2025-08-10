@@ -31,6 +31,7 @@ const VOUCHER_X_OFFSET = -20
 @onready var jokers = $"../Mat/Jokers"
 @onready var consumables = $"../Mat/Consumables"
 @onready var deck_info = $"../Mat/DeckInfo"
+@onready var deck = $"../Deck"
 @onready var game = $".."
 
 @onready var RerollCostOnes = $ShopBackground/RerollButton/RerollCostOnes
@@ -226,11 +227,15 @@ func _buy_attempt(card):
 		if (jokers.is_full() or not game.spend_money(cost)):
 			return
 		buy_joker(card)
+		main.erase(card)
+		main_select = null
 	
 	elif (card.data.is_consumable()):
 		if (consumables.is_full() or not game.spend_money(cost)):
 			return
 		buy_consumable(card)
+		main.erase(card)
+		main_select = null
 	
 	elif (card.data.is_booster()):
 		if (not game.spend_money(cost)):
@@ -270,6 +275,10 @@ func _get_clicked(card):
 	
 	if (card.data.is_joker()):
 		buy_joker(card)
+	elif (card.data.is_consumable()):
+		buy_consumable(card)
+	elif (card.data.is_playing_card()):
+		buy_playing_card(card)
 	else:
 		print("invalid type got")
 	
@@ -292,29 +301,24 @@ func _in_booster_card_clicked(card):
 		
 		if (jokers.is_full()):
 			card.cost_label.disable()
-		
+
+func sever_shop_connections(card):
+	card.shop_deselect()
+	card.hide_buttons()
+	card.data.unset_shop_card()
+	remove_child(card)
 		
 func buy_joker(joker):
-	joker.shop_deselect()
-	joker.hide_buttons()
-	joker.data.unset_shop_card()
-	
-	remove_child(joker)
-	main.erase(joker)
-	main_select = null
-	
+	sever_shop_connections(joker)
 	jokers.add(joker)
 
 func buy_consumable(consumable):
-	consumable.shop_deselect()
-	consumable.hide_buttons()
-	consumable.data.unset_shop_card()
-	
-	remove_child(consumable)
-	main.erase(consumable)
-	main_select = null
-	
+	sever_shop_connections(consumable)
 	consumables.add(consumable)
+
+func buy_playing_card(card):
+	sever_shop_connections(card)
+	deck.add_card(card.data)
 
 func buy_voucher(voucher: Area2D):
 	voucher.data.use()
@@ -342,6 +346,10 @@ func open_booster(booster):
 		CardManager.BoosterType.spectral:
 			open_pack(booster.data.booster_size, 2, 4, 
 				ConsumableCardData, ConsumableManager.ConsumableType.spectral
+			)
+		CardManager.BoosterType.standard:
+			open_pack(booster.data.booster_size, 2, 4, 
+				PlayingCardData
 			)
 		
 	
@@ -371,6 +379,13 @@ func open_pack(size: CardManager.BoosterSize,
 		count = max_size
 		in_booster_count = 2
 	
+	var x_offset = -20
+	if (count == 2):
+		x_offset = 0
+	elif (count == 4):
+		x_offset = -15
+	
+	
 	for i in range(count):
 		var card = CARD.instantiate()
 		add_child(card)
@@ -383,13 +398,16 @@ func open_pack(size: CardManager.BoosterSize,
 		
 		# create a card info, hide top cost
 		card.data.set_shop_card()
-		card.position = Vector2((i*13), 5)		
+		card.position = Vector2((x_offset), 5)		
 		card.display_cost()
 		card.card_buttons.switch_label(1)
 		card.hide_cost_only()
 		card.hide_use_only()
 		
-		card.data.update_variable(jokers.get_joker_score_state())
+		if (data_class == JokerCardData):
+			card.data.update_variable(jokers.get_joker_score_state())
+		
+		x_offset += 13
 
 
 func set_pack_background():

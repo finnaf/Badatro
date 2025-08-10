@@ -9,13 +9,22 @@ var seal: CardManager.Seal
 var is_raised: bool = false
 var is_flipped: bool = false
 
-func _init(i: int, r: int, s: CardManager.Suit):
+func _init(i: int = -1, r: int = -1, s: CardManager.Suit = -1):
+	if (i == -1 or r == -1 or s == -1):
+		# generate data here
+		# playing card id doesnt matter at all
+		id = 1
+		rank = CardManager.get_rnd_int(2, 13)
+		suit = CardManager.Suit.values()[CardManager.get_rnd_int(0, 3)]
+		enhancement = CardManager.Enhancement.values()[CardManager.get_rnd_int(0, 8)]
+		return
+	
 	id = i
 	rank = r
 	suit = s
 	
 	#enhancement = randi_range(0,8)
-	enhancement = CardManager.Enhancement.glass
+	enhancement = CardManager.Enhancement.wild
 
 # returns value of enhancement chips, mult, xmult, money
 func get_enhancement_score_val() -> Dictionary:
@@ -31,9 +40,9 @@ func get_enhancement_score_val() -> Dictionary:
 		CardManager.Enhancement.lucky:
 			var out = {}
 			
-			if (JokerManager.get_rnd_float() > 0.75):
+			if (CardManager.get_rnd_float() > 0.80):
 				out["mult"] = 20
-			if (JokerManager.get_rnd_float() > 0.95):
+			if (CardManager.get_rnd_float() > 0.93333): # 0.93 333...
 				out["money"] = 20
 			
 			return out
@@ -66,5 +75,5 @@ func get_cost(discount_percent: float) -> int:
 		return 1
 	return cost
 
-func is_card() -> bool:
+func is_playing_card() -> bool:
 	return true

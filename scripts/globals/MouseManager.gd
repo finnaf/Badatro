@@ -50,7 +50,7 @@ func start_drag(card: Area2D, start_pos: Vector2):
 	is_pressed = true
 	is_dragging = false
 	
-	can_drag = (not card.is_shop_card()) and (card.is_card() or card.is_joker() or card.is_consumable())
+	can_drag = (not card.is_shop_card()) and (card.is_playing_card() or card.is_joker() or card.is_consumable())
 
 func _end_drag():
 	if drag_target:

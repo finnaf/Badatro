@@ -113,7 +113,7 @@ enum Jokers {
 	#BurntJoker
 }
 
-var rng_joker = RandomNumberGenerator.new()
+var rng_joker = RandomNumberGenerator.new()		# deciding jokers
 var rng = RandomNumberGenerator.new()			# within jokers
 
 var jokers_by_rarity := {
@@ -135,8 +135,6 @@ func set_seeds(seed: int):
 
 func get_joker_rng() -> RandomNumberGenerator:
 	return rng_joker
-func get_rnd_float() -> float:
-	return rng.randf()
 
 # convert id to enum string name
 func get_joker_shortname(value: int, rarity: Rarity) -> String:
