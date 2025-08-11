@@ -5,11 +5,11 @@ var booster_type: CardManager.BoosterType
 var booster_size: CardManager.BoosterSize
 
 # uses shop rng (first round must be two buffoons)
-func _init(rng: RandomNumberGenerator, round: int = -1):
+func _init(shop_rng: RandomNumberGenerator, round: int = -1):
+	set_shop_card()
 	if (round == 1):
 		booster_type = CardManager.BoosterType.buffoon
 		booster_size = CardManager.BoosterSize.normal
-		set_shop_card()
 		return
 	
 	const BOOSTER_WEIGHTS = [
@@ -34,7 +34,7 @@ func _init(rng: RandomNumberGenerator, round: int = -1):
 		{ "type": "celestial", "size": 2, "weight": 0.5 },
 	]
 	
-	var chosen = pick_weighted(rng, BOOSTER_WEIGHTS)
+	var chosen = pick_weighted(shop_rng, BOOSTER_WEIGHTS)
 	match chosen.type:
 		"spectral":
 			booster_type = CardManager.BoosterType.spectral
@@ -48,15 +48,14 @@ func _init(rng: RandomNumberGenerator, round: int = -1):
 			booster_type = CardManager.BoosterType.standard
 	
 	booster_size = chosen.size
-	set_shop_card()
 
 # AIed code to iterate through weights
-func pick_weighted(rng: RandomNumberGenerator, options: Array) -> Dictionary:
+func pick_weighted(shop_rng: RandomNumberGenerator, options: Array) -> Dictionary:
 	var total_weight = 0.0
 	for option in options:
 		total_weight += option.weight
 
-	var threshold = rng.randf_range(0.0, total_weight)
+	var threshold = shop_rng.randf_range(0.0, total_weight)
 	var running_total = 0.0
 
 	for option in options:
@@ -73,11 +72,11 @@ func get_cost() -> int:
 		cost += 4
 	elif (booster_size == CardManager.BoosterSize.jumbo):
 		cost += 6
-	else: # mega
+	elif (booster_size == CardManager.BoosterSize.mega):
 		cost += 8
-		
-	cost += get_edition_cost()
-			
+	else:
+		cost = -1
+				
 	cost = floor(cost * VoucherCardData.discount_rate)
 	if cost < 1:
 		return 1

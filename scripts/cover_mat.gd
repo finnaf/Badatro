@@ -9,7 +9,7 @@ extends Sprite2D
 @onready var fade = $"../FadedBackground"
 
 const WIDTH = 51 # 62-11 for size of guaranteed card
-const CARD_START_POS = Vector2(36, -31)
+const CARD_START_POS = Vector2(37, -31)
 
 var shown_digits = []
 var shown_cards = []

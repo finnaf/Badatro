@@ -19,16 +19,18 @@ func add(consum):
 	reorganise_consumables()
 	connect_consumables()
 
-func use(selected_cards: Array, consumable: Node):
-	
+func use(selected_cards: Array, consumable: Node2D):
 	if (consumable.data.is_planet()):
 		var hand = ConsumableCardData.get_planet_name(consumable.data.id)
-		print(hand, " ", consumable.data.id)
 		await game.upgrade_hand(hand)
 		
-		# update current hand if is playing
-		if game.state == game.states.PLAYING:
+		# update current hand if is playing it
+		if (game.state == game.states.PLAYING and
+			game.hand == hand):
 			game.set_hand(hand)
+	
+	elif (consumable.data.is_tarot()):
+		print("use tarot")
 		
 
 func _on_clicked(card):

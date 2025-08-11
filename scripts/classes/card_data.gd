@@ -83,5 +83,7 @@ func is_consumable() -> bool:
 	return false
 func is_planet() -> bool:
 	return false
+func is_tarot() -> bool:
+	return false
 func is_voucher() -> bool:
 	return false

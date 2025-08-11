@@ -6,7 +6,7 @@ extends Node2D
 @onready var shop = $"Shop"
 @onready var deck = $Deck
 
-var seed = 7
+var seed = 90
 
 const GAMESPEED = 0.3
 const INCRSPEED = GAMESPEED / 7
@@ -132,9 +132,19 @@ func get_deck_size():
 
 func get_hand_size():
 	var hand_size = BASEHANDSIZE
+	hand_size += VoucherCardData.extra_hand_size
 	return hand_size
 
+func get_hands_num():
+	var count = hands
+	count += VoucherCardData.extra_hands
+	return count
 
+func get_discards_num():
+	var count = discards
+	count += VoucherCardData.extra_discards
+	return count
+	
 func is_voucher():
 	if voucher_count > 0:
 		return true
@@ -151,13 +161,13 @@ func get_money_gained():
 		return 5
 
 func get_reroll_cost():
-	return reroll_cost
+	return reroll_cost + VoucherCardData.reroll_subtraction
 
 func get_round():
 	return round
 
 func get_ante():
-	return ante
+	return ante - VoucherCardData.ante_subtraction
 	
 func get_basic_deck() -> Array:
 	var ranks = range(2, 15) #2-15
@@ -177,8 +187,8 @@ func get_basic_deck() -> Array:
 func get_game_state() -> Dictionary:
 	return {
 		"current_hand": hand,
-		"hands": hands,
-		"discards": discards,
+		"hands": get_hands_num(),
+		"discards": get_discards_num(),
 	}
 
 func upgrade_hand(hand: String):
@@ -194,7 +204,7 @@ func set_hand(new_hand: String):
 	sidebar.update_mult()
 
 func can_discard():
-	if discards <= 0 or state != states.PLAYING:
+	if get_discards_num() <= 0 or state != states.PLAYING:
 		return false
 	return true
 
@@ -258,16 +268,17 @@ func end_turn():
 		state = states.PLAYING
 
 func reset_score():
+	# hands / discards without any modifiers
 	hands = BASEHANDS
 	discards = BASEDISCARDS
 	score = 0
 	updateScoreUI.emit()
 
 func cashout():
-	add_money(
-		get_money_gained() + 
-		(hands * 2) +
-		min(floori(money / 5), 5))
+	var interest = min(floori(money / 5), 
+						5 + VoucherCardData.extra_interest_cap)
+	
+	add_money(get_money_gained() + (hands * 2) + interest)
 	
 	WinUI.visible = false
 	reset_score()
@@ -276,7 +287,6 @@ func cashout():
 	sidebar.update_ante()
 	shop.open()
 	state = states.SHOPPING
-
 
 # if the shop has been reset for the ante (vouchers)
 func has_shop_ante_reset() -> bool:

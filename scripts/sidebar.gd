@@ -105,7 +105,7 @@ func _update_click():
 	
 
 func setup_values():
-	ante.frame = game.ante
+	ante.frame = game.get_ante()
 	
 	var digits = Globals.convert_to_digits(game.round, 2, 99)
 	roundones.frame = digits[1]
@@ -116,8 +116,8 @@ func setup_values():
 
 # activated at the end of any button press
 func _update_buttons():
-	discards.frame = game.discards
-	hands.frame = game.hands
+	discards.frame = game.get_discards_num()
+	hands.frame = game.get_hands_num()
 	
 	if game.state == game.states.PLAYING:
 		playbutton.disabled = false

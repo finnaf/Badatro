@@ -47,7 +47,7 @@ func set_seed(s: int):
 	rng.seed = s
 
 func prep_values():
-	cards_remaining = MAIN_STANDARD_SIZE
+	cards_remaining = MAIN_STANDARD_SIZE + VoucherCardData.extra_shop_slots
 	packs_remaining = 2
 	vouchers_remaining = 1
 	self.visible = true

@@ -49,9 +49,13 @@ func setup(new_data: CardData):
 	elif (data.is_voucher()):
 		var d := data as VoucherCardData
 		set_voucher_tex(data.id)
-	elif (data.is_consumable()):
+	
+	elif (data.is_planet()):
 		var d := data as ConsumableCardData
-		set_consumable_tex(d.consumable_type, d.id)
+		set_planet_tex(d.id)
+	elif (data.is_tarot()):
+		var d := data as ConsumableCardData
+		set_tarot_tex(d.id)
 	
 func set_card_tex(rank: int, suit: int):	
 	const SIZE = Vector2(11, 13)
@@ -100,30 +104,29 @@ func set_voucher_tex(voucher: VoucherCardData.Voucher):
 	var tex = CardManager.get_card_texture(path)
 	if tex:
 		image.texture = tex
-func set_consumable_tex(consumable: ConsumableCardData.ConsumableType, id):
-	match consumable:
-		ConsumableCardData.ConsumableType.planet:
-			var path = ("res://images/cards/cards/planet_bg.png")
-			var tex = CardManager.get_card_texture(path)
-			if tex:
-				image.texture = tex
-			
-			add_child(Globals.create_symbol_sprite(id, "planets", Vector2(5.5, 8.5)))
-		ConsumableCardData.ConsumableType.tarot:
-			const SIZE = Vector2(11, 13)
-			var tex := AtlasTexture.new()
-			tex.atlas = tarot_atlas
-			tex.region = Rect2(
-				Vector2((id) * (SIZE.x + 1), 0),
-				SIZE
-			)
-			image.texture = tex
-			image.show()
-		ConsumableCardData.ConsumableType.spectral:
-			var path = ("res://images/cards/planets/planet_bg.png")
-			var tex = CardManager.get_card_texture(path)
-			if tex:
-				image.texture = tex
+
+func set_planet_tex(planet: int):
+	var path = ("res://images/cards/cards/planet_bg.png")
+	var tex = CardManager.get_card_texture(path)
+	if tex:
+		image.texture = tex
+	
+	add_child(Globals.create_symbol_sprite(planet, "planets", Vector2(5.5, 8.5)))
+func set_tarot_tex(tarot: ConsumableCardData.Tarot):
+	const SIZE = Vector2(11, 13)
+	var tex := AtlasTexture.new()
+	tex.atlas = tarot_atlas
+	tex.region = Rect2(
+		Vector2((tarot) * (SIZE.x + 1), 0),
+		SIZE
+	)
+	image.texture = tex
+	image.show()
+func set_spectral_tex(spectral): # TODO
+	var path = ("res://images/cards/planets/planet_bg.png")
+	var tex = CardManager.get_card_texture(path)
+	if tex:
+		image.texture = tex
 
 func draw_edition(edition: CardManager.Edition): # TODO
 	var animation
@@ -174,7 +177,7 @@ func _on_drag_motion(event):
 func _on_drag_end():
 	dragged.emit(self)
 
-func on_clicked():	
+func on_clicked():
 	if (data.is_joker()):
 		var jok_data = JokerManager.joker_info[get_id()]
 		print(
@@ -184,6 +187,8 @@ func on_clicked():
 			" - ",
 			jok_data.description
 		)
+	if (data.is_voucher()):
+		print("voucher id", data.id)
 			
 	emit_signal("card_clicked", self)
 	

@@ -76,6 +76,10 @@ func is_planet() -> bool:
 	if (consumable_type == ConsumableType.planet):
 		return true
 	return false
+func is_tarot() -> bool:
+	if (consumable_type == ConsumableType.tarot):
+		return true
+	return false
 
 static func can_use(selected_cards: Array, consumable: Node) -> bool:
 	if (consumable.data.is_planet()):

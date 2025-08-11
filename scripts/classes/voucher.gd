@@ -70,12 +70,11 @@ static var extra_hands					: int
 static var extra_discards				: int
 static var tarot_rate					: int
 static var planet_rate					: int
-static var interest_cap					: int
+static var extra_interest_cap			: int
 static var extra_joker_slots			: int
 static var playing_card_shop			: bool
 static var enhanced_playing_card_shop	: bool
-static var do_hieroglyph				: bool # flag gets reset
-static var do_petroglyph				: bool # flag gets reset
+static var ante_subtraction				: int
 static var can_reroll					: bool
 static var can_infinite_reroll			: bool
 static var extra_hand_size				: int
@@ -87,7 +86,7 @@ static func _static_init():
 	discount_rate 				= 1
 	extra_shop_slots			= 0
 	extra_edition_rate			= 0
-	reroll_subtraction			= 0
+	reroll_subtraction			= 2
 	extra_consumable			= 0
 	spectral_shop				= false
 	do_telescope				= false
@@ -96,12 +95,11 @@ static func _static_init():
 	extra_discards				= 0
 	tarot_rate					= 1
 	planet_rate					= 1
-	interest_cap				= 5
+	extra_interest_cap			= 0
 	extra_joker_slots			= 0
 	playing_card_shop			= false
 	enhanced_playing_card_shop	= false
-	do_hieroglyph				= false
-	do_petroglyph				= false
+	ante_subtraction			= 0
 	can_reroll					= false
 	can_infinite_reroll			= false
 	extra_hand_size				= 0
@@ -114,7 +112,7 @@ func _init(shop_rng: RandomNumberGenerator):
 		id = Voucher.Blank
 	
 	var index = shop_rng.randi() % pool.size()
-	var id = pool[index]
+	id = pool[index]
 	set_shop_card()
 
 func use():
@@ -150,48 +148,50 @@ func use():
 		Voucher.Observatory:
 			do_observatory = true
 		Voucher.Grabber:
-			extra_hands = 1
+			extra_hands += 1
 			pool.append(Voucher.NachoTong)
 		Voucher.NachoTong:
-			extra_hands = 2
+			extra_hands += 1
 		Voucher.Wasteful:
-			extra_discards = 1
+			extra_discards += 1
 			pool.append(Voucher.Recyclomancy)
 		Voucher.Recyclomancy:
-			extra_discards = 2
+			extra_discards += 1
 		Voucher.PlanetMerchant:
 			planet_rate = 2
 			pool.append(Voucher.PlanetTycoon)
 		Voucher.PlanetTycoon:
 			planet_rate = 4
 		Voucher.SeedMoney:
-			interest_cap = 10
+			extra_interest_cap += 5
 			pool.append(Voucher.MoneyTree)
 		Voucher.MoneyTree:
-			interest_cap = 20
+			extra_interest_cap += 10
 		Voucher.Blank:
 			pool.append(Voucher.Antimatter)
 		Voucher.Antimatter:
-			extra_joker_slots = 1
+			extra_joker_slots += 1
 		Voucher.MagicTrick:
 			playing_card_shop = true
 			pool.append(Voucher.Illusion)
 		Voucher.Illusion:
 			enhanced_playing_card_shop = true
 		Voucher.Hieroglyph:
-			do_hieroglyph = true # make sure to reset
+			ante_subtraction += 1
+			extra_hands -= 1
 			pool.append(Voucher.Petroglyph)
 		Voucher.Petroglyph:
-			do_petroglyph = true
+			ante_subtraction += 1
+			extra_discards -= 1
 		Voucher.DirectorsCut:
 			can_reroll = true
 			pool.append(Voucher.Retcon)
 		Voucher.Retcon:
 			can_infinite_reroll = true
 		Voucher.PaintBrush:
-			extra_hand_size = 1
+			extra_hand_size += 1
 		Voucher.Palette:
-			extra_hand_size = 2
+			extra_hand_size += 1
 	
 	pool.erase(id)
 
