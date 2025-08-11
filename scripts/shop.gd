@@ -134,7 +134,7 @@ func get_booster(xoffset: int):
 	boosters.append(booster)
 
 func load_voucher():
-	# logic only handles one voucher rn
+	# TODO logic only handles one voucher rn
 	if (not vouchers.is_empty()):
 		if game.has_shop_ante_reset():
 			for voucher in vouchers:

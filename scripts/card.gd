@@ -96,8 +96,7 @@ func set_booster_tex(booster: CardManager.BoosterType, size: CardManager.Booster
 	)
 	image.texture = tex
 func set_voucher_tex(voucher: VoucherCardData.Voucher):
-	var path = ("res://images/cards/vouchers/%s.png" % 
-				[VoucherCardData.get_voucher_name(voucher)])
+	var path = ("res://images/cards/vouchers/Blank.png")
 	var tex = CardManager.get_card_texture(path)
 	if tex:
 		image.texture = tex
