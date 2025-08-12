@@ -63,7 +63,6 @@ func get_edition_cost() -> int:
 
 func get_sell_price() -> int:
 	var price = floori(get_cost() / 2)
-	print(price)
 	if price < 1:
 		return 1
 	return price

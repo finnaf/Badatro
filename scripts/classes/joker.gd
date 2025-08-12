@@ -53,6 +53,7 @@ func get_trigger_val(card: PlayingCardData) -> Dictionary:
 	return {}
 
 func update_variable(state: Dictionary, scoreval = null):	
+	# simulate the joker being triggered to get value
 	if (scoreval == null):
 		scoreval = get_score_val(state)
 	
@@ -60,7 +61,7 @@ func update_variable(state: Dictionary, scoreval = null):
 		variable = scoreval.eq_variable
 	elif (scoreval.has("add_variable")):
 		variable += scoreval.add_variable
-
+	
 
 func get_cost() -> int:		
 	var cost = JokerManager.joker_info[id].cost

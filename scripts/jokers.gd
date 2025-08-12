@@ -110,7 +110,13 @@ func get_joker_position(i):
 	return ((i * spacing) - (total_width/2)) - 5
 
 func connect_jokers():
+	# TODO should i check connection already exists?
 	for joker in jokers:
 		joker.connect("dragged", Callable(self, "_on_card_dragged"))
 		joker.connect("card_clicked", Callable(self, "_on_clicked"))
 		joker.connect("button_click_forwarded", Callable(self, "_on_sell"))
+		joker.connect("created_desc_box", Callable(self, "_update_variable_in_jok"))
+			
+
+func _update_variable_in_jok(card):
+	card.data.update_variable(get_joker_score_state())

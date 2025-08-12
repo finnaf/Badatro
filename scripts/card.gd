@@ -4,6 +4,7 @@ signal card_clicked(card)
 signal button_click_forwarded(card)
 signal use_click_forwarded(card)
 signal dragged(card)
+signal created_desc_box(card)
 
 const card_atlas = preload("res://images/cards/cards/cards.png")
 const tarot_atlas = preload("res://images/cards/cards/tarot_cards.png")
@@ -217,6 +218,7 @@ func on_mouse_entered():
 		var desc_data = JokerManager.joker_info[get_id()]
 		desc_box = box.new(desc_data, data)
 		add_child(desc_box)
+		emit_signal("created_desc_box", self)
 
 func on_mouse_exited():
 	if (MouseManager.is_dragging or MouseManager.card_disabled(self)):

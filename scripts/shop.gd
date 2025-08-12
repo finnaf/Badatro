@@ -3,6 +3,7 @@ extends Node2D
 const CARD = preload("res://scenes/card.tscn")
 
 const MAIN_STANDARD_SIZE = 2
+var main_size
 var cards_remaining
 var packs_remaining
 var vouchers_remaining
@@ -47,7 +48,8 @@ func set_seed(s: int):
 	rng.seed = s
 
 func prep_values():
-	cards_remaining = MAIN_STANDARD_SIZE + VoucherCardData.extra_shop_slots
+	main_size = MAIN_STANDARD_SIZE + VoucherCardData.extra_shop_slots
+	cards_remaining = main_size
 	packs_remaining = 2
 	vouchers_remaining = 1
 	self.visible = true
@@ -321,6 +323,24 @@ func buy_voucher(voucher: Area2D):
 	voucher.data.use()
 	vouchers.erase(voucher)
 	voucher.queue_free()
+	
+	reset_shop()
+
+# for changes to the shop on voucher buy (overstock etc)
+func reset_shop():
+	
+	# OVERSTOCK SHOP RESET	
+	if ((MAIN_STANDARD_SIZE + VoucherCardData.extra_shop_slots - main_size) > 0):
+		cards_remaining = MAIN_STANDARD_SIZE + VoucherCardData.extra_shop_slots
+		var offsets = get_card_x_offsets(cards_remaining)
+	
+		for i in range(cards_remaining - main.size()):
+			get_main_card(0)
+	
+		for i in range(main.size()):
+			main[i].position.x = offsets[1] + (i*offsets[0])
+		
+		setup_connections()
 
 func open_booster(booster):
 	boosters.erase(booster)
@@ -345,11 +365,7 @@ func open_booster(booster):
 				ConsumableCardData, ConsumableCardData.ConsumableType.spectral
 			)
 		CardManager.BoosterType.standard:
-			open_pack(booster.data.booster_size, 2, 4, 
-				PlayingCardData
-			)
-		
-	
+			open_pack(booster.data.booster_size, 2, 4, PlayingCardData)
 	
 	setup_booster_connections()	
 
@@ -384,7 +400,6 @@ func open_pack(size: CardManager.BoosterSize,
 	elif (count == 4):
 		x_offset = -15
 	
-	
 	for i in range(count):
 		var card = CARD.instantiate()
 		add_child(card)
@@ -402,9 +417,6 @@ func open_pack(size: CardManager.BoosterSize,
 		card.card_buttons.switch_label(1)
 		card.hide_cost_only()
 		card.hide_use_only()
-		
-		if (data_class == JokerCardData):
-			card.data.update_variable(jokers.get_joker_score_state())
 		
 		x_offset += 13
 

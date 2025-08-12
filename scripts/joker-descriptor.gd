@@ -101,11 +101,9 @@ func _do_benefit(data, joker_data: JokerCardData, i, top_x, top_y, sprites):
 			if (num == -1):
 				num = joker_data.variable
 				if (num == int(num)):
-					data[ben_val] = int(num)
-				else:
-					data[ben_val] = num
+					num = int(num)
 			
-			for d in str(data[ben_val]):
+			for d in str(num):
 				top_x = _place_digit(int(d), top_x, top_y, sprites, Globals.BLUE)
 		JokerManager.Benefit.multnum:
 			var ben_val = "benefit_val_%d" % i
@@ -114,11 +112,9 @@ func _do_benefit(data, joker_data: JokerCardData, i, top_x, top_y, sprites):
 			if (num == -1): # is a var
 				num = joker_data.variable
 				if (num == int(num)): # convert to int if is so
-					data[ben_val] = int(num)
-				else:
-					data[ben_val] = num
+					num = int(num)
 			
-			for d in str(data[ben_val]):
+			for d in str(num):
 				top_x = _place_digit(int(d), top_x, top_y, sprites, Globals.RED)
 		JokerManager.Benefit.to:
 			top_x = _place_symbol(28, SMALL_DIGIT_SIZE+1, top_x, top_y, sprites, Globals.BLACK)
