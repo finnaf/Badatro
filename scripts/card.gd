@@ -8,6 +8,7 @@ signal dragged(card)
 const card_atlas = preload("res://images/cards/cards/cards.png")
 const tarot_atlas = preload("res://images/cards/cards/tarot_cards.png")
 const booster_atlas = preload("res://images/cards/cards/boosters.png")
+const voucher_atlas = preload("res://images/cards/cards/vouchers.png")
 const enhance_atlas = preload("res://images/cards/enhancements/enhancements.png")
 @export var symbols: SpriteFrames
 
@@ -100,10 +101,14 @@ func set_booster_tex(booster: CardManager.BoosterType, size: CardManager.Booster
 	)
 	image.texture = tex
 func set_voucher_tex(voucher: VoucherCardData.Voucher):
-	var path = ("res://images/cards/vouchers/Blank.png")
-	var tex = CardManager.get_card_texture(path)
-	if tex:
-		image.texture = tex
+	const SIZE = Vector2(11, 15)
+	var tex := AtlasTexture.new()
+	tex.atlas = voucher_atlas
+	tex.region = Rect2(
+		Vector2((voucher) * (SIZE.x + 1), 0),
+		SIZE
+	)
+	image.texture = tex
 
 func set_planet_tex(planet: int):
 	var path = ("res://images/cards/cards/planet_bg.png")
@@ -186,10 +191,7 @@ func on_clicked():
 			jok_data.name,
 			" - ",
 			jok_data.description
-		)
-	if (data.is_voucher()):
-		print("voucher id", data.id)
-			
+		)	
 	emit_signal("card_clicked", self)
 	
 func on_mouse_entered():
