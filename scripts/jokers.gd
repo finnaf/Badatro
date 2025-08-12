@@ -91,6 +91,8 @@ func _on_clicked(card):
 func _on_sell(card):
 	game.add_money(card.data.get_sell_price())
 	_delete_joker(card)
+	reorganise_jokers()
+	
 
 func _delete_joker(card):
 	jokers.erase(card)

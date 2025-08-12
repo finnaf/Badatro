@@ -418,6 +418,9 @@ func open_pack(size: CardManager.BoosterSize,
 		card.hide_cost_only()
 		card.hide_use_only()
 		
+		if (data_class == JokerCardData):
+			card.data.update_variable(jokers.get_joker_score_state())
+		
 		x_offset += 13
 
 

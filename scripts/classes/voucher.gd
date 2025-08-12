@@ -116,7 +116,7 @@ func _init(shop_rng: RandomNumberGenerator):
 	set_shop_card()
 	
 	# FOR TESTING
-	id = 0
+	id = 2
 
 func use():
 	match id:

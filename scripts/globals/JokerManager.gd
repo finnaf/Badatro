@@ -568,7 +568,7 @@ func score_raised_fist(joker, gamestate) -> Dictionary:
 	return {"mult": 2 * min_rank}
 func score_abstract_joker(joker, gamestate) -> Dictionary:
 	if (gamestate.jokers.size() > 0):
-		return {"mult": gamestate.jokers.size() * 3}
+		return {"mult": gamestate.jokers.size() * 3, "eq_variable": gamestate.jokers.size() * 3}
 	return {}
 
 # uncommon jokers
