@@ -58,12 +58,12 @@ static var START_POOL = [
 
 static var pool: Array
 
-static var discount_rate					: int
+static var discount_rate				: float
 static var extra_shop_slots				: int
 static var extra_edition_rate			: int
 static var reroll_subtraction			: int
 static var extra_consumable				: int
-static var spectral_shop					: bool
+static var spectral_shop				: bool
 static var do_telescope					: bool
 static var do_observatory				: bool
 static var extra_hands					: int
@@ -71,9 +71,9 @@ static var extra_discards				: int
 static var tarot_rate					: int
 static var planet_rate					: int
 static var extra_interest_cap			: int
-static var extra_joker_slots				: int
-static var playing_card_shop				: bool
-static var enhanced_playing_card_shop		: bool
+static var extra_joker_slots			: int
+static var playing_card_shop			: bool
+static var enhanced_playing_card_shop	: bool
 static var ante_subtraction				: int
 static var can_reroll					: bool
 static var can_infinite_reroll			: bool
@@ -83,23 +83,23 @@ static var extra_hand_size				: int
 static func _static_init():
 	pool = START_POOL.duplicate()
 	
-	discount_rate 				= 1
-	extra_shop_slots				= 0
-	extra_edition_rate			= 0
-	reroll_subtraction			= 2
-	extra_consumable				= 0
-	spectral_shop				= false
-	do_telescope					= false
-	do_observatory				= false
-	extra_hands					= 0
-	extra_discards				= 0
-	tarot_rate					= 1
-	planet_rate					= 1
-	extra_interest_cap			= 0
-	extra_joker_slots			= 0
-	playing_card_shop			= false
-	enhanced_playing_card_shop	= false
-	ante_subtraction				= 0
+	discount_rate = 1
+	extra_shop_slots = 0
+	extra_edition_rate = 0
+	reroll_subtraction = 2
+	extra_consumable = 0
+	spectral_shop = false
+	do_telescope = false
+	do_observatory = false
+	extra_hands = 0
+	extra_discards = 0
+	tarot_rate = 1
+	planet_rate = 1
+	extra_interest_cap = 0
+	extra_joker_slots = 0
+	playing_card_shop = false
+	enhanced_playing_card_shop = false
+	ante_subtraction = 0
 	can_reroll					= false
 	can_infinite_reroll			= false
 	extra_hand_size				= 0

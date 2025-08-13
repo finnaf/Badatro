@@ -66,8 +66,11 @@ func update_variable(state: Dictionary, scoreval = null):
 func get_cost() -> int:		
 	var cost = JokerManager.joker_info[id].cost
 	cost += get_edition_cost()
-			
-	cost = floor(cost * VoucherCardData.discount_rate)
+	
+	print("joker cost before ", cost)
+	print("discount rate:", VoucherCardData.discount_rate)
+	cost = floori(cost * VoucherCardData.discount_rate)
+	print("joker cost after ", cost)
 	if cost < 1:
 		return 1
 	return cost

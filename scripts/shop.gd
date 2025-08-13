@@ -154,9 +154,8 @@ func load_voucher():
 	# pass in rng (voucher affects shop pool)
 	voucher.setup(VoucherCardData.new(rng))
 	voucher.position.x = VOUCHER_X_OFFSET
-	voucher.position.y = BOOSTER_OFFSET
+	voucher.position.y = BOOSTER_OFFSET + 1
 	voucher.display_cost()
-	voucher.hide_cost_only()
 	vouchers.append(voucher)
 
 # returns offset, and starting offset
@@ -341,6 +340,8 @@ func reset_shop():
 			main[i].position.x = offsets[1] + (i*offsets[0])
 		
 		setup_connections()
+	
+	# SHOP MONEY DECREASE TODO
 
 func open_booster(booster):
 	boosters.erase(booster)
