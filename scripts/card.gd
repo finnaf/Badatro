@@ -7,6 +7,7 @@ signal dragged(card)
 signal created_desc_box(card)
 
 const card_atlas = preload("res://images/cards/cards/cards.png")
+const joker_atlas = preload("res://images/cards/cards/jokers.png")
 const tarot_atlas = preload("res://images/cards/cards/tarot_cards.png")
 const booster_atlas = preload("res://images/cards/cards/boosters.png")
 const voucher_atlas = preload("res://images/cards/cards/vouchers.png")
@@ -42,9 +43,23 @@ func setup(new_data: CardData):
 		var d := data as PlayingCardData
 		set_card_tex(d.rank, d.suit)
 		set_enhance_tex(d.enhancement)
+		enhancement.visible = true
 	elif (data.is_joker()):
 		var d := data as JokerCardData
-		set_joker_tex(d.id, d.rarity)
+		
+		var count = 0
+		var rarity_add: int = d.rarity - 1
+		print("RARITY: ", d.rarity)
+		# joker id is sorted by rarity.
+		# common/uncommon/rare/legendary
+		# to get right place on atlas need the relative id
+		while rarity_add >= 0:
+			var pool = JokerManager.jokers_by_rarity[rarity_add]
+			count += pool.size()
+			rarity_add -= 1
+			
+		print("count ", count, "   id ", d.id)
+		set_joker_tex(d.id-count, d.rarity)
 	elif (data.is_booster()):
 		var d := data as BoosterCardData
 		set_booster_tex(d.booster_type, d.booster_size)
@@ -85,13 +100,14 @@ func set_enhance_tex(enhance: CardManager.Enhancement):
 		image.hide()
 
 func set_joker_tex(joker_id, rarity):	
-	var path = ("res://images/cards/jokers/%s/%s.png" % 
-				[JokerManager.get_rarity_string(rarity), 
-				JokerManager.get_joker_shortname(joker_id, rarity)])
-	
-	var tex = CardManager.get_card_texture(path)
-	if tex:
-		image.texture = tex
+	const SIZE = Vector2(11, 13)
+	var tex := AtlasTexture.new()
+	tex.atlas = joker_atlas
+	tex.region = Rect2(
+		Vector2((joker_id) * (SIZE.x + 1), rarity * (SIZE.y + 1)),
+		SIZE
+	)
+	image.texture = tex
 func set_booster_tex(booster: CardManager.BoosterType, size: CardManager.BoosterSize):	
 	const SIZE = Vector2(13, 15)
 	var tex := AtlasTexture.new()

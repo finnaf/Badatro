@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://bx13iw6g2vweo"]
+[gd_scene load_steps=4 format=3 uid="uid://bx13iw6g2vweo"]
 
 [ext_resource type="Script" uid="uid://b2yjo0ea1wf3v" path="res://scripts/card.gd" id="1_6u4wf"]
 [ext_resource type="SpriteFrames" uid="uid://b2130b6r8xv1b" path="res://resources/symbols.tres" id="2_kg30u"]
-[ext_resource type="Texture2D" uid="uid://yolk82kxpyqc" path="res://images/cards/back.png" id="2_ktuci"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rjlel"]
 size = Vector2(9, 11)
@@ -15,15 +14,14 @@ symbols = ExtResource("2_kg30u")
 root_node = NodePath("../Image")
 
 [node name="Background" type="Sprite2D" parent="."]
+visible = false
 texture_filter = 1
 position = Vector2(5, 6)
-texture = ExtResource("2_ktuci")
 offset = Vector2(0.5, 0.5)
 
 [node name="Image" type="Sprite2D" parent="."]
 texture_filter = 1
 position = Vector2(5.5, 6.5)
-texture = ExtResource("2_ktuci")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(5.5, 6.5)

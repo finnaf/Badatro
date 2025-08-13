@@ -30,7 +30,7 @@ var discount_percent = 1
 const BASE_REROLL_COST = 5
 var reroll_cost = 5
 
-var money = 50
+var money = 500
 
 const BASEHANDS = 4
 const BASEDISCARDS = 3
@@ -161,7 +161,7 @@ func get_money_gained():
 		return 5
 
 func get_reroll_cost():
-	return reroll_cost + VoucherCardData.reroll_subtraction
+	return reroll_cost + VoucherCardData.extra_reroll_cost
 
 func get_round():
 	return round

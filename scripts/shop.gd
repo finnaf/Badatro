@@ -346,6 +346,9 @@ func reset_shop():
 		card.update_cost()
 	for booster in boosters:
 		booster.update_cost()
+	
+	# REROLL VOUCHERS
+	update_reroll_display()
 
 func open_booster(booster):
 	boosters.erase(booster)

@@ -61,7 +61,7 @@ static var pool: Array
 static var discount_rate				: float
 static var extra_shop_slots				: int
 static var extra_edition_rate			: int
-static var reroll_subtraction			: int
+static var extra_reroll_cost			: int
 static var extra_consumable				: int
 static var spectral_shop				: bool
 static var do_telescope					: bool
@@ -86,7 +86,7 @@ static func _static_init():
 	discount_rate = 1
 	extra_shop_slots = 0
 	extra_edition_rate = 0
-	reroll_subtraction = 2
+	extra_reroll_cost = 0
 	extra_consumable = 0
 	spectral_shop = false
 	do_telescope = false
@@ -116,7 +116,7 @@ func _init(shop_rng: RandomNumberGenerator):
 	set_shop_card()
 	
 	# FOR TESTING
-	id = 2
+	id = 7
 
 func use():
 	match id:
@@ -136,10 +136,10 @@ func use():
 		Voucher.GlowUp:
 			extra_edition_rate = 4
 		Voucher.RerollSurplus:
-			reroll_subtraction = 2
+			extra_reroll_cost = -2
 			pool.append(Voucher.RerollGlut)
 		Voucher.RerollGlut:
-			reroll_subtraction = 4
+			extra_reroll_cost = -4
 		Voucher.CrystalBall:
 			extra_consumable = 1
 			pool.append(Voucher.OmenGlobe)
