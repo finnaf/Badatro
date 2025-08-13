@@ -297,7 +297,7 @@ func _in_booster_card_clicked(card):
 		in_booster_select = card
 		card.shop_select()
 		
-		if (jokers.is_full()):
+		if (card.is_joker() and jokers.is_full()):
 			card.cost_label.disable()
 
 func sever_shop_connections(card):

@@ -1,6 +1,6 @@
 extends Sprite2D
 
-# TODO fix
+# TODO fix DRAG END!
 
 @onready var game = $"../.."
 
@@ -9,7 +9,6 @@ var consum_select = null
 var consumables = []
 var max_consumables = 2
 const BASE_CONSUMABLES = 2
-
 
 func add(consum):
 	consumables.append(consum)
@@ -64,8 +63,11 @@ func reorganise_consumables():
 		consumables[i].position.x = get_consumable_position(i)
 		consumables[i].position.y = -6
 
+func get_consumable_count():
+	return max_consumables + VoucherCardData.extra_consumable
+
 func is_full():
-	if (consumables.size() >= max_consumables):
+	if (consumables.size() >= get_consumable_count()):
 		return true
 	return false
 
@@ -74,8 +76,22 @@ func get_consumable_position(i):
 	var total_width = (consumables.size() - 1) * spacing
 	return ((i * spacing) - (total_width/2)) - 6
 
+func _on_card_dragged(card):
+	consumables.erase(card)
+
+	var insert_index = 0
+	for i in range(consumables.size()):
+		if card.position.x > consumables[i].position.x:
+			insert_index = i + 1
+		else:
+			break
+
+	consumables.insert(insert_index, card)
+	reorganise_consumables()
+
 func connect_consumables():
 	for card in consumables:
 		card.connect("card_clicked", Callable(self, "_on_clicked"))
+		card.connect("dragged", Callable(self, "_on_card_dragged"))
 		card.connect("use_click_forwarded", Callable(self, "use_attempt"))
 		card.connect("button_click_forwarded", Callable(self, "_on_sell"))

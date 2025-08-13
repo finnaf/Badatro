@@ -38,7 +38,7 @@ func get_joker_score_state() -> Dictionary:
 	state.merge(deck.get_game_state())
 	state.merge({
 		"jokers": jokers,
-		"max_jokers": max_jokers,
+		"max_jokers": get_max_jokers(),
 	})
 	
 	return state
@@ -102,9 +102,12 @@ func _delete_joker(card):
 
 
 func is_full():
-	if (jokers.size() < max_jokers):
+	if (jokers.size() < get_max_jokers()):
 		return false
 	return true
+
+func get_max_jokers():
+	return max_jokers + VoucherCardData.extra_joker_slots
 
 func get_joker_position(i):
 	var spacing = round((55)/jokers.size())

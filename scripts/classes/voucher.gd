@@ -116,7 +116,7 @@ func _init(shop_rng: RandomNumberGenerator):
 	set_shop_card()
 	
 	# FOR TESTING
-	id = 7
+	#id = Voucher.Antimatter
 
 func use():
 	match id:

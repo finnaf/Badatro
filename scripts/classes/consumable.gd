@@ -55,7 +55,11 @@ const planet_values = {
 
 func _init(type: ConsumableType):
 	consumable_type = type
-	id = randi_range(0, 21)
+	
+	if (consumable_type == ConsumableType.planet):
+		id = randi_range(0, 11)
+	elif (consumable_type == ConsumableType.tarot):
+		id = randi_range(0, 21)
 
 func get_cost() -> int:	
 	var cost = 0
@@ -112,6 +116,6 @@ static func get_planet_name(value: int) -> String:
 		10:
 			return "flush house"
 		11:
-			return "five of a kind"
+			return "flush five"
 		_:
 			return "none"

@@ -49,7 +49,7 @@ func setup(new_data: CardData):
 		
 		var count = 0
 		var rarity_add: int = d.rarity - 1
-		print("RARITY: ", d.rarity)
+		
 		# joker id is sorted by rarity.
 		# common/uncommon/rare/legendary
 		# to get right place on atlas need the relative id
@@ -58,7 +58,6 @@ func setup(new_data: CardData):
 			count += pool.size()
 			rarity_add -= 1
 			
-		print("count ", count, "   id ", d.id)
 		set_joker_tex(d.id-count, d.rarity)
 	elif (data.is_booster()):
 		var d := data as BoosterCardData

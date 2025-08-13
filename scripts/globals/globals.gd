@@ -64,7 +64,7 @@ func create_symbol_sprite(frame: int, ani, offset: Vector2) -> AnimatedSprite2D:
 	sprite.frames = symbol_frames
 	sprite.animation = ani
 	sprite.position = offset
-	sprite.z_index = 1
+	sprite.z_index = 0
 	sprite.frame = frame
 	return sprite
 
