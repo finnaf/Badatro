@@ -30,8 +30,13 @@ func _init(desc_data: Dictionary, joker_data: JokerCardData):
 
 func _draw():
 	draw_rect(Rect2(pos, size), col)
-	draw_rect(Rect2(Vector2(pos.x+1, pos.y+1), 
-				Vector2(size.x-2, size.y-2)), Globals.WHITE)
+	
+	var whitebox = Rect2(
+		Vector2(pos.x+1, pos.y+1),
+		Vector2(size.x-2 - 11, size.y-2)
+	)
+	
+	draw_rect(whitebox, Globals.WHITE)
 
 func generate_content(desc_data: Dictionary, joker_data: JokerCardData) -> float:
 	var top_y = 3.5
