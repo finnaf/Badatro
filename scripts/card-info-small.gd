@@ -16,6 +16,7 @@ extends Sprite2D
 var card_cost
 
 var nums = []
+var moved = false
 
 signal button_clicked(card)
 signal use_clicked(card)
@@ -53,6 +54,12 @@ func _on_use_pressed():
 func _on_pressed():
 	emit_signal("button_clicked", self)
 
+func _move_apart():
+	# as any booster pack is taller than a regular card
+	self.position.y -= 1
+	button.position.y += 2
+	moved = true
+
 func set_value(cost: int, data: CardData):
 	clear_score()
 	
@@ -70,11 +77,9 @@ func set_value(cost: int, data: CardData):
 	else:
 		print("Invalid cost length.")
 		return
-		
-	# as any booster pack is taller than a regular card
-	if (data.is_booster()):
-		self.position.y -= 1
-		button.position.y += 2
+	
+	if (data.is_booster() and not moved):
+		_move_apart()
 	
 	for i in range(digits.size()):
 		var digit = digits[i]

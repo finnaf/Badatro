@@ -253,6 +253,10 @@ func display_cost():
 	card_buttons.connect("button_clicked", Callable(self, "_on_button_clicked_on_label"))
 	card_buttons.connect("use_clicked", Callable(self, "_on_use_clicked_on_label"))
 
+func update_cost():
+	var cost_val = data.get_cost()
+	card_buttons.set_value(cost_val, data)
+
 func setup_sell_price():
 	if (card_buttons):
 		var sell_val = data.get_sell_price()

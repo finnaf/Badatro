@@ -342,6 +342,10 @@ func reset_shop():
 		setup_connections()
 	
 	# SHOP MONEY DECREASE TODO
+	for card in main:
+		card.update_cost()
+	for booster in boosters:
+		booster.update_cost()
 
 func open_booster(booster):
 	boosters.erase(booster)
