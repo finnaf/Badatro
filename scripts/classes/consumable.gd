@@ -60,7 +60,7 @@ func _init(type: ConsumableType):
 		id = randi_range(0, 11)
 	elif (consumable_type == ConsumableType.tarot):
 		#id = randi_range(0, 21)
-		id = Tarot.Magician
+		id = Tarot.HighPriestess
 
 func get_cost() -> int:	
 	var cost = 0
@@ -85,7 +85,6 @@ func is_tarot() -> bool:
 	if (consumable_type == ConsumableType.tarot):
 		return true
 	return false
-
 func is_fool() -> bool:
 	if (is_tarot() and id == Tarot.Fool):
 		return true
@@ -101,13 +100,20 @@ func can_use(selected_cards: Array) -> bool:
 			Tarot.Fool:
 				pass
 			Tarot.Magician:
-				if (selected_cards.size() == 1 or
-					selected_cards.size() == 2):
-						return true
-				return false
+				return has_one_or_two(selected_cards)
 			Tarot.HighPriestess:
-				pass
-	
+				pass # TODO more info
+			Tarot.Empress:
+				return has_one_or_two(selected_cards)
+			Tarot.Emperor:
+				pass # TODO
+		return true
+	return false
+
+func has_one_or_two(selected_cards):
+	if (selected_cards.size() == 1 or
+		selected_cards.size() == 2):
+			return true
 	return false
 
 static func get_planet_name(value: int) -> String:
