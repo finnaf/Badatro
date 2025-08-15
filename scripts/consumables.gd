@@ -5,6 +5,7 @@ const CARD = preload("res://scenes/card.tscn")
 @onready var game = $"../.."
 @onready var shop = $"../../Shop" # use in boosters TODO
 @onready var deck = $"../../Deck" # use in game
+@onready var jokers = $"../Jokers" # use in game
 
 var consum_select = null
 
@@ -70,8 +71,121 @@ func _use_tarot(selected_cards: Array, tarot: Node2D):
 			if consumables.size() >= get_consumable_count():
 				return -1
 			_add_up_to_two(ConsumableCardData.ConsumableType.tarot)
+		
+		ConsumableCardData.Tarot.Hierophant:
+			if (selected_cards.size() > 3 or
+				selected_cards.is_empty()):
+					return -1
+			
+			for card in selected_cards:
+				card.data.enhancement = CardManager.Enhancement.bonus
+				card.setup(card.data)
+		
+		ConsumableCardData.Tarot.Lovers:
+			if (selected_cards.size() != 1):
+					return -1
+			
+			selected_cards[0].data.enhancement = CardManager.Enhancement.wild
+			selected_cards[0].setup(selected_cards[0].data)
+		
+		ConsumableCardData.Tarot.Chariot:
+			if (selected_cards.size() != 1):
+					return -1
+			
+			selected_cards[0].data.enhancement = CardManager.Enhancement.steel
+			selected_cards[0].setup(selected_cards[0].data)
+		
+		ConsumableCardData.Tarot.Justice:
+			if (selected_cards.size() != 1):
+					return -1
+			
+			selected_cards[0].data.enhancement = CardManager.Enhancement.glass
+			selected_cards[0].setup(selected_cards[0].data)
+		
+		ConsumableCardData.Tarot.Hermit:
+			# TODO no animation as have to delete card earlier
+			game.add_money(min(20, game.money*2))
+		
+		ConsumableCardData.Tarot.WheelOfFortune:
+			pass # TODO
+		ConsumableCardData.Tarot.Strength:
+			if not tarot.data.has_one_or_two(selected_cards):
+				return -1
+			
+			for card in selected_cards:
+				card.data.rank += 1
+				
+				if (card.data.rank >= 15):
+					card.data.rank = 2
+				
+				card.setup(card.data)
+		
+		ConsumableCardData.Tarot.HangedMan:
+			if not tarot.data.has_one_or_two(selected_cards):
+				return -1
+			
+			for card in selected_cards:
+				deck.remove_card(card.data)
+				card.queue_free()
+			deck.selected_cards.clear()
+		
+		ConsumableCardData.Tarot.Death: # right convert to left
+			if (selected_cards.size() != 2):
+				return -1
+			
+			selected_cards[1].setup(selected_cards[0].data)
+			# TODO BUG, changed card not played until double clicked
 	
-	
+		ConsumableCardData.Tarot.Temperance:
+			game.add_money(min(50, jokers.get_sell_total()))
+		
+		ConsumableCardData.Tarot.Devil:
+			if (selected_cards.size() != 1):
+					return -1
+			
+			selected_cards[0].data.enhancement = CardManager.Enhancement.gold
+			selected_cards[0].setup(selected_cards[0].data)
+		
+		ConsumableCardData.Tarot.Tower:
+			if (selected_cards.size() != 1):
+				return -1
+			
+			selected_cards[0].data.enhancement = CardManager.Enhancement.stone
+			selected_cards[0].setup(selected_cards[0].data)
+		
+		ConsumableCardData.Tarot.Star:
+			if (selected_cards.size() > 3 or
+				selected_cards.is_empty()):
+					return -1
+					
+			_change_cards_suit(selected_cards, CardManager.Suit.diamonds)
+
+		ConsumableCardData.Tarot.Moon:
+			if (selected_cards.size() > 3 or
+				selected_cards.is_empty()):
+					return -1
+					
+			_change_cards_suit(selected_cards, CardManager.Suit.clubs)
+		
+		ConsumableCardData.Tarot.Sun:
+			if (selected_cards.size() > 3 or
+				selected_cards.is_empty()):
+					return -1
+			_change_cards_suit(selected_cards, CardManager.Suit.hearts)
+		
+		ConsumableCardData.Tarot.World:
+			if (selected_cards.size() > 3 or
+				selected_cards.is_empty()):
+					return -1
+			_change_cards_suit(selected_cards, CardManager.Suit.spades)
+		
+		ConsumableCardData.Tarot.Judgement:
+			var jok = CARD.instantiate()
+			add_child(jok)
+			jok.setup(JokerCardData.new())
+			jok.display_cost()
+			remove_child(jok)
+			jokers.add(jok)
 	last_used = tarot
 
 func _add_up_to_two(type: ConsumableCardData.ConsumableType):
@@ -87,6 +201,11 @@ func _add_up_to_two(type: ConsumableCardData.ConsumableType):
 		card2.setup(ConsumableCardData.new(type))
 		card2.display_cost()
 		add(card2)
+
+func _change_cards_suit(cards: Array, suit: CardManager.Suit):
+	for card in cards:
+		card.data.suit = suit
+		card.setup(card.data)
 
 func _on_clicked(card):
 	if (card == consum_select):

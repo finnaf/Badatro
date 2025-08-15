@@ -88,18 +88,23 @@ func _on_clicked(card):
 		jok_select = card
 		card.jok_select()
 
+
+func get_sell_total() -> int:
+	var total = 0
+	for joker in jokers:
+		total += joker.data.get_sell_price()
+	return total
+
 func _on_sell(card):
 	game.add_money(card.data.get_sell_price())
 	_delete_joker(card)
 	reorganise_jokers()
 	
-
 func _delete_joker(card):
 	jokers.erase(card)
 	if (jok_select == card):
 		jok_select = null
 	card.queue_free()
-
 
 func is_full():
 	if (jokers.size() < get_max_jokers()):

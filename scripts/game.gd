@@ -30,7 +30,7 @@ var discount_percent = 1
 const BASE_REROLL_COST = 5
 var reroll_cost = 5
 
-var money = 500
+var money = 4
 
 const BASEHANDS = 4
 const BASEDISCARDS = 3
