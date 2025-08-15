@@ -6,7 +6,6 @@ extends Sprite2D
 
 @onready var deck = $"../../../Deck"
 @onready var toggle_button = $ToggleButton
-@onready var fade = $"../FadedBackground"
 
 const WIDTH = 51 # 62-11 for size of guaranteed card
 const CARD_START_POS = Vector2(37, -31)
@@ -20,7 +19,6 @@ var suit_counts = [0, 0, 0, 0]
 
 func display(in_shop: bool):
 	self.visible = true
-	fade.visible = true
 	
 	clear_digits()
 	clear_cards()
@@ -47,16 +45,13 @@ func disable_other_cards():
 
 func close():
 	self.visible = false
-	fade.visible = false
 	MouseManager.enable()
 
 func raise():
 	self.position.y -= 4
-	fade.position.y -= 4
 
 func lower():
 	self.position.y += 4
-	fade.position.y += 4
 	
 
 func load_cards():
@@ -182,6 +177,3 @@ func _on_toggle_button_pressed() -> void:
 	clear_cards()
 	load_info()
 	load_cards()
-
-func _on_back_button_pressed() -> void:
-	close()

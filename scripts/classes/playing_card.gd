@@ -1,6 +1,8 @@
 class_name PlayingCardData
 extends CardData
 
+static var id_count = 52
+
 var rank: int
 var suit: CardManager.Suit
 var enhancement: CardManager.Enhancement
@@ -15,7 +17,9 @@ func _init(i: int = -1, r: int = -1, s: CardManager.Suit = -1):
 	if (i == -1 or r == -1 or s == -1):
 		# generate data here
 		# playing card id doesnt matter at all
-		id = 1
+		id = id_count
+		id_count += 1
+		
 		rank = get_rnd_int(2, 13)
 		suit = CardManager.Suit.values()[get_rnd_int(0, 3)]
 		enhancement = CardManager.Enhancement.values()[get_rnd_int(0, 8)]
@@ -26,7 +30,7 @@ func _init(i: int = -1, r: int = -1, s: CardManager.Suit = -1):
 	suit = s
 	
 	#enhancement = randi_range(0,8)
-	enhancement = CardManager.Enhancement.none
+	enhancement = CardManager.Enhancement.glass
 
 # returns value of enhancement chips, mult, xmult, money
 func get_enhancement_score_val() -> Dictionary:

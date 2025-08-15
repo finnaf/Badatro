@@ -63,16 +63,16 @@ static var extra_shop_slots				: int
 static var extra_edition_rate			: int
 static var extra_reroll_cost			: int
 static var extra_consumable				: int
-static var spectral_shop				: bool
+static var shop_spectral_rate			: int
 static var do_telescope					: bool
 static var do_observatory				: bool
 static var extra_hands					: int
 static var extra_discards				: int
-static var tarot_rate					: int
-static var planet_rate					: int
+static var extra_tarot_rate				: float
+static var extra_planet_rate			: int
 static var extra_interest_cap			: int
 static var extra_joker_slots			: int
-static var playing_card_shop			: bool
+static var shop_playing_card_rate		: int
 static var enhanced_playing_card_shop	: bool
 static var ante_subtraction				: int
 static var can_reroll					: bool
@@ -85,24 +85,24 @@ static func _static_init():
 	
 	discount_rate = 1
 	extra_shop_slots = 0
-	extra_edition_rate = 0
+	extra_edition_rate = 0 # TODO
 	extra_reroll_cost = 0
 	extra_consumable = 0
-	spectral_shop = false
+	shop_spectral_rate = 0
+	shop_playing_card_rate = 0
 	do_telescope = false
 	do_observatory = false
 	extra_hands = 0
 	extra_discards = 0
-	tarot_rate = 1
-	planet_rate = 1
+	extra_tarot_rate = 0
+	extra_planet_rate = 0
 	extra_interest_cap = 0
 	extra_joker_slots = 0
-	playing_card_shop = false
 	enhanced_playing_card_shop = false
 	ante_subtraction = 0
-	can_reroll					= false
-	can_infinite_reroll			= false
-	extra_hand_size				= 0
+	can_reroll = false
+	can_infinite_reroll = false
+	extra_hand_size = 0
 
 static func reset_vouchers():
 	_static_init()
@@ -116,7 +116,7 @@ func _init(shop_rng: RandomNumberGenerator):
 	set_shop_card()
 	
 	# FOR TESTING
-	#id = Voucher.Antimatter
+	id = Voucher.MagicTrick
 
 func use():
 	match id:
@@ -144,7 +144,7 @@ func use():
 			extra_consumable = 1
 			pool.append(Voucher.OmenGlobe)
 		Voucher.OmenGlobe:
-			spectral_shop = true
+			shop_spectral_rate = 4
 		Voucher.Telescope:
 			do_telescope = true
 			pool.append(Voucher.Observatory)
@@ -161,10 +161,15 @@ func use():
 		Voucher.Recyclomancy:
 			extra_discards += 1
 		Voucher.PlanetMerchant:
-			planet_rate = 2
+			extra_planet_rate = 5.6
 			pool.append(Voucher.PlanetTycoon)
 		Voucher.PlanetTycoon:
-			planet_rate = 4
+			extra_planet_rate = 28
+		Voucher.TarotMerchant:
+			extra_tarot_rate = 5.6
+			pool.append(Voucher.TarotTycoon)
+		Voucher.TarotTycoon:
+			extra_tarot_rate = 28
 		Voucher.SeedMoney:
 			extra_interest_cap += 5
 			pool.append(Voucher.MoneyTree)
@@ -175,7 +180,7 @@ func use():
 		Voucher.Antimatter:
 			extra_joker_slots += 1
 		Voucher.MagicTrick:
-			playing_card_shop = true
+			shop_playing_card_rate = 4
 			pool.append(Voucher.Illusion)
 		Voucher.Illusion:
 			enhanced_playing_card_shop = true

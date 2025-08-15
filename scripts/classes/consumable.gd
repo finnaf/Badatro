@@ -59,7 +59,8 @@ func _init(type: ConsumableType):
 	if (consumable_type == ConsumableType.planet):
 		id = randi_range(0, 11)
 	elif (consumable_type == ConsumableType.tarot):
-		id = randi_range(0, 21)
+		#id = randi_range(0, 21)
+		id = Tarot.Magician
 
 func get_cost() -> int:	
 	var cost = 0
@@ -85,9 +86,27 @@ func is_tarot() -> bool:
 		return true
 	return false
 
-static func can_use(selected_cards: Array, consumable: Node) -> bool:
-	if (consumable.data.is_planet()):
+func is_fool() -> bool:
+	if (is_tarot() and id == Tarot.Fool):
 		return true
+	return false
+
+func can_use(selected_cards: Array) -> bool:
+	if (is_planet()):
+		return true
+	
+	elif (is_tarot()):
+		
+		match id:
+			Tarot.Fool:
+				pass
+			Tarot.Magician:
+				if (selected_cards.size() == 1 or
+					selected_cards.size() == 2):
+						return true
+				return false
+			Tarot.HighPriestess:
+				pass
 	
 	return false
 

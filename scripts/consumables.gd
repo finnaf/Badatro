@@ -1,8 +1,8 @@
 extends Sprite2D
 
-# TODO fix DRAG END!
-
 @onready var game = $"../.."
+@onready var shop = $"../../Shop" # use in boosters TODO
+@onready var deck = $"../../Deck" # use in game
 
 var consum_select = null
 
@@ -10,7 +10,9 @@ var consumables = []
 var max_consumables = 2
 const BASE_CONSUMABLES = 2
 
-func add(consum):
+var last_used: Node2D = null
+
+func add(consum: Node2D):
 	consumables.append(consum)
 	add_child(consum)
 	consum.setup_consumable()
@@ -18,7 +20,9 @@ func add(consum):
 	reorganise_consumables()
 	connect_consumables()
 
+# dont delete, just use
 func use(selected_cards: Array, consumable: Node2D):
+	print("in big use")
 	if (consumable.data.is_planet()):
 		var hand = ConsumableCardData.get_planet_name(consumable.data.id)
 		await game.upgrade_hand(hand)
@@ -29,8 +33,44 @@ func use(selected_cards: Array, consumable: Node2D):
 			game.set_hand(hand)
 	
 	elif (consumable.data.is_tarot()):
-		print("use tarot")
+		_use_tarot(selected_cards, consumable)
+
+func _use_tarot(selected_cards: Array, tarot: Node2D):
+	print("IN USE TAROT")
+	match tarot.get_id():
+		ConsumableCardData.Tarot.Fool:
+			if (last_used == null or last_used.data.is_fool()):
+				return -1
+			
+			consumables.add(last_used)
 		
+		ConsumableCardData.Tarot.Magician:
+			if (selected_cards.size() != 1 and 
+				selected_cards.size() != 2):
+					return -1
+			
+			for card in selected_cards:
+				card.data.enhancement = CardManager.Enhancement.lucky
+				print("changed to lucky")
+				card.setup(card.data)
+			
+		ConsumableCardData.Tarot.HighPriestess:
+			if consumables.size() >= get_consumable_count():
+				return -1
+			
+			consumables.add(
+				ConsumableCardData.new(ConsumableCardData.ConsumableType.tarot)
+			)
+			
+			if (consumables.size() < get_consumable_count()):
+				consumables.add(
+					ConsumableCardData.new(
+						ConsumableCardData.ConsumableType.tarot)
+				)
+			
+	
+	
+	last_used = tarot
 
 func _on_clicked(card):
 	if (card == consum_select):
@@ -54,9 +94,20 @@ func _on_sell(card):
 	_delete_consumable(card)
 # 
 func use_attempt(card):
-	if (ConsumableCardData.can_use([], card)):
-		use([], card)
-		_delete_consumable(card)
+	print("USE ATTEMPT!!")
+	
+	if (game.state == game.states.PLAYING):
+		print("playing")
+		print(deck.selected_cards)
+		if (card.data.can_use(deck.selected_cards)):
+			use(deck.selected_cards, card)
+			_delete_consumable(card)
+	
+	# TODO in booster card state
+	elif (game.state == game.states.SHOPPING):
+		if (card.data.can_use([])):
+			use([], card)
+			_delete_consumable(card)
 
 func reorganise_consumables():
 	for i in range(consumables.size()):

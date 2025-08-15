@@ -105,11 +105,12 @@ func get_main_card(xoffset: int):
 	
 	# decide if planet, tarot, joker or playing card
 	const W_JOK = 20
-	const W_TAR = 4
-	const W_PLA = 4
+	var W_TAR = 4 + VoucherCardData.extra_tarot_rate
+	var W_PLA = 4 + VoucherCardData.extra_planet_rate
+	var W_CAR = VoucherCardData.shop_playing_card_rate
+	var W_SPE = VoucherCardData.shop_spectral_rate
 	
-	# 20 -4 -4
-	var type_thresh = rng.randi_range(0, W_JOK + W_TAR + W_TAR)
+	var type_thresh = rng.randi_range(0, W_JOK + W_TAR + W_CAR + W_SPE)
 	
 	if type_thresh < W_JOK: # jok
 		
@@ -118,8 +119,15 @@ func get_main_card(xoffset: int):
 		
 	elif type_thresh < W_JOK + W_TAR:
 		data = ConsumableCardData.new(ConsumableCardData.ConsumableType.tarot)
-	else: # planet
+	
+	elif type_thresh < W_JOK + W_TAR + W_PLA:
 		data = ConsumableCardData.new(ConsumableCardData.ConsumableType.planet)
+	
+	elif type_thresh < W_JOK + W_TAR + W_PLA + W_SPE:
+		data = ConsumableCardData.new(ConsumableCardData.ConsumableType.spectral)
+	
+	elif type_thresh < W_JOK + W_TAR + W_PLA + W_SPE + W_CAR:
+		data = PlayingCardData.new()
 	
 	data.set_shop_card()
 	card.setup(data)
@@ -247,6 +255,11 @@ func _buy_attempt(card):
 			game.voucher_count -= 1
 		return
 	
+	elif (card.data.is_playing_card()):
+		if (not game.spend_money(cost)):
+			return
+		buy_playing_card(card)
+	
 	# disconnect from all card signals if it is successfully bought
 	card.disconnect("use_click_forwarded", Callable(self, "_use_attempt"))
 	card.disconnect("button_click_forwarded", Callable(self, "_buy_attempt"))
@@ -254,12 +267,10 @@ func _buy_attempt(card):
 
 func _use_attempt(consumable):
 	var cost = consumable.data.get_cost()
-	var can_use = ConsumableCardData.can_use([], consumable)
-	if (can_use and game.spend_money(cost)):
+	if (consumable.data.can_use([]) and game.spend_money(cost)):
 		consumables.use([], consumable)
-	
-	consumable.queue_free()
-	main.erase(consumable)
+		consumable.queue_free()
+		main.erase(consumable)
 
 # in a booster, the get is clicked
 func _get_clicked(card):

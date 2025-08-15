@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://cijoautimuua5"]
+[gd_scene load_steps=59 format=3 uid="uid://cijoautimuua5"]
 
 [ext_resource type="Script" uid="uid://c7vv5i4f5v710" path="res://scripts/game.gd" id="1_ca42v"]
 [ext_resource type="Texture2D" uid="uid://cv0tqpisxhrod" path="res://images/board/mat/mat.png" id="2_qnb83"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://bsembqx4tn0eg" path="res://images/symbols/numbers.png" id="11_dinhu"]
 [ext_resource type="Texture2D" uid="uid://btyjj6alhpcsu" path="res://images/board/sidebar/buttons/info.png" id="12_0sl42"]
 [ext_resource type="Texture2D" uid="uid://e0j8ab05p427" path="res://images/board/mat/joker-area.png" id="12_sww3w"]
+[ext_resource type="Script" uid="uid://db1x5qp4jj46e" path="res://scenes/run_info.gd" id="13_458eo"]
 [ext_resource type="Texture2D" uid="uid://bdw3okq5fdjf2" path="res://images/board/sidebar/shop-sidebar-1.png" id="13_e1j6l"]
 [ext_resource type="Texture2D" uid="uid://bvqaaorm7bpd6" path="res://images/board/cash-out/cash-out.png" id="13_ir15t"]
 [ext_resource type="Texture2D" uid="uid://bvtudkaj4go8g" path="res://images/board/sidebar/buttons/settings.png" id="13_oaba0"]
@@ -324,6 +325,16 @@ offset_top = -9.0
 offset_right = -34.0
 offset_bottom = -2.0
 texture_hover = ExtResource("12_0sl42")
+script = ExtResource("13_458eo")
+
+[node name="FadedBackground" type="Sprite2D" parent="Mat/RunInfo"]
+visible = false
+z_index = 10
+position = Vector2(49, 9)
+texture = ExtResource("23_8ool0")
+
+[node name="CoverMat" type="Sprite2D" parent="Mat/RunInfo"]
+visible = false
 
 [node name="Settings" type="TextureButton" parent="Mat"]
 offset_left = -49.0
@@ -524,10 +535,11 @@ texture_normal = ExtResource("28_js0lu")
 [connection signal="pressed" from="Mat/BottomButtons/DiscardButton" to="Deck" method="_on_discard_button_pressed"]
 [connection signal="pressed" from="Mat/BottomButtons/SortRankButton" to="Deck" method="_on_sort_rank_button_pressed"]
 [connection signal="pressed" from="Mat/BottomButtons/SortSuitButton" to="Deck" method="_on_sort_suit_button_pressed"]
+[connection signal="pressed" from="Mat/RunInfo" to="Mat/RunInfo" method="_on_pressed"]
 [connection signal="pressed" from="Mat/MoneyCountUI/CashOutButton" to="Deck" method="_on_cash_out_button_pressed"]
 [connection signal="pressed" from="Mat/DeckInfo" to="Mat/DeckInfo" method="_on_pressed"]
 [connection signal="pressed" from="Mat/DeckInfo/CoverMat/ToggleButton" to="Mat/DeckInfo/CoverMat" method="_on_toggle_button_pressed"]
-[connection signal="pressed" from="Mat/DeckInfo/CoverMat/BackButton" to="Mat/DeckInfo/CoverMat" method="_on_back_button_pressed"]
+[connection signal="pressed" from="Mat/DeckInfo/CoverMat/BackButton" to="Mat/DeckInfo" method="_on_back_button_pressed"]
 [connection signal="pressed" from="Shop/ShopBackground/RerollButton" to="Shop" method="_on_reroll_button_pressed"]
 [connection signal="pressed" from="Shop/ShopBackground/NextRoundButton" to="Deck" method="_on_next_round_button_pressed"]
 [connection signal="pressed" from="Shop/SkipButton" to="Shop" method="_on_skip_button_pressed"]
