@@ -8,7 +8,7 @@ extends Node2D
 
 var seed = 56
 
-const GAMESPEED = 0.3
+const GAMESPEED = 0.5
 const INCRSPEED = GAMESPEED / 7
 const MAXSPEED = 0.05
 var gamespeed
@@ -25,12 +25,11 @@ var blind = 0 # 0, 1 or 2
 # vouchers
 var shop_ante_reset = false
 var voucher_count = 1
-var discount_percent = 1
 
 const BASE_REROLL_COST = 5
 var reroll_cost = 5
 
-var money = 4
+@export var money = 4
 
 const BASEHANDS = 4
 const BASEDISCARDS = 3

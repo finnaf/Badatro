@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=35 format=3 uid="uid://b2130b6r8xv1b"]
+[gd_resource type="SpriteFrames" load_steps=35 format=3 uid="uid://bh7kl8kogc7yu"]
 
 [ext_resource type="Texture2D" uid="uid://bhd8nnmphkhky" path="res://images/symbols/connectives.png" id="1_mcbd0"]
 [ext_resource type="Texture2D" uid="uid://bkj75jqjh17w0" path="res://images/symbols/joins.png" id="2_pnrph"]
