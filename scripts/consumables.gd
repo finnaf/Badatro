@@ -184,6 +184,7 @@ func _use_tarot(selected_cards: Array, tarot: Node2D):
 			add_child(jok)
 			jok.setup(JokerCardData.new())
 			jok.display_cost()
+			jok.hide_cost_only()
 			remove_child(jok)
 			jokers.add(jok)
 	last_used = tarot

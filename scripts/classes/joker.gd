@@ -1,6 +1,9 @@
 class_name JokerCardData
 extends CardData
 
+# meta affecting jokers
+static var debt_potential : int
+
 static var jok_rng = RandomNumberGenerator.new()
 
 var is_flipped: bool = false
@@ -10,6 +13,9 @@ var variable: int = 0
 
 var score_func: Callable = Callable()
 var trigger_func: Callable = Callable()
+
+static func _static_init():
+	debt_potential = 0
 
 static func set_seed(seed: int):
 	jok_rng.seed = seed

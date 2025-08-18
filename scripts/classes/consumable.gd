@@ -59,8 +59,8 @@ func _init(type: ConsumableType):
 	if (consumable_type == ConsumableType.planet):
 		id = randi_range(0, 11)
 	elif (consumable_type == ConsumableType.tarot):
-		#id = randi_range(0, 21)
-		id = Tarot.Judgement
+		id = randi_range(0, 21)
+		#id = Tarot.Judgement
 
 func get_cost() -> int:	
 	var cost = 0

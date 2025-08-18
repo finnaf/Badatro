@@ -222,7 +222,7 @@ func process_reroll():
 
 # returns false if doesn't succeed
 func spend_money(cost: int) -> bool:
-	if (money >= cost):
+	if (money + JokerCardData.debt_potential >= cost):
 		money -= cost
 		updateMoneyUI.emit()
 		shop.update_buy_labels()
