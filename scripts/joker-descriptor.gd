@@ -67,6 +67,8 @@ func generate_content(desc_data: Dictionary, joker_data: JokerCardData) -> float
 			bot_x = _place_symbol(2, DIGIT_SIZE, bot_x, bot_y, sprites, Globals.BLACK)
 			bot_x = _place_symbol(10, SMALL_DIGIT_SIZE, bot_x, bot_y, sprites, Globals.BLACK)
 		
+		JokerManager.Connective.none:
+			pass
 		_:
 			for s in sprites:
 				s.position.x -= (top_x + 1)
@@ -142,6 +144,9 @@ func _do_condition(cond, bot_x, bot_y, sprites):
 		
 		JokerManager.Condition.face: # TODO
 			pass
+		
+		JokerManager.Condition.discards:
+			bot_x = _place_symbol(3, DIGIT_SIZE, bot_x, bot_y, sprites, Globals.BLACK)
 	
 		JokerManager.Condition.highcard:
 			bot_x = _place_symbol(16, HAND_SYM_SIZE, bot_x, bot_y, sprites)

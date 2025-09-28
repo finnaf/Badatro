@@ -310,7 +310,7 @@ var joker_info = {
 		"connective" : Connective.contains,
 		"condition_0" : Condition.flush,
 	},
-	Jokers.HalfJoker: {
+	Jokers.HalfJoker: { # TODO fix always activates
 		"name" : "Half Joker",
 		"rarity" : Rarity.common,
 		"score_func" : score_half_joker,
@@ -325,7 +325,7 @@ var joker_info = {
 		"condition_2" : Condition.zero,
 		"condition_3" : Condition.cards,
 	},
-	Jokers.CreditCard: { # TODO
+	Jokers.CreditCard: {
 		"name" : "Credit Card",
 		"rarity" : Rarity.common,
 		"cost" : 1,
@@ -357,7 +357,7 @@ var joker_info = {
 			"benefit_0" : Benefit.addmult,
 			"benefit_1" : Benefit.multnum,
 			"benefit_val_1" : 15,
-			"connective" : Connective.contains, # when -> 0D TODO ADD "W"
+			"connective" : Connective.none,
 			"condition_0" : Condition.zero,
 			"condition_1" : Condition.discards, # TODO
 	},
@@ -595,7 +595,8 @@ func score_crafty_joker(_joker, gamestate) -> Dictionary:
 		return {"chips": 80}
 	return {}
 func score_half_joker(_joker, gamestate) -> Dictionary:
-	if (gamestate.jokers.size() <= 3):
+	print(gamestate)
+	if (gamestate.played_cards.size() <= 3):
 		return {"mult": 20}
 	return {}
 func score_banner(_joker, gamestate) -> Dictionary:

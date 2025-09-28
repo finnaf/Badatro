@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://bsembqx4tn0eg" path="res://images/symbols/numbers.png" id="11_dinhu"]
 [ext_resource type="Texture2D" uid="uid://btyjj6alhpcsu" path="res://images/board/sidebar/buttons/info.png" id="12_0sl42"]
 [ext_resource type="Texture2D" uid="uid://e0j8ab05p427" path="res://images/board/mat/joker-area.png" id="12_sww3w"]
-[ext_resource type="Script" path="res://scenes/run_info.gd" id="13_458eo"]
+[ext_resource type="Script" uid="uid://db1x5qp4jj46e" path="res://scripts/run_info.gd" id="13_458eo"]
 [ext_resource type="Texture2D" uid="uid://bdw3okq5fdjf2" path="res://images/board/sidebar/shop-sidebar-1.png" id="13_e1j6l"]
 [ext_resource type="Texture2D" uid="uid://bvqaaorm7bpd6" path="res://images/board/cash-out/cash-out.png" id="13_ir15t"]
 [ext_resource type="Texture2D" uid="uid://bvtudkaj4go8g" path="res://images/board/sidebar/buttons/settings.png" id="13_oaba0"]
@@ -153,6 +153,7 @@ animations = [{
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_ca42v")
+money = 99
 
 [node name="Mat" type="Sprite2D" parent="."]
 texture_filter = 1
