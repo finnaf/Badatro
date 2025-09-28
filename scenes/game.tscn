@@ -16,7 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://bdw3okq5fdjf2" path="res://images/board/sidebar/shop-sidebar-1.png" id="13_e1j6l"]
 [ext_resource type="Texture2D" uid="uid://bvqaaorm7bpd6" path="res://images/board/cash-out/cash-out.png" id="13_ir15t"]
 [ext_resource type="Texture2D" uid="uid://bvtudkaj4go8g" path="res://images/board/sidebar/buttons/settings.png" id="13_oaba0"]
-[ext_resource type="Script" path="res://scripts/shop.gd" id="13_pl11u"]
+[ext_resource type="Script" uid="uid://qj0k6hkypgdi" path="res://scripts/shop.gd" id="13_pl11u"]
 [ext_resource type="Script" uid="uid://c0i0j38gje1kl" path="res://scripts/jokers.gd" id="13_qouja"]
 [ext_resource type="Script" path="res://scripts/cashout.gd" id="13_ssvqc"]
 [ext_resource type="Texture2D" uid="uid://ns8h037tpe4k" path="res://images/board/mat/consumable-area.png" id="13_suyxu"]

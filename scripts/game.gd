@@ -219,9 +219,14 @@ func process_reroll():
 	reroll_cost += 1
 
 
+func can_spend(cost: int) -> bool:
+	if (money + JokerCardData.debt_potential >= cost):
+		return true
+	return false
+
 # returns false if doesn't succeed
 func spend_money(cost: int) -> bool:
-	if (money + JokerCardData.debt_potential >= cost):
+	if (can_spend(cost)):
 		money -= cost
 		updateMoneyUI.emit()
 		shop.update_buy_labels()

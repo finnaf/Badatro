@@ -467,7 +467,7 @@ func update_reroll_display():
 func update_buy_labels():
 	for card in main:
 		if (card.card_buttons):
-			if (card.card_buttons.card_cost > game.money or 
+			if (not game.can_spend(card.card_buttons.card_cost) or 
 				(card.data.is_joker() and 
 				jokers.is_full())):
 				card.card_buttons.disable()
@@ -476,17 +476,17 @@ func update_buy_labels():
 	
 	for card in boosters:
 		if (card.card_buttons):
-			if (card.card_buttons.card_cost > game.money):
-				card.card_buttons.disable()
-			else:
+			if (game.can_spend(card.card_buttons.card_cost)):
 				card.card_buttons.enable()
+			else:
+				card.card_buttons.disable()
 	
 	for card in vouchers:
 		if (card.card_buttons):
-			if (card.card_buttons.card_cost > game.money):
-				card.card_buttons.disable()
-			else:
+			if (game.can_spend(card.card_buttons.card_cost)):
 				card.card_buttons.enable()
+			else:
+				card.card_buttons.disable()
 				
 func _on_reroll_button_pressed() -> void:
 	if MouseManager.is_disabled:

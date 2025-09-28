@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://n0pgrtq40qtg"]
+[gd_scene load_steps=9 format=3 uid="uid://x77yud0exd1b"]
 
 [ext_resource type="Texture2D" uid="uid://j50fqyjlshjh" path="res://images/cards/misc/cost-background.png" id="1_f6iml"]
 [ext_resource type="Script" uid="uid://cuqxibma8oe3l" path="res://scripts/card-info-small.gd" id="2_trfud"]

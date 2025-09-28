@@ -2,7 +2,7 @@ class_name JokerCardData
 extends CardData
 
 # meta affecting jokers
-static var debt_potential : int
+static var debt_potential : int					# from credit card
 
 static var jok_rng = RandomNumberGenerator.new()
 
@@ -48,8 +48,9 @@ func generate_by_rarity(rarity):
 	trigger_func = data.get("trigger_func", Callable())
 
 func activate_static_effect():
+	
 	var data = JokerManager.joker_info[id]
-	if (data.has(debt_potential)):
+	if (data.has("debt_potential")):
 		debt_potential += data.debt_potential
 
 func deactivate_static_effect():

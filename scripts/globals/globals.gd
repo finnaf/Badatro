@@ -29,11 +29,11 @@ enum ResourceType {
 func _ready():
 	digit_frames = load("res://resources/number-sprite-frames.tres")
 
-func convert_to_digits(number, length, max) -> Array:
+func convert_to_digits(number, length, max, min=0) -> Array:
 	if number > max:
 		number = max
-	if number < 0:
-		number = 0
+	if number < min:
+		number = min
 	
 	var chars = str(number).pad_zeros(length).split("")
 	var digits = []

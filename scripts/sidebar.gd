@@ -192,7 +192,15 @@ func update_ante():
 	ante.frame = digits[0]
 
 func update_money():
-	var digits = Globals.convert_to_digits(game.money, 2, 99)
+	var digits = Globals.convert_to_digits(abs(game.money), 2, 99)
+	
+	if (game.money < 0):
+		moneytens.modulate = Globals.RED
+		moneyones.modulate = Globals.RED
+	else:
+		moneytens.modulate = Globals.YELLOW
+		moneyones.modulate = Globals.YELLOW
+	
 	moneyones.frame = digits[1]
 	moneytens.frame = digits[0]
 
