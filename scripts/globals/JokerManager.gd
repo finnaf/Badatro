@@ -331,6 +331,9 @@ var joker_info = {
 		"cost" : 1,
 		"description" : "Go up to -$20 in debt",
 		"debt_potential" : 20,
+		"benefit_0" : Benefit.addmoney,
+		"benefit_1" : Benefit.moneynum,
+		"benefit_val_1" : 20,
 		"connective" : Connective.none
 	},
 	Jokers.Banner: {

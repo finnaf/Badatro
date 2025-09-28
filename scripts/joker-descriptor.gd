@@ -93,39 +93,42 @@ func generate_content(desc_data: Dictionary, joker_data: JokerCardData) -> float
 func _do_benefit(data, joker_data: JokerCardData, i, top_x, top_y, sprites):
 	var benefit = "benefit_%d" % i
 	match data[benefit]:
+		JokerManager.Benefit.addmoney:
+			top_x = _place_digit(10, top_x, top_y, sprites, Globals.YELLOW)
 		JokerManager.Benefit.addchips:
 			top_x = _place_digit(10, top_x, top_y, sprites, Globals.BLUE)
 		JokerManager.Benefit.addmult:
 			top_x = _place_digit(10, top_x, top_y, sprites, Globals.RED)
 		JokerManager.Benefit.xmult:
 			top_x = _place_digit(11, top_x, top_y, sprites, Globals.RED)
+		
 		JokerManager.Benefit.chipnum:
-			var ben_val = "benefit_val_%d" % i
-			var num = data[ben_val]
-			
-			if (num == -1):
-				num = joker_data.variable
-				if (num == int(num)):
-					num = int(num)
-			
+			var num = _benefit_num_helper(data["benefit_val_%d" % i], joker_data)
 			for d in str(num):
 				top_x = _place_digit(int(d), top_x, top_y, sprites, Globals.BLUE)
+		
 		JokerManager.Benefit.multnum:
-			var ben_val = "benefit_val_%d" % i
-			var num = data[ben_val]
-			
-			if (num == -1): # is a var
-				num = joker_data.variable
-				if (num == int(num)): # convert to int if is so
-					num = int(num)
-			
+			var num = _benefit_num_helper(data["benefit_val_%d" % i], joker_data)
 			for d in str(num):
 				top_x = _place_digit(int(d), top_x, top_y, sprites, Globals.RED)
+		
+		JokerManager.Benefit.moneynum:
+			var num = _benefit_num_helper(data["benefit_val_%d" % i], joker_data)
+			for d in str(num):
+				top_x = _place_digit(int(d), top_x, top_y, sprites, Globals.YELLOW)
+		
 		JokerManager.Benefit.to:
 			top_x = _place_symbol(28, SMALL_DIGIT_SIZE+1, top_x, top_y, sprites, Globals.BLACK)
 	
 	return top_x
-		
+
+func _benefit_num_helper(num, joker_data):
+	if (num == -1): # is a var
+		num = joker_data.variable
+		if (num == int(num)): # convert to int if is so
+			num = int(num)
+	return num
+
 func _do_condition(cond, bot_x, bot_y, sprites):
 	match cond:		
 		JokerManager.Condition.spades:
