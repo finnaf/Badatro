@@ -26,6 +26,9 @@ var in_booster_count: int = 0
 const BOOSTER_OFFSET = 27
 const VOUCHER_X_OFFSET = -20
 
+var free_rerolls_this_shop = 0 # bugged and not ideal way of doing this
+# e.g. buy and use reroll, find a new chaos and it wont give free reroll
+
 @onready var sidebar = $ShopSidebar
 @onready var background = $ShopBackground
 @onready var skip_button = $SkipButton
@@ -52,6 +55,7 @@ func prep_values():
 	cards_remaining = main_size
 	packs_remaining = 2
 	vouchers_remaining = 1
+	free_rerolls_this_shop = 0
 	self.visible = true
 
 func open():
@@ -235,6 +239,8 @@ func _buy_attempt(card):
 		buy_joker(card)
 		main.erase(card)
 		main_select = null
+		
+		update_reroll_display() # if it is chaos
 	
 	elif (card.data.is_consumable()):
 		if (consumables.is_full() or not game.spend_money(cost)):
@@ -498,12 +504,16 @@ func _on_reroll_button_pressed() -> void:
 	if (not game.spend_money(cost)):
 		return
 	
+	if (cost == 0):
+		free_rerolls_this_shop += 1
+	else:
+		game.process_reroll()
+	
 	for card in main:
 		card.queue_free()
 	main.clear()
 	
 	load_main()
-	game.process_reroll()
 	update_reroll_display()
 	setup_connections()
 

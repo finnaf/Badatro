@@ -8,6 +8,7 @@ enum Benefit {
 	chipnum,
 	multnum,
 	moneynum,
+	num,
 	creation,
 	retrigger,
 	copy,
@@ -15,6 +16,7 @@ enum Benefit {
 	hands,
 	discards,
 	to,
+	arrow,
 	other
 }
 
@@ -311,7 +313,7 @@ var joker_info = {
 		"connective" : Connective.contains,
 		"condition_0" : Condition.flush,
 	},
-	Jokers.HalfJoker: { # TODO fix always activates
+	Jokers.HalfJoker: {
 		"name" : "Half Joker",
 		"rarity" : Rarity.common,
 		"score_func" : score_half_joker,
@@ -347,7 +349,7 @@ var joker_info = {
 			"benefit_1" : Benefit.chipnum,
 			"benefit_val_1" : 30,
 			"connective" : Connective.contains,
-			"condition_0" : Condition.flush, # TODO
+			"condition_0" : Condition.discards, # TODO
 	},
 	Jokers.MysticSummit: {
 			"name" : "Mystic Summit",
@@ -365,10 +367,16 @@ var joker_info = {
 	Jokers.EightBall: { # TODO
 		"name" : "8 Ball",
 		"rarity" : Rarity.common,
+		"trigger_func" : trigger_eight_ball,
 		"cost" : 5,
 		"description" : "1 in 4 chance for each played 8 
 						to create a Tarot card when scored
 						(Must have room)",
+		"benefit_0" : Benefit.num,
+		"benefit_val_0" : 8,
+		"benefit_1": Benefit.arrow,
+		"benefit_2" : Benefit.creation,
+		"connective": Connective.none,
 	},
 	Jokers.Misprint: {
 		"name" : "Misprint",
@@ -384,20 +392,19 @@ var joker_info = {
 		"benefit_val_3" : 23,
 		"connective" : Connective.none,
 	},
-	Jokers.RaisedFist: { # TODO
+	Jokers.RaisedFist: {
 		"name" : "Raised Fist",
 		"rarity" : Rarity.common,
 		"score_func" : score_raised_fist,
 		"cost" : 5,
 		"description" : "Adds double the rank of lowest ranked card held in hand to Mult",
 		"benefit_0" : Benefit.addmult,
-		"benefit_1" : Benefit.multnum,
-		"benefit_val_1" : 0,
-		"connective" : Connective.none,
+		"connective" : Connective.held_hand, # TODO
 	},
 	Jokers.ChaosTheClown: { # TODO
 		"name" : "Chaos The Clown",
 		"rarity" : Rarity.common,
+		"free_roll": 1,
 		"cost" : 4,
 		"description" : "1 free Reroll per shop ",
 		"connective" : Connective.none,
@@ -439,7 +446,7 @@ var joker_info = {
 		"condition_0" : Condition.zero,
 		"condition_1" : Condition.discards,
 	},
-	Jokers.GrosMichel: { # TODO
+	Jokers.GrosMichel: {
 		"name" : "Gros Michel",
 		"rarity" : Rarity.common,
 		"score_func" : score_gros_michel,
@@ -452,7 +459,7 @@ var joker_info = {
 		"benefit_val_1" : 15,
 		"connective" : Connective.none,
 	},
-	Jokers.EvenSteven: { # TODO
+	Jokers.EvenSteven: {
 		"name" : "Even Steven",
 		"rarity" : Rarity.common,
 		"trigger_func" : trigger_even_steven,
@@ -693,6 +700,11 @@ func trigger_gluttonous_joker(_joker: JokerCardData, card: CardData) -> Dictiona
 	if (card.suit == CardManager.Suit.clubs
 	or card.is_wild_card()):
 		return {"mult": 3}
+	return {}
+func trigger_eight_ball(_joker: JokerCardData, card: CardData) -> Dictionary:
+	if (card.rank == 8):
+		if (JokerCardData.do_dice_roll(1, 4)):
+			return {"create": ConsumableCardData.ConsumableType.tarot}
 	return {}
 func trigger_scary_face(_joker: JokerCardData, card: CardData) -> Dictionary:
 	if (CardManager.is_facecard(card.rank)):

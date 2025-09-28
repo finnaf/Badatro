@@ -24,7 +24,7 @@
 [ext_resource type="Texture2D" uid="uid://n8br4mtr224o" path="res://images/board/sidebar/shop-sidebar-2.png" id="14_pl11u"]
 [ext_resource type="Script" uid="uid://dp8isqxsoevh" path="res://scripts/sidebar.gd" id="14_suyxu"]
 [ext_resource type="Texture2D" uid="uid://by84gotttlsfl" path="res://images/board/sidebar/shop-sidebar-3.png" id="15_bhx41"]
-[ext_resource type="Script" path="res://scripts/consumables.gd" id="15_pr1ej"]
+[ext_resource type="Script" uid="uid://4i8h0qfcinpl" path="res://scripts/consumables.gd" id="15_pr1ej"]
 [ext_resource type="Texture2D" uid="uid://8mkiimnrgjke" path="res://images/board/cash-out/cash-out-disabled.png" id="15_rysoc"]
 [ext_resource type="Texture2D" uid="uid://yolk82kxpyqc" path="res://images/cards/back.png" id="15_suyxu"]
 [ext_resource type="Texture2D" uid="uid://ci46j8ptxdskk" path="res://images/board/cash-out/cash-out-hands.png" id="16_ca42v"]
@@ -153,7 +153,8 @@ animations = [{
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_ca42v")
-money = 99
+seed = 123
+money = 88
 
 [node name="Mat" type="Sprite2D" parent="."]
 texture_filter = 1

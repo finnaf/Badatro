@@ -15,6 +15,7 @@ const BASE_CONSUMABLES = 2
 
 var last_used: Node2D = null
 
+## adds given node to the consumables slot
 func add(consum: Node2D):
 	consumables.append(consum)
 	add_child(consum)
@@ -23,7 +24,7 @@ func add(consum: Node2D):
 	reorganise_consumables()
 	connect_consumables()
 
-# dont delete, just use
+## activates the effect of the given consumable
 func use(selected_cards: Array, consumable: Node2D):
 	if (consumable.data.is_planet()):
 		var hand = ConsumableCardData.get_planet_name(consumable.data.id)
@@ -57,7 +58,8 @@ func _use_tarot(selected_cards: Array, tarot: Node2D):
 			if consumables.size() >= get_consumable_count():
 				return -1
 			
-			_add_up_to_two(ConsumableCardData.ConsumableType.planet)
+			create_consumable(ConsumableCardData.ConsumableType.planet)
+			create_consumable(ConsumableCardData.ConsumableType.planet)
 		
 		ConsumableCardData.Tarot.Empress:
 			if not tarot.data.has_one_or_two(selected_cards):
@@ -70,7 +72,8 @@ func _use_tarot(selected_cards: Array, tarot: Node2D):
 		ConsumableCardData.Tarot.Emperor:
 			if consumables.size() >= get_consumable_count():
 				return -1
-			_add_up_to_two(ConsumableCardData.ConsumableType.tarot)
+			create_consumable(ConsumableCardData.ConsumableType.tarot)
+			create_consumable(ConsumableCardData.ConsumableType.tarot)
 		
 		ConsumableCardData.Tarot.Hierophant:
 			if (selected_cards.size() > 3 or
@@ -189,19 +192,15 @@ func _use_tarot(selected_cards: Array, tarot: Node2D):
 			jokers.add(jok)
 	last_used = tarot
 
-func _add_up_to_two(type: ConsumableCardData.ConsumableType):
-	var card1 = CARD.instantiate()
-	add_child(card1)
-	card1.setup(ConsumableCardData.new(type))
-	card1.display_cost()
-	add(card1)
-			
-	if (consumables.size() < get_consumable_count()):
-		var card2 = CARD.instantiate()
-		add_child(card2)
-		card2.setup(ConsumableCardData.new(type))
-		card2.display_cost()
-		add(card2)
+func create_consumable(type: ConsumableCardData.ConsumableType):
+	if (consumables.size() >= get_consumable_count()):
+		return
+	
+	var card = CARD.instantiate()
+	add_child(card)
+	card.setup(ConsumableCardData.new(type))
+	card.display_cost()
+	add(card)
 
 func _change_cards_suit(cards: Array, suit: CardManager.Suit):
 	for card in cards:

@@ -2,6 +2,8 @@ extends Sprite2D
 
 @onready var game = $"../.."
 @onready var deck = $"../../Deck"
+@onready var shop = $"../../Shop"
+
 
 var jok_select = null
 var jokers = []
@@ -114,6 +116,10 @@ func _delete_joker(jok: Area2D):
 	if (jok_select == jok):
 		jok_select = null
 	jok.queue_free()
+	
+	# update shop so it knows theres space for more jokers
+	# maybe have this as a signal?
+	shop.update_buy_labels()
 
 func is_full():
 	if (jokers.size() < get_max_jokers()):

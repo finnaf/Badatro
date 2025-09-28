@@ -3,6 +3,7 @@ extends CardData
 
 # meta affecting jokers
 static var debt_potential : int					# from credit card
+static var free_rolls : int						# from chaos the clown
 static var chance_multiplier : int				# oops all sixes
 
 static var jok_rng = RandomNumberGenerator.new()
@@ -52,15 +53,18 @@ func generate_by_rarity(rarity):
 	round_end_func = data.get("round_end_func", Callable())
 
 func activate_static_effect():
-	
 	var data = JokerManager.joker_info[id]
 	if (data.has("debt_potential")):
 		debt_potential += data.debt_potential
+	if (data.has("free_roll")):
+		free_rolls += data.free_roll
 
 func deactivate_static_effect():
 	var data = JokerManager.joker_info[id]
 	if (data.has(debt_potential)):
 		debt_potential -= data.debt_potential
+	if (data.has("free_roll")):
+		free_rolls -= data.free_roll
 
 # gets the value of the joker when it is triggered
 func get_score_val(state: Dictionary, active_cards = []) -> Dictionary:
@@ -109,7 +113,7 @@ func is_joker() -> bool:
 ## counts from 1 inclusive, true if below or equal to threshold
 static func do_dice_roll(thresh : int, max : int) -> bool:
 	var val = CardData.get_rnd_int(1, max)
-		
+	
 	if val <= thresh * chance_multiplier:
 		return true
 	return false

@@ -119,8 +119,19 @@ func _do_benefit(data, joker_data: JokerCardData, i, top_x, top_y, sprites):
 			for d in str(num):
 				top_x = _place_digit(int(d), top_x, top_y, sprites, Globals.YELLOW)
 		
+		JokerManager.Benefit.num:
+			var num = _benefit_num_helper(data["benefit_val_%d" % i], joker_data)
+			for d in str(num):
+				top_x = _place_digit(int(d), top_x, top_y, sprites, Globals.BLACK)
+		
 		JokerManager.Benefit.to:
 			top_x = _place_symbol(28, SMALL_DIGIT_SIZE+1, top_x, top_y, sprites, Globals.BLACK)
+		
+		JokerManager.Benefit.arrow:
+			top_x = _place_symbol(11, DIGIT_SIZE+1, top_x, top_y, sprites, Globals.BLACK)
+		
+		JokerManager.Benefit.creation:
+			top_x = _place_symbol(1, DIGIT_SIZE, top_x, top_y, sprites, Globals.BLACK)
 	
 	return top_x
 

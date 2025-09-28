@@ -6,10 +6,11 @@ extends Node2D
 @onready var shop = $"Shop"
 @onready var deck = $Deck
 @onready var jokers = $Mat/Jokers
+@onready var consumables = $Mat/Consumables
 
-var seed = 56
+@export var seed = 56
 
-const GAMESPEED = 0.5
+const GAMESPEED = 0.3 # lower num is faster
 const INCRSPEED = GAMESPEED / 7
 const MAXSPEED = 0.05
 var gamespeed
@@ -161,6 +162,8 @@ func get_money_gained():
 		return 5
 
 func get_reroll_cost():
+	if (JokerCardData.free_rolls > shop.free_rerolls_this_shop):
+		return 0
 	return reroll_cost + VoucherCardData.extra_reroll_cost
 
 func get_round():
@@ -351,6 +354,16 @@ func add_resources(card, dict: Dictionary):
 		alert = Globals.do_score_alert(card, true, 2, dict.money, 
 										GAMESPEED, offset)
 		await add_money(dict.money)
+		await clear_notification(alert)
+	
+	# eight ball etc
+	if (dict.has("create")):
+		alert = Globals.do_score_alert(card, true, 2, 99, 
+										GAMESPEED, offset)
+		
+		if (dict["create"] == ConsumableCardData.ConsumableType.tarot):
+			consumables.create_consumable(ConsumableCardData.ConsumableType.tarot)
+		
 		await clear_notification(alert)
 	
 func clear_notification(alert):
