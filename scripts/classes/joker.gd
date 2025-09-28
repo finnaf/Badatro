@@ -40,12 +40,22 @@ func generate_by_rarity(rarity):
 		id = JokerManager.Jokers.Joker
 		score_func = Callable(JokerManager, "score_joker")
 		return
-
+	
 	id = pool[jok_rng.randi() % pool.size()]
 	var data = JokerManager.joker_info[id]
 	self.rarity = rarity
 	score_func = data.get("score_func", Callable())
 	trigger_func = data.get("trigger_func", Callable())
+
+func activate_static_effect():
+	var data = JokerManager.joker_info[id]
+	if (data.has(debt_potential)):
+		debt_potential += data.debt_potential
+
+func deactivate_static_effect():
+	var data = JokerManager.joker_info[id]
+	if (data.has(debt_potential)):
+		debt_potential -= data.debt_potential
 
 # gets the value of the joker when it is triggered
 func get_score_val(state: Dictionary, active_cards = []) -> Dictionary:

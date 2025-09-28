@@ -121,16 +121,20 @@ func load_faces():
 	place_digit_sprites(deck.get_face_count(is_full_deck), offset)
 
 func load_suits():
+	# spades, hearts, diamonds, clubs
 	var offset = Vector2(-37.5, 22.5)
 	
 	suit_counts[0] = deck.get_deck_count("suit", 0, is_full_deck)
 	place_digit_sprites(suit_counts[0], offset)
+	
 	offset.y += 6
-	suit_counts[2] = deck.get_deck_count("suit", 2, is_full_deck)
-	place_digit_sprites(suit_counts[2], offset)
-	offset.x += 15
 	suit_counts[3] = deck.get_deck_count("suit", 3, is_full_deck)
 	place_digit_sprites(suit_counts[3], offset)
+	
+	offset.x += 15
+	suit_counts[2] = deck.get_deck_count("suit", 2, is_full_deck)
+	place_digit_sprites(suit_counts[2], offset)
+	
 	offset.y -= 6
 	suit_counts[1] = deck.get_deck_count("suit", 1, is_full_deck)
 	place_digit_sprites(suit_counts[1], offset)

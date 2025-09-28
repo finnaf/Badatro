@@ -127,14 +127,6 @@ func _ready():
 		var rarity = joker_info[id].rarity
 		jokers_by_rarity[rarity].append(id)
 
-# convert id to enum string name
-func get_joker_shortname(value: int, rarity: Rarity) -> String:
-	for joker in Jokers:
-		if Jokers[joker] == value:
-			return joker
-	
-	return "none"
-
 # get info about joker (for descriptor and joker)
 # score func on joker trigger
 # trigger func on card trigger
@@ -338,6 +330,7 @@ var joker_info = {
 		"rarity" : Rarity.common,
 		"cost" : 1,
 		"description" : "Go up to -$20 in debt",
+		"debt_potential" : 20,
 		"connective" : Connective.none
 	},
 	Jokers.Banner: {

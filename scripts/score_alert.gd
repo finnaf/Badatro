@@ -53,14 +53,14 @@ func set_value(is_plus: bool, type: int, score: float):
 		offset.x += digit_size.x + 1
 
 func do_background(type: int, digits):
-	var len = digits.size()
+	var length = digits.size()
 
 	match type:
 		0: background.modulate = Globals.BLUE
 		1: background.modulate = Globals.RED
 		2: background.modulate = Globals.YELLOW
 
-	background.position += Vector2(6 + len, -5)
+	background.position += Vector2(6 + length, -5)
 
 func clear_score():
 	for digit in get_children():

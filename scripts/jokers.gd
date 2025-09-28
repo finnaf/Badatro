@@ -59,6 +59,7 @@ func add(joker):
 	reorganise_jokers()
 	connect_jokers()
 	update_variable_all_jokers()
+	joker.data.activate_static_effect()
 
 func reorganise_jokers():
 	for i in range(jokers.size()):
@@ -100,11 +101,12 @@ func _on_sell(card):
 	_delete_joker(card)
 	reorganise_jokers()
 	
-func _delete_joker(card):
-	jokers.erase(card)
-	if (jok_select == card):
+func _delete_joker(jok: Area2D):
+	jok.data.deactivate_static_effect()
+	jokers.erase(jok)
+	if (jok_select == jok):
 		jok_select = null
-	card.queue_free()
+	jok.queue_free()
 
 func is_full():
 	if (jokers.size() < get_max_jokers()):
