@@ -13,6 +13,7 @@ static func set_seed(s: int):
 	rng.seed = s
 static func get_rnd_float() -> float:
 	return rng.randf()
+## inclusive
 static func get_rnd_int(min: int, max: int) -> float:
 	return rng.randi_range(min, max)
 

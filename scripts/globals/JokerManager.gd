@@ -42,6 +42,7 @@ enum Condition {
 	zero, one, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king, ace,
 	highcard, pair, twopair, threeofakind, fullhouse, flush, straight, 
 	straightflush, fourofakind, fiveofakind, flushhouse, flushfive,
+	odd, even,
 }
 
 enum Rarity {
@@ -441,6 +442,8 @@ var joker_info = {
 	Jokers.GrosMichel: { # TODO
 		"name" : "Gros Michel",
 		"rarity" : Rarity.common,
+		"score_func" : score_gros_michel,
+		"round_end_func" : round_end_gros_michel,
 		"cost" : 5,
 		"description" : "+15 Mult. 1 in 6 chance this is destroyed
 						at the end of the round",
@@ -452,24 +455,28 @@ var joker_info = {
 	Jokers.EvenSteven: { # TODO
 		"name" : "Even Steven",
 		"rarity" : Rarity.common,
+		"trigger_func" : trigger_even_steven,
 		"cost" : 4,
 		"description" : "Played cards with even rank give +4
 						Mult when scored (10, 8, 6, 4, 2)",
 		"benefit_0" : Benefit.addmult,
 		"benefit_1" : Benefit.multnum,
 		"benefit_val_1" : 4,
-		"connective" : Connective.none
+		"connective" : Connective.is_,
+		"condition_0" : Condition.even, # TODO
 	},
-	Jokers.OddTodd: { # TODO
+	Jokers.OddTodd: {
 		"name" : "Odd Todd",
 		"rarity" : Rarity.common,
+		"trigger_func" : trigger_odd_todd,
 		"cost" : 4,
 		"description" : "Played cards with and odd rank give +31
 						Chips when scored (A, 9, 7, 5, 3)",
 		"benefit_0" : Benefit.addchips,
 		"benefit_1" : Benefit.chipnum,
 		"benefit_val_1" : 31,
-		"connective" : Connective.none
+		"connective" : Connective.is_,
+		"condition_0" : Condition.odd, # TODO
 	},
 	
 	# UNCOMMON JOKERS
@@ -595,7 +602,6 @@ func score_crafty_joker(_joker, gamestate) -> Dictionary:
 		return {"chips": 80}
 	return {}
 func score_half_joker(_joker, gamestate) -> Dictionary:
-	print(gamestate)
 	if (gamestate.played_cards.size() <= 3):
 		return {"mult": 20}
 	return {}
@@ -630,6 +636,8 @@ func score_abstract_joker(_joker, gamestate) -> Dictionary:
 	if (gamestate.jokers.size() > 0):
 		return {"mult": gamestate.jokers.size() * 3, "eq_variable": gamestate.jokers.size() * 3}
 	return {}
+func score_gros_michel(_joker, _gamestate) -> Dictionary:
+	return {"mult": 15}
 
 # uncommon jokers
 func score_joker_stencil(_joker, gamestate) -> Dictionary: # needs joker size and joker count
@@ -690,7 +698,22 @@ func trigger_scary_face(_joker: JokerCardData, card: CardData) -> Dictionary:
 	if (CardManager.is_facecard(card.rank)):
 		return {"chips": 30}
 	return {}
+func trigger_even_steven(_joker: JokerCardData, card: CardData) -> Dictionary:
+	if (CardManager.is_even(card.rank)):
+		return {"mult": 4}
+	return {}
+func trigger_odd_todd(_joker: JokerCardData, card: CardData) -> Dictionary:
+	if (CardManager.is_odd(card.rank)):
+		return {"chips": 31}
+	return {}
 
+
+func round_end_gros_michel(_joker: JokerCardData):
+	# 1 in 6 chance self destruct
+	if (JokerCardData.do_dice_roll(1, 6)):
+		# destruct
+		return {"self_destruct" : true}
+	return {}
 
 
 func get_rarity_string(rarity: Rarity) -> String:

@@ -3,6 +3,7 @@ extends CardData
 
 # meta affecting jokers
 static var debt_potential : int					# from credit card
+static var chance_multiplier : int				# oops all sixes
 
 static var jok_rng = RandomNumberGenerator.new()
 
@@ -13,9 +14,11 @@ var variable: int = 0
 
 var score_func: Callable = Callable()
 var trigger_func: Callable = Callable()
+var round_end_func: Callable = Callable()
 
 static func _static_init():
 	debt_potential = 0
+	chance_multiplier = 1
 
 static func set_seed(seed: int):
 	jok_rng.seed = seed
@@ -46,6 +49,7 @@ func generate_by_rarity(rarity):
 	self.rarity = rarity
 	score_func = data.get("score_func", Callable())
 	trigger_func = data.get("trigger_func", Callable())
+	round_end_func = data.get("round_end_func", Callable())
 
 func activate_static_effect():
 	
@@ -72,6 +76,12 @@ func get_trigger_val(card: PlayingCardData) -> Dictionary:
 		return trigger_func.call(self, card)
 	return {}
 
+# TODO implement
+func get_round_end_val() -> Dictionary:
+	if round_end_func:
+		return round_end_func.call(self)
+	return {}
+
 func update_variable(state: Dictionary, scoreval = null):	
 	# simulate the joker being triggered to get value
 	if (scoreval == null):
@@ -94,3 +104,12 @@ func get_cost() -> int:
 
 func is_joker() -> bool:
 	return true
+
+## helper function for all x in y function calls in jokers (for oops handling)
+## counts from 1 inclusive, true if below or equal to threshold
+static func do_dice_roll(thresh : int, max : int) -> bool:
+	var val = CardData.get_rnd_int(1, max)
+		
+	if val <= thresh * chance_multiplier:
+		return true
+	return false

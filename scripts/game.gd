@@ -5,6 +5,7 @@ extends Node2D
 @onready var sidebar = $Mat/Sidebar
 @onready var shop = $"Shop"
 @onready var deck = $Deck
+@onready var jokers = $Mat/Jokers
 
 var seed = 56
 
@@ -262,6 +263,8 @@ func end_turn():
 	var req = BossManager.get_chip_req(ante, blind)
 	if score >= req:
 		state = states.WINNING
+		
+		jokers.do_round_end()
 		
 		updateCashoutUI.emit(req)
 		

@@ -43,6 +43,13 @@ func get_joker_score_state() -> Dictionary:
 	
 	return state
 
+func do_round_end():
+	for joker in jokers:
+		var dict = joker.data.get_round_end_val()
+		
+		if dict.has("self_destruct"):
+			_delete_joker(joker)
+			reorganise_jokers()
 
 
 func update_variable_all_jokers():

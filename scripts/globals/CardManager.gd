@@ -272,6 +272,16 @@ func is_facecard(rank: int) -> bool:
 		return true
 	return false
 
+func is_even(rank: int) -> bool:
+	if (rank == 2 or rank == 4 or rank == 6 or rank == 8 or rank == 10):
+		return true
+	return false
+
+func is_odd(rank: int) -> bool:
+	if (rank == 3 or rank == 5 or rank == 7 or rank == 9 or rank == 14):
+		return true
+	return false
+
 func convert_rank_to_chipvalue(rank: int) -> int:
 	if (is_facecard(rank)):
 		return 10
