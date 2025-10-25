@@ -7,6 +7,7 @@ extends Node2D
 @onready var deck = $Deck
 @onready var jokers = $Mat/Jokers
 @onready var consumables = $Mat/Consumables
+@onready var blindoptions = $Mat/BlindOptions
 
 @export var seed = 56
 
@@ -92,8 +93,9 @@ signal updateGoalUI
 signal updateCashoutUI
 
 func _ready():
-	updateGoalUI.emit()
+	#updateGoalUI.emit()
 	setup(seed)
+	blindoptions.open()
 
 func setup(game_seed: int):
 	seed = game_seed
@@ -106,7 +108,6 @@ func setup(game_seed: int):
 	gamespeed = GAMESPEED
 	
 	deck.setup()
-	deck.begin_round()
 
 func is_win():
 	if state == states.WINNING:
@@ -316,9 +317,9 @@ func update_blind():
 
 func next_round():
 	shop.close()
-	
-	# TODO add choosing blinds
-	
+	blindoptions.open()
+
+func start_round():
 	round += 1
 	sidebar.update_round()
 	state = states.PLAYING
@@ -373,4 +374,4 @@ func clear_notification(alert):
 	# delete
 	if (alert):
 		alert.queue_free()
-		await get_tree().create_timer(abs(get_speed() - 0.1) / 3).timeout	
+		await get_tree().create_timer(abs(get_speed() - 0.1) / 3).timeout

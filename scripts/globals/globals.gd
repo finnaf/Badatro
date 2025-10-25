@@ -16,6 +16,7 @@ const GREEN = Color("3e8948") # mat/reroll col
 const DARKGREEN = Color("265c42") # joker/consum area
 
 const MUSTARD = Color("f77622") # diamonds, low importance text
+const BURNTRED = Color("a22633")
 
 
 enum ResourceType {

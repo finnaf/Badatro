@@ -376,8 +376,7 @@ func _on_cash_out_button_pressed() -> void:
 
 
 func _on_next_round_button_pressed() -> void:
-	await game.next_round()
-	begin_round()
+	game.next_round()
 
 func get_game_state() -> Dictionary:
 	return {

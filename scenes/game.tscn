@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=3 uid="uid://cijoautimuua5"]
+[gd_scene load_steps=65 format=3 uid="uid://cijoautimuua5"]
 
 [ext_resource type="Script" uid="uid://c7vv5i4f5v710" path="res://scripts/game.gd" id="1_ca42v"]
 [ext_resource type="Texture2D" uid="uid://cv0tqpisxhrod" path="res://images/board/mat/mat.png" id="2_qnb83"]
@@ -46,6 +46,12 @@
 [ext_resource type="Texture2D" uid="uid://dl6r3o2jglp6a" path="res://images/board/shop/next-round.png" id="27_gxtfn"]
 [ext_resource type="Texture2D" uid="uid://7htb31isba7y" path="res://images/board/deck-info/remaining.png" id="27_m4url"]
 [ext_resource type="Texture2D" uid="uid://bk1w8yeigqvpd" path="res://images/board/shop/skip-button.png" id="28_js0lu"]
+[ext_resource type="Script" uid="uid://bokx3fnl28key" path="res://scripts/blind_options.gd" id="35_fedci"]
+[ext_resource type="Texture2D" uid="uid://bopxsjjy2gaht" path="res://images/board/blind-picking/blind-option.png" id="36_i4re6"]
+[ext_resource type="Texture2D" uid="uid://bfvno2dyeavta" path="res://images/board/blind-picking/blind-option-outline.png" id="37_pf7vy"]
+[ext_resource type="Texture2D" uid="uid://cupghxe5jdqgi" path="res://images/board/blind-picking/select-button.png" id="38_i4re6"]
+[ext_resource type="Texture2D" uid="uid://b6r5ln051g5y4" path="res://images/board/blind-picking/select-button-hover.png" id="39_pf7vy"]
+[ext_resource type="Texture2D" uid="uid://bb6p3kpsbcvhq" path="res://images/board/blind-picking/select-button-disabled.png" id="40_pf7vy"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kvuet"]
 atlas = ExtResource("11_dinhu")
@@ -162,6 +168,7 @@ position = Vector2(53, 38)
 texture = ExtResource("2_qnb83")
 
 [node name="BottomButtons" type="Node2D" parent="Mat"]
+visible = false
 position = Vector2(-8, 27)
 
 [node name="PlayButton" type="TextureButton" parent="Mat/BottomButtons"]
@@ -473,6 +480,161 @@ offset_right = 47.0
 offset_bottom = 32.0
 texture_normal = ExtResource("26_7025r")
 
+[node name="BlindOptions" type="Node2D" parent="Mat"]
+visible = false
+script = ExtResource("35_fedci")
+
+[node name="SmallBlind" type="Sprite2D" parent="Mat/BlindOptions"]
+position = Vector2(-19, 10)
+texture = ExtResource("36_i4re6")
+offset = Vector2(0.5, 0)
+
+[node name="bg" type="Sprite2D" parent="Mat/BlindOptions/SmallBlind"]
+texture = ExtResource("37_pf7vy")
+offset = Vector2(0.5, 0)
+
+[node name="Select" type="TextureButton" parent="Mat/BlindOptions/SmallBlind"]
+offset_left = -7.0
+offset_top = -25.0
+offset_right = 8.0
+offset_bottom = -18.0
+texture_normal = ExtResource("38_i4re6")
+texture_hover = ExtResource("39_pf7vy")
+texture_disabled = ExtResource("40_pf7vy")
+metadata/_edit_use_anchors_ = true
+
+[node name="GoalTenThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind"]
+position = Vector2(6.5, -6.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalHundredThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind"]
+position = Vector2(2.5, -6.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalMillions" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind"]
+position = Vector2(-1.5, -6.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalTenMillions" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind"]
+position = Vector2(-5.5, -6.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalOnes" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind"]
+position = Vector2(6.5, -0.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalTens" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind"]
+position = Vector2(2.5, -0.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalHundreds" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind"]
+position = Vector2(-1.5, -0.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind"]
+position = Vector2(-5.5, -0.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="BigBlind" type="Sprite2D" parent="Mat/BlindOptions"]
+position = Vector2(3, 10)
+texture = ExtResource("36_i4re6")
+offset = Vector2(0.5, 0)
+
+[node name="Select" type="TextureButton" parent="Mat/BlindOptions/BigBlind"]
+offset_left = -7.0
+offset_top = -25.0
+offset_right = 8.0
+offset_bottom = -18.0
+texture_normal = ExtResource("38_i4re6")
+texture_hover = ExtResource("39_pf7vy")
+texture_disabled = ExtResource("40_pf7vy")
+
+[node name="bg" type="Sprite2D" parent="Mat/BlindOptions/BigBlind"]
+position = Vector2(0.5, 0)
+texture = ExtResource("37_pf7vy")
+
+[node name="GoalTenThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind"]
+position = Vector2(6.5, -6.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalHundredThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind"]
+position = Vector2(2.5, -6.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalMillions" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind"]
+position = Vector2(-1.5, -6.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalTenMillions" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind"]
+position = Vector2(-5.5, -6.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalOnes" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind"]
+position = Vector2(6.5, -0.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalTens" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind"]
+position = Vector2(2.5, -0.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalHundreds" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind"]
+position = Vector2(-1.5, -0.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind"]
+position = Vector2(-5.5, -0.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="BossBlind" type="Sprite2D" parent="Mat/BlindOptions"]
+position = Vector2(26, 10)
+texture = ExtResource("36_i4re6")
+offset = Vector2(0.5, 0)
+
+[node name="Select" type="TextureButton" parent="Mat/BlindOptions/BossBlind"]
+offset_left = -7.0
+offset_top = -25.0
+offset_right = 8.0
+offset_bottom = -18.0
+texture_normal = ExtResource("38_i4re6")
+texture_hover = ExtResource("39_pf7vy")
+texture_disabled = ExtResource("40_pf7vy")
+
+[node name="bg" type="Sprite2D" parent="Mat/BlindOptions/BossBlind"]
+position = Vector2(0.5, 0)
+texture = ExtResource("37_pf7vy")
+
+[node name="GoalTenThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind"]
+position = Vector2(6.5, -6.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalHundredThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind"]
+position = Vector2(2.5, -6.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalMillions" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind"]
+position = Vector2(-1.5, -6.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalTenMillions" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind"]
+position = Vector2(-5.5, -6.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalOnes" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind"]
+position = Vector2(6.5, -0.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalTens" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind"]
+position = Vector2(2.5, -0.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalHundreds" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind"]
+position = Vector2(-1.5, -0.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
+[node name="GoalThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind"]
+position = Vector2(-5.5, -0.5)
+sprite_frames = SubResource("SpriteFrames_f1jbl")
+
 [node name="Deck" type="Node2D" parent="."]
 position = Vector2(57, 51)
 script = ExtResource("16_qouja")
@@ -542,6 +704,9 @@ texture_normal = ExtResource("28_js0lu")
 [connection signal="pressed" from="Mat/DeckInfo" to="Mat/DeckInfo" method="_on_pressed"]
 [connection signal="pressed" from="Mat/DeckInfo/CoverMat/ToggleButton" to="Mat/DeckInfo/CoverMat" method="_on_toggle_button_pressed"]
 [connection signal="pressed" from="Mat/DeckInfo/CoverMat/BackButton" to="Mat/DeckInfo" method="_on_back_button_pressed"]
+[connection signal="pressed" from="Mat/BlindOptions/SmallBlind/Select" to="Mat/BlindOptions" method="_on_small_select_pressed"]
+[connection signal="pressed" from="Mat/BlindOptions/BigBlind/Select" to="Mat/BlindOptions" method="_on_big_select_pressed"]
+[connection signal="pressed" from="Mat/BlindOptions/BossBlind/Select" to="Mat/BlindOptions" method="_on_boss_select_pressed"]
 [connection signal="pressed" from="Shop/ShopBackground/RerollButton" to="Shop" method="_on_reroll_button_pressed"]
 [connection signal="pressed" from="Shop/ShopBackground/NextRoundButton" to="Deck" method="_on_next_round_button_pressed"]
 [connection signal="pressed" from="Shop/SkipButton" to="Shop" method="_on_skip_button_pressed"]
