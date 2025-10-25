@@ -51,6 +51,9 @@ func _ready():
 func open():
 	self.visible = true
 	
+	if game.blind == 0:
+		update_goals()
+	
 	match game.blind:
 		0:
 			small_button.disabled = false
@@ -90,13 +93,41 @@ func colour_numbers():
 	for digit in boss_digits:
 		digit.modulate = Globals.BLACK
 
+func update_goals():
+	var digits = Globals.convert_to_digits(game.calculate_goal(), 8, 99999999)
+	for i in range(8):
+		small_digits[7-i].frame = digits[i]
+	
+	digits = Globals.convert_to_digits(game.calculate_goal(1), 8, 99999999)
+	for i in range(8):
+		big_digits[7-i].frame = digits[i]
+	
+	digits = Globals.convert_to_digits(game.calculate_goal(2), 8, 99999999)
+	for i in range(8):
+		boss_digits[7-i].frame = digits[i]
+	
+	var offset = Vector2(-22.5, 18.5)
+	for i in range(3):
+		var dollar = Globals.create_symbol_sprite(0, "extras", offset)
+		add_child(dollar)
+		offset.x += 4
+	
+	offset.x += 8
+	for i in range(4):
+		var dollar = Globals.create_symbol_sprite(0, "extras", offset)
+		add_child(dollar)
+		offset.x += 4
+	
+	offset.x += 7
+	for i in range(5):
+		var dollar = Globals.create_symbol_sprite(0, "extras", offset)
+		add_child(dollar)
+		offset.x += 3
+
 
 func _on_small_select_pressed():
 	close()
-
-
 func _on_big_select_pressed():
 	close()
-
 func _on_boss_select_pressed():
 	close()

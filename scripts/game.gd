@@ -113,8 +113,8 @@ func is_win():
 	if state == states.WINNING:
 		return 1
 	
-func calculate_goal():
-	return BossManager.get_chip_req(ante, blind)
+func calculate_goal(offset: int = 0):
+	return BossManager.get_chip_req(ante, blind+offset)
 
 
 func get_seed():

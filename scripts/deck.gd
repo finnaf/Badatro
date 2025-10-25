@@ -18,6 +18,7 @@ signal updateButtonsUI
 
 func setup():
 	fulldeck = game.get_basic_deck()
+	deck = fulldeck.duplicate(true)
 
 func begin_round():
 	hand_size = game.get_hand_size()
