@@ -4,7 +4,18 @@ Implemented the basic gameplay loop of Balatro, with custom pixel art for 35 Jok
 
 ![Dashboard Image (playing)](images/screenshots/playing.png)
 
-There exists a few bugs for card animation, and both boss blinds and spectral cards are yet to be implemented.
+There exists a few bugs for card animation, and a lack of uncommon jokers leads to an unfair advantage in drawing joker stencils.
+
+## Not Implemented
+- Boss Blinds
+- Spectral Cards
+- Card Edition Shaders
+- Round Skipping
+- Remaining 100+ Jokers 
+- Winning
+- Stakes
+- Different Decks
+- Settings Panel
 
 ## Gallery
 
@@ -15,3 +26,7 @@ There exists a few bugs for card animation, and both boss blinds and spectral ca
 ![Checking Deck](images/screenshots/remaining.png)
 
 ![Using Consumable](images/screenshots/consumable.png)
+
+![Five Stencil Jokers](images/screenshots/stencils.PNG)
+
+![Five Stencil Jokers](images/screenshots/round-select.png)
