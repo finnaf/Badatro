@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cq44jds7mqdvr"
-path="res://.godot/imported/halfway.png-3b290903ebd7f6e0d38c4b46d7078b81.ctex"
+uid="uid://ny5lrubvw4kd"
+path="res://.godot/imported/playing.png-b363c4d61262762481c1962b994b22b2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/cards/turning/halfway.png"
-dest_files=["res://.godot/imported/halfway.png-3b290903ebd7f6e0d38c4b46d7078b81.ctex"]
+source_file="res://images/screenshots/playing.png"
+dest_files=["res://.godot/imported/playing.png-b363c4d61262762481c1962b994b22b2.ctex"]
 
 [params]
 

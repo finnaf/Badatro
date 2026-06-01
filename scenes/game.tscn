@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://cijoautimuua5"]
+[gd_scene format=3 uid="uid://cijoautimuua5"]
 
 [ext_resource type="Script" uid="uid://c7vv5i4f5v710" path="res://scripts/game.gd" id="1_ca42v"]
 [ext_resource type="Texture2D" uid="uid://cv0tqpisxhrod" path="res://images/board/mat/mat.png" id="2_qnb83"]
@@ -18,7 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://bvtudkaj4go8g" path="res://images/board/sidebar/buttons/settings.png" id="13_oaba0"]
 [ext_resource type="Script" uid="uid://qj0k6hkypgdi" path="res://scripts/shop.gd" id="13_pl11u"]
 [ext_resource type="Script" uid="uid://c0i0j38gje1kl" path="res://scripts/jokers.gd" id="13_qouja"]
-[ext_resource type="Script" path="res://scripts/cashout.gd" id="13_ssvqc"]
+[ext_resource type="Script" uid="uid://csv1wj8wihwq1" path="res://scripts/cashout.gd" id="13_ssvqc"]
 [ext_resource type="Texture2D" uid="uid://ns8h037tpe4k" path="res://images/board/mat/consumable-area.png" id="13_suyxu"]
 [ext_resource type="Texture2D" uid="uid://d138fy7r4bgeg" path="res://images/board/cash-out/cash-out-selected.png" id="14_ca42v"]
 [ext_resource type="Texture2D" uid="uid://n8br4mtr224o" path="res://images/board/sidebar/shop-sidebar-2.png" id="14_pl11u"]
@@ -31,7 +31,7 @@
 [ext_resource type="Texture2D" uid="uid://dssvu8yog34e1" path="res://images/board/sidebar/shop-sidebar-4.png" id="16_qnb83"]
 [ext_resource type="Script" uid="uid://bt1g21xjd08tc" path="res://scripts/deck.gd" id="16_qouja"]
 [ext_resource type="Texture2D" uid="uid://lplj5as5ftk8" path="res://images/board/cash-out/cash-out-beat.png" id="16_rysoc"]
-[ext_resource type="Script" path="res://scripts/deck_info.gd" id="16_sgl2t"]
+[ext_resource type="Script" uid="uid://da4ky1onnbco4" path="res://scripts/deck_info.gd" id="16_sgl2t"]
 [ext_resource type="Texture2D" uid="uid://bkwyr3gjhtl2w" path="res://images/board/sidebar/shop-sidebar-5.png" id="17_sww3w"]
 [ext_resource type="Texture2D" uid="uid://euaxxcdeussy" path="res://images/board/sidebar/shop-sidebar-6.png" id="18_suyxu"]
 [ext_resource type="Texture2D" uid="uid://d2rs274hkxifa" path="res://images/board/deck-info/faded-bg.png" id="23_8ool0"]
@@ -157,21 +157,21 @@ animations = [{
 "speed": 6.0
 }]
 
-[node name="Game" type="Node2D"]
+[node name="Game" type="Node2D" unique_id=1257373547]
 script = ExtResource("1_ca42v")
 seed = 123
 money = 88
 
-[node name="Mat" type="Sprite2D" parent="."]
+[node name="Mat" type="Sprite2D" parent="." unique_id=155744394]
 texture_filter = 1
 position = Vector2(53, 38)
 texture = ExtResource("2_qnb83")
 
-[node name="BottomButtons" type="Node2D" parent="Mat"]
+[node name="BottomButtons" type="Node2D" parent="Mat" unique_id=943020778]
 visible = false
 position = Vector2(-8, 27)
 
-[node name="PlayButton" type="TextureButton" parent="Mat/BottomButtons"]
+[node name="PlayButton" type="TextureButton" parent="Mat/BottomButtons" unique_id=989780959]
 offset_left = -20.0
 offset_right = -1.0
 offset_bottom = 9.0
@@ -179,156 +179,156 @@ texture_normal = ExtResource("7_37s47")
 texture_disabled = ExtResource("8_bt5mj")
 metadata/_edit_use_anchors_ = true
 
-[node name="DiscardButton" type="TextureButton" parent="Mat/BottomButtons"]
+[node name="DiscardButton" type="TextureButton" parent="Mat/BottomButtons" unique_id=447813582]
 offset_left = 15.0
 offset_right = 44.0
 offset_bottom = 9.0
 texture_normal = ExtResource("5_1kice")
 texture_disabled = ExtResource("6_5newe")
 
-[node name="SortRankButton" type="TextureButton" parent="Mat/BottomButtons"]
+[node name="SortRankButton" type="TextureButton" parent="Mat/BottomButtons" unique_id=1875396926]
 offset_right = 7.0
 offset_bottom = 8.0
 texture_normal = ExtResource("3_ssvqc")
 metadata/_edit_use_anchors_ = true
 
-[node name="SortSuitButton" type="TextureButton" parent="Mat/BottomButtons"]
+[node name="SortSuitButton" type="TextureButton" parent="Mat/BottomButtons" unique_id=829952040]
 offset_left = 7.0
 offset_right = 14.0
 offset_bottom = 8.0
 texture_normal = ExtResource("4_264po")
 metadata/_edit_use_anchors_ = true
 
-[node name="Sidebar" type="Sprite2D" parent="Mat"]
+[node name="Sidebar" type="Sprite2D" parent="Mat" unique_id=1592640368]
 position = Vector2(-41.5, 0)
 texture = ExtResource("9_e1j6l")
 script = ExtResource("14_suyxu")
 
-[node name="Discards" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="Discards" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=946603645]
 position = Vector2(4, 11.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="MoneyOnes" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="MoneyOnes" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=2103208262]
 position = Vector2(4, 21.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="RoundTens" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="RoundTens" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=1593462409]
 position = Vector2(0, 31.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="RoundOnes" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="RoundOnes" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=1238433135]
 position = Vector2(4.0113, 31.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="MoneyTens" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="MoneyTens" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=757451522]
 position = Vector2(-0.101526, 21.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="Hands" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="Hands" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=1873628682]
 position = Vector2(-4, 11.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="MultOnes" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="MultOnes" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=1204276958]
 position = Vector2(5.00258, 2.50171)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="MultTens" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="MultTens" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=1848202861]
 position = Vector2(1.00258, 2.50171)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="ChipOnes" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="ChipOnes" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=160803450]
 position = Vector2(5, -5.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="ChipHundreds" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="ChipHundreds" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=1319558847]
 position = Vector2(-3, -5.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="ChipThousands" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="ChipThousands" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=621111570]
 position = Vector2(-7, -5.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="ChipTens" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="ChipTens" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=1320396781]
 position = Vector2(1, -5.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="MultHundreds" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="MultHundreds" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=695834426]
 position = Vector2(-2.99742, 2.50171)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="MultThousands" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="MultThousands" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=1847634900]
 position = Vector2(-6.99742, 2.50171)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="Ante" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="Ante" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=15979430]
 position = Vector2(-5.98815, 31.495)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="ScoreOnes" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="ScoreOnes" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=45598281]
 position = Vector2(6, -13.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="ScoreTens" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="ScoreTens" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=1964905041]
 position = Vector2(2, -13.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="ScoreHundreds" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="ScoreHundreds" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=1490475039]
 position = Vector2(-2, -13.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="ScoreThousands" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="ScoreThousands" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=107444066]
 position = Vector2(-6, -13.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="ScoreTenThousands" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="ScoreTenThousands" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=852979765]
 position = Vector2(6, -19.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="ScoreHundredThousands" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="ScoreHundredThousands" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=902005336]
 position = Vector2(2, -19.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="ScoreMillions" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="ScoreMillions" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=446602469]
 position = Vector2(-2, -19.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="ScoreTenMillions" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="ScoreTenMillions" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=351163125]
 position = Vector2(-6, -19.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalTenThousands" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="GoalTenThousands" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=632698669]
 position = Vector2(6, -33.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalHundredThousands" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="GoalHundredThousands" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=1651047408]
 position = Vector2(2, -33.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalMillions" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="GoalMillions" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=158065316]
 position = Vector2(-2, -33.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalTenMillions" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="GoalTenMillions" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=1943062245]
 position = Vector2(-6, -33.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalOnes" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="GoalOnes" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=1396123720]
 position = Vector2(6, -27.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalTens" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="GoalTens" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=651968270]
 position = Vector2(2, -27.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalHundreds" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="GoalHundreds" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=70193730]
 position = Vector2(-2, -27.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalThousands" type="AnimatedSprite2D" parent="Mat/Sidebar"]
+[node name="GoalThousands" type="AnimatedSprite2D" parent="Mat/Sidebar" unique_id=2147468830]
 position = Vector2(-6, -27.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="RunInfo" type="TextureButton" parent="Mat"]
+[node name="RunInfo" type="TextureButton" parent="Mat" unique_id=808758519]
 offset_left = -49.0
 offset_top = -9.0
 offset_right = -34.0
@@ -336,35 +336,35 @@ offset_bottom = -2.0
 texture_hover = ExtResource("12_0sl42")
 script = ExtResource("13_458eo")
 
-[node name="FadedBackground" type="Sprite2D" parent="Mat/RunInfo"]
+[node name="FadedBackground" type="Sprite2D" parent="Mat/RunInfo" unique_id=942157764]
 visible = false
 z_index = 10
 position = Vector2(49, 9)
 texture = ExtResource("23_8ool0")
 
-[node name="CoverMat" type="Sprite2D" parent="Mat/RunInfo"]
+[node name="CoverMat" type="Sprite2D" parent="Mat/RunInfo" unique_id=146075959]
 visible = false
 
-[node name="Settings" type="TextureButton" parent="Mat"]
+[node name="Settings" type="TextureButton" parent="Mat" unique_id=214127269]
 offset_left = -49.0
 offset_top = -1.0
 offset_right = -34.0
 offset_bottom = 6.0
 texture_hover = ExtResource("13_oaba0")
 
-[node name="Jokers" type="Sprite2D" parent="Mat"]
+[node name="Jokers" type="Sprite2D" parent="Mat" unique_id=222936034]
 position = Vector2(-4, -30)
 texture = ExtResource("12_sww3w")
 offset = Vector2(0.5, 0.5)
 script = ExtResource("13_qouja")
 
-[node name="Consumables" type="Sprite2D" parent="Mat"]
+[node name="Consumables" type="Sprite2D" parent="Mat" unique_id=770107692]
 position = Vector2(38, -30)
 texture = ExtResource("13_suyxu")
 offset = Vector2(0, 0.5)
 script = ExtResource("15_pr1ej")
 
-[node name="MoneyCountUI" type="VBoxContainer" parent="Mat"]
+[node name="MoneyCountUI" type="VBoxContainer" parent="Mat" unique_id=1877451494]
 visible = false
 texture_filter = 1
 offset_left = -27.0
@@ -374,75 +374,75 @@ offset_bottom = 37.0
 theme_override_constants/separation = -1
 script = ExtResource("13_ssvqc")
 
-[node name="CashOutButton" type="TextureButton" parent="Mat/MoneyCountUI"]
+[node name="CashOutButton" type="TextureButton" parent="Mat/MoneyCountUI" unique_id=1590531434]
 layout_mode = 2
 texture_normal = ExtResource("13_ir15t")
 texture_pressed = ExtResource("14_ca42v")
 texture_disabled = ExtResource("15_rysoc")
 
-[node name="MoneyGoal" type="TextureRect" parent="Mat/MoneyCountUI"]
+[node name="MoneyGoal" type="TextureRect" parent="Mat/MoneyCountUI" unique_id=739102197]
 layout_mode = 2
 texture = ExtResource("16_rysoc")
 
-[node name="MoneyGoalTenThousands" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyGoal"]
+[node name="MoneyGoalTenThousands" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyGoal" unique_id=1147297108]
 position = Vector2(32.5, 4.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="MoneyGoalHundredThousands" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyGoal"]
+[node name="MoneyGoalHundredThousands" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyGoal" unique_id=291230189]
 position = Vector2(28.5, 4.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="MoneyGoalMillions" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyGoal"]
+[node name="MoneyGoalMillions" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyGoal" unique_id=496584113]
 position = Vector2(24.5, 4.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="MoneyGoalTenMillions" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyGoal"]
+[node name="MoneyGoalTenMillions" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyGoal" unique_id=714320443]
 position = Vector2(20.5, 4.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="MoneyGoalOnes" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyGoal"]
+[node name="MoneyGoalOnes" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyGoal" unique_id=745528591]
 position = Vector2(48.5, 4.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="MoneyGoalTens" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyGoal"]
+[node name="MoneyGoalTens" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyGoal" unique_id=419491182]
 position = Vector2(44.5, 4.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="MoneyGoalHundreds" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyGoal"]
+[node name="MoneyGoalHundreds" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyGoal" unique_id=292187753]
 position = Vector2(40.5, 4.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="MoneyGoalThousands" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyGoal"]
+[node name="MoneyGoalThousands" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyGoal" unique_id=504022524]
 position = Vector2(36.5, 4.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="MoneyGoalGainedOnes" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyGoal"]
+[node name="MoneyGoalGainedOnes" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyGoal" unique_id=1968807636]
 position = Vector2(58.6015, 4.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="MoneyHands" type="TextureRect" parent="Mat/MoneyCountUI"]
+[node name="MoneyHands" type="TextureRect" parent="Mat/MoneyCountUI" unique_id=947152763]
 layout_mode = 2
 texture = ExtResource("16_ca42v")
 
-[node name="MoneyHands" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyHands"]
+[node name="MoneyHands" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyHands" unique_id=144859915]
 position = Vector2(3, 4)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 offset = Vector2(0.5, 0.5)
 
-[node name="MoneyHandsGainedOnes" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyHands"]
+[node name="MoneyHandsGainedOnes" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyHands" unique_id=312452598]
 position = Vector2(58.6015, 4.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="MoneyInterest" type="TextureRect" parent="Mat/MoneyCountUI"]
+[node name="MoneyInterest" type="TextureRect" parent="Mat/MoneyCountUI" unique_id=2070606145]
 layout_mode = 2
 texture = ExtResource("24_oaba0")
 
-[node name="MoneyInterestGainedOnes" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyInterest"]
+[node name="MoneyInterestGainedOnes" type="AnimatedSprite2D" parent="Mat/MoneyCountUI/MoneyInterest" unique_id=193921935]
 position = Vector2(58, 4)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 offset = Vector2(0.5, 0.5)
 
-[node name="DeckInfo" type="TextureButton" parent="Mat"]
+[node name="DeckInfo" type="TextureButton" parent="Mat" unique_id=301098036]
 z_index = 9
 offset_left = 38.0
 offset_top = 27.0
@@ -451,13 +451,13 @@ offset_bottom = 40.0
 texture_normal = ExtResource("15_suyxu")
 script = ExtResource("16_sgl2t")
 
-[node name="FadedBackground" type="Sprite2D" parent="Mat/DeckInfo"]
+[node name="FadedBackground" type="Sprite2D" parent="Mat/DeckInfo" unique_id=975855507]
 visible = false
 position = Vector2(-38, -27)
 scale = Vector2(1.01923, 1)
 texture = ExtResource("23_8ool0")
 
-[node name="CoverMat" type="Sprite2D" parent="Mat/DeckInfo"]
+[node name="CoverMat" type="Sprite2D" parent="Mat/DeckInfo" unique_id=1510651749]
 visible = false
 position = Vector2(-38, -27)
 texture = ExtResource("23_gxtfn")
@@ -466,34 +466,34 @@ digit_frames = ExtResource("25_nepv3")
 full_deck = ExtResource("26_m4url")
 remaining = ExtResource("27_m4url")
 
-[node name="ToggleButton" type="TextureButton" parent="Mat/DeckInfo/CoverMat"]
+[node name="ToggleButton" type="TextureButton" parent="Mat/DeckInfo/CoverMat" unique_id=1333115587]
 offset_left = -15.0
 offset_top = 25.0
 offset_right = 22.0
 offset_bottom = 32.0
 texture_disabled = ExtResource("26_m4url")
 
-[node name="BackButton" type="TextureButton" parent="Mat/DeckInfo/CoverMat"]
+[node name="BackButton" type="TextureButton" parent="Mat/DeckInfo/CoverMat" unique_id=472350044]
 offset_left = 23.0
 offset_top = 25.0
 offset_right = 47.0
 offset_bottom = 32.0
 texture_normal = ExtResource("26_7025r")
 
-[node name="BlindOptions" type="Node2D" parent="Mat"]
+[node name="BlindOptions" type="Node2D" parent="Mat" unique_id=1538330938]
 visible = false
 script = ExtResource("35_fedci")
 
-[node name="SmallBlind" type="Sprite2D" parent="Mat/BlindOptions"]
+[node name="SmallBlind" type="Sprite2D" parent="Mat/BlindOptions" unique_id=1661846038]
 position = Vector2(-19, 10)
 texture = ExtResource("36_i4re6")
 offset = Vector2(0.5, 0)
 
-[node name="bg" type="Sprite2D" parent="Mat/BlindOptions/SmallBlind"]
+[node name="bg" type="Sprite2D" parent="Mat/BlindOptions/SmallBlind" unique_id=428040202]
 texture = ExtResource("37_pf7vy")
 offset = Vector2(0.5, 0)
 
-[node name="Select" type="TextureButton" parent="Mat/BlindOptions/SmallBlind"]
+[node name="Select" type="TextureButton" parent="Mat/BlindOptions/SmallBlind" unique_id=944481119]
 offset_left = -7.0
 offset_top = -25.0
 offset_right = 8.0
@@ -503,44 +503,44 @@ texture_hover = ExtResource("39_pf7vy")
 texture_disabled = ExtResource("40_pf7vy")
 metadata/_edit_use_anchors_ = true
 
-[node name="GoalTenThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind"]
+[node name="GoalTenThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind" unique_id=1834278775]
 position = Vector2(6.5, -6.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalHundredThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind"]
+[node name="GoalHundredThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind" unique_id=2125968238]
 position = Vector2(2.5, -6.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalMillions" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind"]
+[node name="GoalMillions" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind" unique_id=355669588]
 position = Vector2(-1.5, -6.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalTenMillions" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind"]
+[node name="GoalTenMillions" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind" unique_id=259899141]
 position = Vector2(-5.5, -6.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalOnes" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind"]
+[node name="GoalOnes" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind" unique_id=2140122280]
 position = Vector2(6.5, -0.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalTens" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind"]
+[node name="GoalTens" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind" unique_id=1428766564]
 position = Vector2(2.5, -0.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalHundreds" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind"]
+[node name="GoalHundreds" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind" unique_id=962357006]
 position = Vector2(-1.5, -0.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind"]
+[node name="GoalThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/SmallBlind" unique_id=484068773]
 position = Vector2(-5.5, -0.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="BigBlind" type="Sprite2D" parent="Mat/BlindOptions"]
+[node name="BigBlind" type="Sprite2D" parent="Mat/BlindOptions" unique_id=1464483571]
 position = Vector2(3, 10)
 texture = ExtResource("36_i4re6")
 offset = Vector2(0.5, 0)
 
-[node name="Select" type="TextureButton" parent="Mat/BlindOptions/BigBlind"]
+[node name="Select" type="TextureButton" parent="Mat/BlindOptions/BigBlind" unique_id=1250049897]
 offset_left = -7.0
 offset_top = -25.0
 offset_right = 8.0
@@ -549,48 +549,48 @@ texture_normal = ExtResource("38_i4re6")
 texture_hover = ExtResource("39_pf7vy")
 texture_disabled = ExtResource("40_pf7vy")
 
-[node name="bg" type="Sprite2D" parent="Mat/BlindOptions/BigBlind"]
+[node name="bg" type="Sprite2D" parent="Mat/BlindOptions/BigBlind" unique_id=1050241048]
 position = Vector2(0.5, 0)
 texture = ExtResource("37_pf7vy")
 
-[node name="GoalTenThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind"]
+[node name="GoalTenThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind" unique_id=1614315588]
 position = Vector2(6.5, -6.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalHundredThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind"]
+[node name="GoalHundredThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind" unique_id=956425615]
 position = Vector2(2.5, -6.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalMillions" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind"]
+[node name="GoalMillions" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind" unique_id=1195891136]
 position = Vector2(-1.5, -6.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalTenMillions" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind"]
+[node name="GoalTenMillions" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind" unique_id=1190137428]
 position = Vector2(-5.5, -6.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalOnes" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind"]
+[node name="GoalOnes" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind" unique_id=1879706615]
 position = Vector2(6.5, -0.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalTens" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind"]
+[node name="GoalTens" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind" unique_id=1098270478]
 position = Vector2(2.5, -0.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalHundreds" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind"]
+[node name="GoalHundreds" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind" unique_id=13700125]
 position = Vector2(-1.5, -0.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind"]
+[node name="GoalThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/BigBlind" unique_id=1494893348]
 position = Vector2(-5.5, -0.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="BossBlind" type="Sprite2D" parent="Mat/BlindOptions"]
+[node name="BossBlind" type="Sprite2D" parent="Mat/BlindOptions" unique_id=1835697926]
 position = Vector2(26, 10)
 texture = ExtResource("36_i4re6")
 offset = Vector2(0.5, 0)
 
-[node name="Select" type="TextureButton" parent="Mat/BlindOptions/BossBlind"]
+[node name="Select" type="TextureButton" parent="Mat/BlindOptions/BossBlind" unique_id=1403088321]
 offset_left = -7.0
 offset_top = -25.0
 offset_right = 8.0
@@ -599,94 +599,94 @@ texture_normal = ExtResource("38_i4re6")
 texture_hover = ExtResource("39_pf7vy")
 texture_disabled = ExtResource("40_pf7vy")
 
-[node name="bg" type="Sprite2D" parent="Mat/BlindOptions/BossBlind"]
+[node name="bg" type="Sprite2D" parent="Mat/BlindOptions/BossBlind" unique_id=1327502184]
 position = Vector2(0.5, 0)
 texture = ExtResource("37_pf7vy")
 
-[node name="GoalTenThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind"]
+[node name="GoalTenThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind" unique_id=1881594411]
 position = Vector2(6.5, -6.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalHundredThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind"]
+[node name="GoalHundredThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind" unique_id=639493936]
 position = Vector2(2.5, -6.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalMillions" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind"]
+[node name="GoalMillions" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind" unique_id=452427582]
 position = Vector2(-1.5, -6.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalTenMillions" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind"]
+[node name="GoalTenMillions" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind" unique_id=1995720754]
 position = Vector2(-5.5, -6.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalOnes" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind"]
+[node name="GoalOnes" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind" unique_id=1344205799]
 position = Vector2(6.5, -0.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalTens" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind"]
+[node name="GoalTens" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind" unique_id=878300046]
 position = Vector2(2.5, -0.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalHundreds" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind"]
+[node name="GoalHundreds" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind" unique_id=168872182]
 position = Vector2(-1.5, -0.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="GoalThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind"]
+[node name="GoalThousands" type="AnimatedSprite2D" parent="Mat/BlindOptions/BossBlind" unique_id=1548376138]
 position = Vector2(-5.5, -0.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 
-[node name="Deck" type="Node2D" parent="."]
+[node name="Deck" type="Node2D" parent="." unique_id=148288562]
 position = Vector2(57, 51)
 script = ExtResource("16_qouja")
 
-[node name="Shop" type="Node2D" parent="."]
+[node name="Shop" type="Node2D" parent="." unique_id=774007547]
 visible = false
 texture_filter = 1
 position = Vector2(52, 30)
 script = ExtResource("13_pl11u")
 
-[node name="ShopSidebar" type="AnimatedSprite2D" parent="Shop"]
+[node name="ShopSidebar" type="AnimatedSprite2D" parent="Shop" unique_id=23904110]
 position = Vector2(-41, 8)
 sprite_frames = SubResource("SpriteFrames_sgl2t")
 frame = 2
 frame_progress = 0.354236
 offset = Vector2(0.5, 0)
 
-[node name="ShopBackground" type="Sprite2D" parent="Shop"]
+[node name="ShopBackground" type="Sprite2D" parent="Shop" unique_id=467328959]
 position = Vector2(4, 18)
 texture = ExtResource("25_v2yb1")
 offset = Vector2(0.5, 0)
 
-[node name="RerollButton" type="TextureButton" parent="Shop/ShopBackground"]
+[node name="RerollButton" type="TextureButton" parent="Shop/ShopBackground" unique_id=708083863]
 offset_left = -31.0
 offset_top = -11.0
 offset_right = -6.0
 offset_bottom = 4.0
 texture_normal = ExtResource("26_js0lu")
 
-[node name="RerollCostOnes" type="AnimatedSprite2D" parent="Shop/ShopBackground/RerollButton"]
+[node name="RerollCostOnes" type="AnimatedSprite2D" parent="Shop/ShopBackground/RerollButton" unique_id=1418299161]
 position = Vector2(18, 11)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 offset = Vector2(0.5, -0.5)
 
-[node name="RerollCostTens" type="AnimatedSprite2D" parent="Shop/ShopBackground/RerollButton"]
+[node name="RerollCostTens" type="AnimatedSprite2D" parent="Shop/ShopBackground/RerollButton" unique_id=1545034732]
 position = Vector2(14, 10.5)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 offset = Vector2(0.5, 0)
 
-[node name="RerollCostHundreds" type="AnimatedSprite2D" parent="Shop/ShopBackground/RerollButton"]
+[node name="RerollCostHundreds" type="AnimatedSprite2D" parent="Shop/ShopBackground/RerollButton" unique_id=1206344481]
 position = Vector2(10, 11)
 sprite_frames = SubResource("SpriteFrames_f1jbl")
 offset = Vector2(0.5, -0.5)
 
-[node name="NextRoundButton" type="TextureButton" parent="Shop/ShopBackground"]
+[node name="NextRoundButton" type="TextureButton" parent="Shop/ShopBackground" unique_id=2016869944]
 offset_left = -31.0
 offset_top = -25.0
 offset_right = -6.0
 offset_bottom = -10.0
 texture_normal = ExtResource("27_gxtfn")
 
-[node name="SkipButton" type="TextureButton" parent="Shop"]
+[node name="SkipButton" type="TextureButton" parent="Shop" unique_id=625195133]
 visible = false
 offset_left = 16.0
 offset_top = 35.0
