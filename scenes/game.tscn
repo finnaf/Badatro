@@ -160,7 +160,6 @@ animations = [{
 [node name="Game" type="Node2D" unique_id=1257373547]
 script = ExtResource("1_ca42v")
 seed = 123
-money = 88
 
 [node name="Mat" type="Sprite2D" parent="." unique_id=155744394]
 texture_filter = 1
